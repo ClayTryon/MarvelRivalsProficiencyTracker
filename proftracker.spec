@@ -27,12 +27,16 @@ a = Analysis(
         # EasyOCR + torch hidden imports discovered by collect_all
         *easyocr_hiddenimports,
         *torch_hiddenimports,
+        # scipy is a runtime dependency of EasyOCR
+        'scipy',
+        'scipy.special',
+        'scipy.special._cdflib',
     ],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
     # Strip heavy packages we definitely don't use
-    excludes=['tkinter', 'matplotlib', 'IPython', 'jupyter', 'notebook', 'scipy'],
+    excludes=['tkinter', 'matplotlib', 'IPython', 'jupyter', 'notebook'],
     win_no_prefer_redirects=False,
     win_private_assemblies=False,
     cipher=block_cipher,
