@@ -1,9 +1,11 @@
 import csv
 from PyQt6.QtWidgets import (
-    QWidget, QHBoxLayout, QVBoxLayout, QSplitter,
-    QListWidget, QListWidgetItem, QPushButton, QComboBox, QLabel, QFileDialog, QMessageBox
+    QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QComboBox, QLabel,
+    QFileDialog, QMessageBox, QScrollArea, QGridLayout, QDialog,
 )
 from PyQt6.QtCore import Qt, pyqtSignal
+
+from gui.hero_card import HeroCard
 from gui.hero_detail import HeroDetailPanel
 from models.hero import Hero
 
@@ -20,6 +22,78 @@ _ROLE_FILTERS = {
     "Duelist":    "Duelist",
     "Strategist": "Strategist",
 }
+
+
+class _HeroDetailDialog(QDialog):
+    def __init__(self, hero: Hero, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle(hero.name)
+        self.setMinimumWidth(480)
+        self.setModal(True)
+
+        lay = QVBoxLayout(self)
+        lay.setContentsMargins(0, 0, 0, 0)
+
+        panel = HeroDetailPanel()
+        panel.set_hero(hero)
+        lay.addWidget(panel)
+
+
+class _HeroGrid(QWidget):
+    card_clicked = pyqtSignal(object)
+
+    _GAP = 10
+    _PAD = 16
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self._cards: list[HeroCard] = []
+        self._cols = 5
+
+        self._lay = QGridLayout(self)
+        self._lay.setSpacing(self._GAP)
+        self._lay.setContentsMargins(self._PAD, self._PAD, self._PAD, self._PAD)
+
+    def set_heroes(self, heroes: list[Hero]):
+        for card in self._cards:
+            self._lay.removeWidget(card)
+            card.deleteLater()
+        self._cards = []
+
+        for hero in heroes:
+            card = HeroCard(hero)
+            card.clicked.connect(self.card_clicked)
+            self._cards.append(card)
+
+        self._cols = self._calc_cols(self.width())
+        self._place_cards()
+
+    def _calc_cols(self, w: int) -> int:
+        if w <= 0:
+            return 5
+        usable = w - 2 * self._PAD
+        return max(1, (usable + self._GAP) // (HeroCard.W + self._GAP))
+
+    def _place_cards(self):
+        while self._lay.count():
+            self._lay.takeAt(0)
+        for i, card in enumerate(self._cards):
+            row, col = divmod(i, self._cols)
+            self._lay.addWidget(card, row, col)
+        # Push cards to the top; don't stretch them vertically
+        bottom_row = (len(self._cards) + self._cols - 1) // self._cols if self._cards else 0
+        self._lay.setRowStretch(bottom_row, 1)
+
+    def minimumSizeHint(self):
+        from PyQt6.QtCore import QSize
+        return QSize(HeroCard.W + 2 * self._PAD, 0)
+
+    def resizeEvent(self, event):
+        new_cols = self._calc_cols(event.size().width())
+        if new_cols != self._cols and self._cards:
+            self._cols = new_cols
+            self._place_cards()
+        super().resizeEvent(event)
 
 
 class HeroBrowser(QWidget):
@@ -68,20 +142,18 @@ class HeroBrowser(QWidget):
         toolbar.addStretch()
         layout.addLayout(toolbar)
 
-        self._splitter = QSplitter(Qt.Orientation.Horizontal)
-        self._list = QListWidget()
-        self._list.setMinimumWidth(200)
-        self._detail = HeroDetailPanel()
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
+        scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
 
-        self._splitter.addWidget(self._list)
-        self._splitter.addWidget(self._detail)
-        self._splitter.setSizes([220, 680])
-        layout.addWidget(self._splitter)
+        self._grid = _HeroGrid()
+        self._grid.card_clicked.connect(self._show_detail)
+        scroll.setWidget(self._grid)
+        layout.addWidget(scroll)
 
         self._all_heroes: list[Hero] = []
         self._heroes: list[Hero] = []
         self._descending = False
-        self._list.currentRowChanged.connect(self._on_selection_changed)
 
     def load_heroes(self, heroes: list[Hero]):
         self._all_heroes = list(heroes)
@@ -89,61 +161,36 @@ class HeroBrowser(QWidget):
 
     def _apply_sort(self):
         role_filter = _ROLE_FILTERS[self._role_combo.currentText()]
-        if role_filter:
-            filtered = [h for h in self._all_heroes if h.role == role_filter]
-        else:
-            filtered = list(self._all_heroes)
-
+        filtered = (
+            [h for h in self._all_heroes if h.role == role_filter]
+            if role_filter else list(self._all_heroes)
+        )
         key_fn = _SORT_OPTIONS[self._sort_combo.currentText()]
         filtered.sort(key=key_fn, reverse=self._descending)
-
-        selected_name = None
-        if 0 <= self._list.currentRow() < len(self._heroes):
-            selected_name = self._heroes[self._list.currentRow()].name
-
         self._heroes = filtered
-        self._list.blockSignals(True)
-        self._list.clear()
-        for hero in self._heroes:
-            self._list.addItem(QListWidgetItem(hero.name))
-        self._list.blockSignals(False)
-
-        if selected_name:
-            for i, h in enumerate(self._heroes):
-                if h.name == selected_name:
-                    self._list.setCurrentRow(i)
-                    return
-        if self._heroes:
-            self._list.setCurrentRow(0)
-        else:
-            self._detail.clear()
+        self._grid.set_heroes(filtered)
 
     def _toggle_direction(self):
         self._descending = self._dir_btn.isChecked()
         self._dir_btn.setText("↓ Desc" if self._descending else "↑ Asc")
         self._apply_sort()
 
-    def _on_selection_changed(self, row: int):
-        if 0 <= row < len(self._heroes):
-            self._detail.set_hero(self._heroes[row])
-        else:
-            self._detail.clear()
+    def _show_detail(self, hero: Hero):
+        dlg = _HeroDetailDialog(hero, self)
+        dlg.exec()
 
     def _export_csv(self):
         if not self._heroes:
             QMessageBox.information(self, "Export CSV", "No heroes to export.")
             return
-
         path, _ = QFileDialog.getSaveFileName(
             self, "Export CSV", "proficiency.csv", "CSV Files (*.csv)"
         )
         if not path:
             return
-
         with open(path, "w", newline="", encoding="utf-8") as f:
             writer = csv.writer(f)
             writer.writerow(["name", "role", "level", "xp", "xp_required", "is_max_level"])
             for h in self._heroes:
                 writer.writerow([h.name, h.role, h.level, h.xp, h.xp_required, h.is_max_level])
-
         QMessageBox.information(self, "Export CSV", f"Exported {len(self._heroes)} heroes to:\n{path}")
