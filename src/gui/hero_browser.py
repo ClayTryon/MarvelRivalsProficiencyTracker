@@ -1,6 +1,7 @@
+import csv
 from PyQt6.QtWidgets import (
     QWidget, QHBoxLayout, QVBoxLayout, QSplitter,
-    QListWidget, QListWidgetItem, QPushButton, QComboBox, QLabel
+    QListWidget, QListWidgetItem, QPushButton, QComboBox, QLabel, QFileDialog, QMessageBox
 )
 from PyQt6.QtCore import Qt, pyqtSignal
 from gui.hero_detail import HeroDetailPanel
@@ -38,6 +39,11 @@ class HeroBrowser(QWidget):
         new_scan_btn.setFixedWidth(110)
         new_scan_btn.clicked.connect(self.new_scan_requested)
         toolbar.addWidget(new_scan_btn)
+
+        export_btn = QPushButton("Export CSV")
+        export_btn.setFixedWidth(100)
+        export_btn.clicked.connect(self._export_csv)
+        toolbar.addWidget(export_btn)
 
         toolbar.addWidget(QLabel("Role:"))
         self._role_combo = QComboBox()
@@ -122,3 +128,22 @@ class HeroBrowser(QWidget):
             self._detail.set_hero(self._heroes[row])
         else:
             self._detail.clear()
+
+    def _export_csv(self):
+        if not self._heroes:
+            QMessageBox.information(self, "Export CSV", "No heroes to export.")
+            return
+
+        path, _ = QFileDialog.getSaveFileName(
+            self, "Export CSV", "proficiency.csv", "CSV Files (*.csv)"
+        )
+        if not path:
+            return
+
+        with open(path, "w", newline="", encoding="utf-8") as f:
+            writer = csv.writer(f)
+            writer.writerow(["name", "role", "level", "xp", "xp_required", "is_max_level"])
+            for h in self._heroes:
+                writer.writerow([h.name, h.role, h.level, h.xp, h.xp_required, h.is_max_level])
+
+        QMessageBox.information(self, "Export CSV", f"Exported {len(self._heroes)} heroes to:\n{path}")
