@@ -1,3 +1,12 @@
+"""
+ScanPanel — the main screen shown before and during a scan session.
+
+Supports two modes:
+  Manual session — user navigates to each hero themselves and presses 2 (or clicks
+                   the button) to capture that hero's proficiency screen one at a time.
+  Auto scan      — app drives the game window automatically, capturing every hero in
+                   HERO_ROSTER via synthetic input, then OCR-processes all images.
+"""
 import threading
 import time
 import win32api
@@ -5,16 +14,23 @@ from PyQt6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QTextEdit, QComboBox
 )
 from PyQt6.QtCore import Qt, pyqtSignal, QTimer
+
+from capture import navigator
+from capture.debug import clear_temp
+from capture.pipeline import capture_one_hero, run_scan
+from capture.window_picker import pick_window
 from data.heroes import HERO_ROSTER
+from models.capture_run import CaptureStatus
 from models.hero import Hero
 from storage.database import Database
+from storage.repository import CaptureRunRepository
 
 
 class ScanPanel(QWidget):
     scan_complete = pyqtSignal(list)
     back_requested = pyqtSignal()
 
-    # Cross-thread signals for auto scan
+    # Cross-thread signals — Qt requires GUI updates to happen on the main thread
     _log_sig = pyqtSignal(str)
     _hero_sig = pyqtSignal(object)
     _scan_finished_sig = pyqtSignal(int)
@@ -49,7 +65,6 @@ class ScanPanel(QWidget):
         self._status_label.setStyleSheet("color: #888;")
         layout.addWidget(self._status_label)
 
-        # Setup row
         setup_row = QHBoxLayout()
         self._select_btn = QPushButton("Select Window")
         self._start_btn = QPushButton("Start Session")
@@ -67,7 +82,7 @@ class ScanPanel(QWidget):
         setup_row.addStretch()
         layout.addLayout(setup_row)
 
-        # Session row — hidden until manual session starts
+        # Session controls — hidden until a manual session starts
         session_row = QHBoxLayout()
         self._hero_combo = QComboBox()
         self._hero_combo.addItems(sorted(HERO_ROSTER))
@@ -111,7 +126,7 @@ class ScanPanel(QWidget):
         self._hotkey_timer.timeout.connect(self._poll_hotkeys)
 
     # ------------------------------------------------------------------
-    # Hotkey polling
+    # Hotkey polling (manual session only)
     # ------------------------------------------------------------------
 
     def _poll_hotkeys(self):
@@ -128,7 +143,6 @@ class ScanPanel(QWidget):
     # ------------------------------------------------------------------
 
     def _select_window(self):
-        from capture.window_picker import pick_window
         result = pick_window(parent=self)
         if result:
             hwnd, title = result
@@ -142,16 +156,11 @@ class ScanPanel(QWidget):
     # ------------------------------------------------------------------
 
     def _start_session(self):
-        from storage.repository import CaptureRunRepository
-        from capture.debug import clear_temp
         self._heroes = []
         clear_temp()
 
-        db = Database(self._db.db_path)
-        db.connect()
-        run = CaptureRunRepository(db).create()
+        run = CaptureRunRepository(self._db).create()
         self._capture_run_id = run.id
-        db.close()
 
         win = self.window()
         win.setWindowFlags(win.windowFlags() | Qt.WindowType.WindowStaysOnTopHint)
@@ -173,18 +182,12 @@ class ScanPanel(QWidget):
         )
 
     def _finish_session(self):
-        from storage.repository import CaptureRunRepository
-        from models.capture_run import CaptureStatus
-
         self._session_active = False
         self._hotkey_timer.stop()
 
-        db = Database(self._db.db_path)
-        db.connect()
-        CaptureRunRepository(db).update_status(
+        CaptureRunRepository(self._db).update_status(
             self._capture_run_id, CaptureStatus.COMPLETED, hero_count=len(self._heroes)
         )
-        db.close()
 
         win = self.window()
         win.setWindowFlags(win.windowFlags() & ~Qt.WindowType.WindowStaysOnTopHint)
@@ -201,25 +204,19 @@ class ScanPanel(QWidget):
         self.scan_complete.emit(self._heroes)
 
     # ------------------------------------------------------------------
-    # Manual capture
+    # Manual capture (single hero)
     # ------------------------------------------------------------------
 
     def _capture_proficiency(self):
-        from capture.pipeline import capture_one_hero
-
         hero_name = self._hero_combo.currentText()
-        db = Database(self._db.db_path)
-        db.connect()
         try:
-            hero = capture_one_hero(self._hwnd, db, self._capture_run_id, hero_name)
+            hero = capture_one_hero(self._hwnd, self._db, self._capture_run_id, hero_name)
             self._heroes.append(hero)
             xp_str = "MAX" if hero.is_max_level else f"{hero.xp}/{hero.xp_required} XP"
             self._append_log(f"✓ {hero.name}  LV{hero.level}  {xp_str}")
             self._rescan_btn.setEnabled(True)
         except Exception as e:
             self._append_log(f"✗ {hero_name}: {e}")
-        finally:
-            db.close()
 
     # ------------------------------------------------------------------
     # Auto scan
@@ -247,9 +244,7 @@ class ScanPanel(QWidget):
         self._append_log("Cancelling scan...")
 
     def _auto_scan_thread(self):
-        from capture import navigator
-        from capture.pipeline import run_scan
-
+        # Background thread — must use its own DB connection (SQLite is not thread-safe)
         db = Database(self._db.db_path)
         db.connect()
         try:

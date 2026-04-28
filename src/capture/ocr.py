@@ -1,6 +1,13 @@
+"""
+OCR utilities for reading hero proficiency data from a screenshot.
+
+Two engines are used:
+- pytesseract (--psm 6) for the XP fraction — fast, reliable on clean digits
+- EasyOCR for the level number — handles the game's italic LV## font better
+"""
+import logging
 import os
 import re
-import difflib
 
 import numpy as np
 import pytesseract
@@ -9,6 +16,8 @@ from PIL import Image
 from capture.debug import save_debug_image
 from data.xp_table import level_range_for_xp, fit_level_to_range
 from exceptions import ParseError
+
+log = logging.getLogger(__name__)
 
 _tess_cmd = os.environ.get("TESSERACT_CMD", r"C:\Program Files\Tesseract-OCR\tesseract.exe")
 if os.path.exists(_tess_cmd):
@@ -27,53 +36,8 @@ def _get_reader():
 
 
 def preprocess(image: Image.Image) -> Image.Image:
+    """Convert to greyscale — improves pytesseract accuracy on both regions."""
     return image.convert("L")
-
-
-def detect_text_in_region(image: Image.Image, keyword: str, region: tuple = None) -> bool:
-    img = image.crop(region) if region else image
-    text = pytesseract.image_to_string(preprocess(img), config="--psm 6")
-    return keyword.lower() in text.lower()
-
-
-def parse_hero_card_name(image: Image.Image) -> str:
-    w, h = image.size
-    crop = image.crop((0, int(h * 0.80), w, h))
-    text = pytesseract.image_to_string(preprocess(crop), config="--psm 7")
-    return text.strip().upper()
-
-
-def _normalize(text: str) -> str:
-    return " ".join(re.sub(r"[^A-Z ]", " ", text.upper()).split())
-
-
-def parse_hero_overview_name(image: Image.Image) -> str:
-    """OCR the overview left panel and fuzzy-match against the known hero roster."""
-    from data.heroes import HERO_ROSTER
-
-    w, h = image.size
-    crop = image.crop((int(w * 0.05), int(h * 0.28), int(w * 0.45), int(h * 0.58)))
-    text = pytesseract.image_to_string(preprocess(crop), config="--psm 6")
-    ocr_words = _normalize(text).split()
-
-    best_name = None
-    best_score = 0.0
-
-    for hero in HERO_ROSTER:
-        hero_norm = _normalize(hero)
-        n = len(hero_norm.split())
-        for i in range(max(1, len(ocr_words) - n + 1)):
-            window = " ".join(ocr_words[i:i + n])
-            score = difflib.SequenceMatcher(None, hero_norm, window).ratio()
-            if score > best_score:
-                best_score = score
-                best_name = hero
-
-    if best_score < 0.5 or best_name is None:
-        raise ParseError(
-            f"No hero matched (best: {best_name!r} score {best_score:.2f}) — OCR: {text!r}"
-        )
-    return best_name
 
 
 def _ocr_digits_str(raw: str) -> str:
@@ -90,12 +54,17 @@ def _ocr_digits_str(raw: str) -> str:
             .replace('T', '7'))
 
 
-LEVEL_REGION = (510, 870, 640, 900)  # fixed pixel coords for the LV## strip (italic font)
-XP_REGION    = (450, 910, 630, 970)  # fixed pixel coords for the XP fraction strip
+# Fixed pixel regions within the proficiency screen (calibrated for 1936×1119 window)
+LEVEL_REGION = (510, 870, 640, 900)  # italic LV## strip
+XP_REGION    = (450, 910, 630, 970)  # XP fraction strip
 
 
 def _easyocr_level(image: Image.Image) -> int:
-    """Use EasyOCR to read the level — handles the game's italic font better than pytesseract."""
+    """Read the level number from LEVEL_REGION using EasyOCR.
+
+    The crop is upscaled 2× before passing to the model — sharpens thin italic strokes.
+    Raises ParseError if no digits can be extracted.
+    """
     crop = image.crop(LEVEL_REGION)
     lc = crop.convert("L")
     lc = lc.resize((lc.width * 2, lc.height * 2), Image.LANCZOS)
@@ -111,7 +80,7 @@ def _easyocr_level(image: Image.Image) -> int:
     if m:
         digits = re.sub(r"\D", "", m.group(1))
     else:
-        # Fallback: V was dropped (e.g. "L7" from "LV7") — grab trailing digits
+        # Fallback: V was dropped (e.g. "L7" → "LV7") — grab trailing digits
         digits = re.sub(r"\D", "", corrected)
     if not digits:
         raise ParseError(f"Could not parse level from EasyOCR: {raw!r}")
@@ -119,9 +88,13 @@ def _easyocr_level(image: Image.Image) -> int:
 
 
 def parse_proficiency_bar(image: Image.Image) -> tuple[str, int, int, int, bool]:
-    import logging
-    log = logging.getLogger(__name__)
+    """Extract (name, level, xp, xp_required, is_max) from a proficiency screen screenshot.
 
+    name is always an empty string — the caller tracks hero identity via HERO_ROSTER index.
+    is_max is True when the XP region contains 'MAX' or xp_required is 0.
+    Level is cross-validated against the XP table and corrected if OCR produced a plausible
+    look-alike (e.g. '17' when the real range is 15–19).
+    """
     xp_text = pytesseract.image_to_string(preprocess(image.crop(XP_REGION)), config="--psm 6")
 
     if re.search(r"max", xp_text, re.IGNORECASE):

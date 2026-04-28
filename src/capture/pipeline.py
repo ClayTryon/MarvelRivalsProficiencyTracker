@@ -1,3 +1,13 @@
+"""
+Scan pipeline — navigates the Marvel Rivals heroes grid and captures proficiency data.
+
+Two-phase design:
+  Phase 1 — navigate every hero card, screenshot the proficiency tab, store images in memory.
+  Phase 2 — run OCR on all collected images and persist results to the database.
+
+Separating navigation from OCR means the game window is held for the minimum possible time.
+The caller is responsible for calling navigator.enable() / navigator.disable() around run_scan().
+"""
 import time
 import random
 from datetime import datetime, timezone
@@ -12,27 +22,20 @@ from models.capture_run import CaptureStatus
 from exceptions import CaptureError, ParseError, ValidationError
 from data.heroes import HERO_ROSTER, HERO_ROLES
 
-# Relative positions of the HEROES nav button (measured from 1936×1119 window)
+# Relative positions measured from a 1936×1119 window
 _HEROES_BTN_X = 0.346
 _HEROES_BTN_Y = 0.054
 
-# Grid layout: 7 columns × 2 rows
 _GRID_COLS = 7
 _GRID_ROWS = 2
 
-# Hero card center positions as fractions of window (measured from 1936×1119 window)
-# Columns at px: 300, 530, 750, 980, 1200, 1420, 1640
-# Rows at px: 420, 800
+# Hero card centres as fractions of window width/height
 _COL_CENTERS = [0.155, 0.274, 0.387, 0.506, 0.620, 0.733, 0.847]
 _ROW_CENTERS = [0.375, 0.715]
 
-# Proficiency tab relative position (measured from 1936×1119 window, px: 840x75)
+# Proficiency tab position
 _PROFICIENCY_TAB_X = 0.434
 _PROFICIENCY_TAB_Y = 0.067
-
-
-def _card_center_pct(col: int, row: int) -> tuple[float, float]:
-    return _COL_CENTERS[col], _ROW_CENTERS[row]
 
 
 def _build_and_save_hero(hero_name: str, capture_run_id: int, level: int,
@@ -53,13 +56,17 @@ def _build_and_save_hero(hero_name: str, capture_run_id: int, level: int,
 
 
 def capture_one_hero(hwnd: int, db: Database, capture_run_id: int, hero_name: str) -> Hero:
+    """Capture and OCR the currently visible proficiency screen for a single hero.
+
+    Used by the manual session — the user navigates to the hero themselves and
+    triggers this via hotkey or button.
+    """
     if not is_window_alive(hwnd):
         raise CaptureError("Target window is no longer alive")
 
     image = clipboard_capture.capture_window(hwnd)
     save_debug_image(image, "proficiency_raw")
     save_debug_image(ocr.preprocess(image.crop(ocr.XP_REGION)), "proficiency_xp_crop")
-    # _easyocr_level() inside parse_proficiency_bar saves its own "level_ocr_input" debug image
 
     _name, level, xp, xp_req, is_max = ocr.parse_proficiency_bar(image)
     return _build_and_save_hero(hero_name, capture_run_id, level, xp, xp_req, is_max,
@@ -67,6 +74,16 @@ def capture_one_hero(hwnd: int, db: Database, capture_run_id: int, hero_name: st
 
 
 def run_scan(hwnd: int, db: Database, on_log, on_hero, check_cancelled) -> int:
+    """Automatically scan every hero in HERO_ROSTER and persist proficiency data.
+
+    Expects navigator devices to already be registered by the caller.
+
+    on_log(str)   — called with status messages for the UI log
+    on_hero(Hero) — called for each successfully parsed hero (Phase 2)
+    check_cancelled() → bool — return True to abort mid-scan
+
+    Returns the number of heroes successfully captured.
+    """
     if not is_window_alive(hwnd):
         raise CaptureError("Target window is no longer alive")
 
@@ -77,7 +94,6 @@ def run_scan(hwnd: int, db: Database, on_log, on_hero, check_cancelled) -> int:
     hero_count = 0
 
     try:
-        navigator.enable()
         clipboard_capture.focus_window(hwnd)
         on_log("Starting scan from heroes grid...")
 
@@ -102,17 +118,18 @@ def run_scan(hwnd: int, db: Database, on_log, on_hero, check_cancelled) -> int:
 
                 hero_name = HERO_ROSTER[roster_idx]
                 col, row = idx % _GRID_COLS, idx // _GRID_COLS
-                cx, cy = _card_center_pct(col, row)
+                cx, cy = _COL_CENTERS[col], _ROW_CENTERS[row]
 
                 clipboard_capture.focus_window(hwnd)
                 navigator.click_at(hwnd, cx, cy, delay=0.35 + random.uniform(0, 0.08))
 
                 clipboard_capture.focus_window(hwnd)
-                navigator.press_space(hwnd)
+                navigator.press_space()
                 time.sleep(0.35 + random.uniform(0, 0.08))
 
                 clipboard_capture.focus_window(hwnd)
-                navigator.click_at(hwnd, _PROFICIENCY_TAB_X, _PROFICIENCY_TAB_Y, delay=0.35 + random.uniform(0, 0.08))
+                navigator.click_at(hwnd, _PROFICIENCY_TAB_X, _PROFICIENCY_TAB_Y,
+                                   delay=0.35 + random.uniform(0, 0.08))
 
                 prof_image = clipboard_capture.capture_window(hwnd)
                 save_debug_image(prof_image, f"prof_{hero_name.replace(' ', '_')}")
@@ -120,12 +137,12 @@ def run_scan(hwnd: int, db: Database, on_log, on_hero, check_cancelled) -> int:
                 on_log(f"  captured {hero_name}")
 
                 clipboard_capture.focus_window(hwnd)
-                navigator.press_escape(hwnd)
+                navigator.press_escape()
                 time.sleep(0.35 + random.uniform(0, 0.08))
 
             roster_offset += page_size
             if roster_offset < len(HERO_ROSTER):
-                navigator.scroll_down(hwnd, amount=3)
+                navigator.scroll_down(amount=3)
                 time.sleep(0.6 + random.uniform(0, 0.1))
 
         on_log(f"All {len(captures)} screenshots captured. Processing...")
@@ -157,5 +174,3 @@ def run_scan(hwnd: int, db: Database, on_log, on_hero, check_cancelled) -> int:
     except Exception as e:
         run_repo.update_status(capture_run.id, CaptureStatus.FAILED, error_message=str(e))
         raise
-    finally:
-        navigator.disable()
