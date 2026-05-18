@@ -35,6 +35,9 @@ jobs:
       - name: Build with PyInstaller
         run: pyinstaller proftracker.spec
 
+      - name: Bundle user guide
+        run: Copy-Item README.md dist\ProfTracker\README.md
+
       - name: Zip release
         run: Compress-Archive -Path dist\ProfTracker -DestinationPath ProfTracker-windows.zip
 
