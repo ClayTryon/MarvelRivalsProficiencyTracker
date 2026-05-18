@@ -4,25 +4,29 @@ from PyInstaller.utils.hooks import collect_all, collect_submodules, collect_dat
 block_cipher = None
 
 # EasyOCR bundles model-loading code and its dependencies (torch, etc.)
-easyocr_datas, easyocr_binaries, easyocr_hiddenimports = collect_all('easyocr')
-torch_datas,   torch_binaries,   torch_hiddenimports   = collect_all('torch')
+easyocr_datas, easyocr_binaries, easyocr_hiddenimports     = collect_all('easyocr')
+torch_datas,   torch_binaries,   torch_hiddenimports       = collect_all('torch')
+ic_datas,      ic_binaries,      ic_hiddenimports           = collect_all('interception')
 mpl_datas = collect_data_files('matplotlib')
 
 a = Analysis(
     ['src/main.py'],
     pathex=['src'],
-    binaries=easyocr_binaries + torch_binaries,
+    binaries=easyocr_binaries + torch_binaries + ic_binaries,
     datas=[
         ('Icons', 'Icons'),
         ('Icons/app_icon.ico', 'Icons'),
         *easyocr_datas,
         *torch_datas,
+        *ic_datas,
         *mpl_datas,
     ],
     hiddenimports=[
         # pywin32
         'win32api', 'win32con', 'win32gui', 'win32process',
         'win32clipboard', 'pywintypes', 'winerror',
+        # interception — lazy-loaded, only used by Auto Scan
+        *ic_hiddenimports,
         # PyQt6
         'PyQt6.sip',
         # EasyOCR + torch hidden imports discovered by collect_all
