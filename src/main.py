@@ -31,8 +31,9 @@ _ICON_PATH = os.path.normpath(
 
 
 def main():
-    db_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "proficiency_tracker.db")
-    db = Database(os.path.normpath(db_path))
+    app_data = os.path.join(os.environ.get("APPDATA", os.path.expanduser("~")), "ProficiencyTracker")
+    os.makedirs(app_data, exist_ok=True)
+    db = Database(os.path.join(app_data, "proficiency_tracker.db"))
     db.connect()
     db.init_schema()
     SnapshotRepository(db).backfill_from_heroes()
