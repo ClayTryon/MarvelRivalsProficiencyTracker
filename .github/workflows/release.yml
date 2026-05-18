@@ -36,9 +36,7 @@ jobs:
         run: pyinstaller proftracker.spec
 
       - name: Bundle user guide
-        run: |
-          Copy-Item README.md "dist\ProfTracker\README.md"
-          Copy-Item "How to Use ProfTracker.docx" "dist\ProfTracker\How to Use ProfTracker.docx"
+        run: Copy-Item README.md "dist\ProfTracker\README.md"
 
       - name: Zip release
         run: Compress-Archive -Path dist\ProfTracker -DestinationPath ProfTracker-windows.zip
@@ -46,5 +44,7 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: ProfTracker-windows.zip
+          files: |
+            ProfTracker-windows.zip
+            How to Use ProfTracker.docx
           generate_release_notes: true
