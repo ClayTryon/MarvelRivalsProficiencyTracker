@@ -1,4 +1,5 @@
 import os
+import sys
 import numpy as np
 import matplotlib
 matplotlib.use('QtAgg')
@@ -17,9 +18,12 @@ from PyQt6.QtWidgets import (
 from storage.database import Database
 from storage.repository import SnapshotRepository
 
-_ICONS_DIR = os.path.normpath(
-    os.path.join(os.path.dirname(__file__), '..', '..', 'Icons')
-)
+if getattr(sys, 'frozen', False):
+    _ICONS_DIR = os.path.join(sys._MEIPASS, 'Icons')
+else:
+    _ICONS_DIR = os.path.normpath(
+        os.path.join(os.path.dirname(__file__), '..', '..', 'Icons')
+    )
 _icon_cache: dict[str, np.ndarray] = {}
 
 _TIME_OPTIONS = {
