@@ -10,3 +10,4 @@ debug/
 .vs/
 .claude/
 CLAUDE.md
+generate_user_guide.py
