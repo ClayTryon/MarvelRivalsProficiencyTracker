@@ -12,30 +12,29 @@ import time
 from capture.window import get_window_rect
 
 _devices_ready = False
-_interception = None
+_ic = None
 
 
-def _get_interception():
-    global _interception
-    if _interception is None:
+def _get_ic():
+    global _ic
+    if _ic is None:
         try:
-            import interception as _ic
-            _interception = _ic
+            import interception.inputs as _inputs
+            _ic = _inputs
         except ImportError:
             raise RuntimeError(
-                "The Interception driver is not installed.\n\n"
-                "Auto Scan requires the Interception kernel driver.\n"
-                "Download it from: github.com/oblitum/Interception\n"
-                "Install as Administrator, then reboot."
+                "The interception-python package is not installed.\n\n"
+                "Auto Scan requires the Interception kernel driver and its Python wrapper.\n"
+                "Run: pip install interception-python\n"
+                "Also install the Interception driver from: github.com/oblitum/Interception"
             )
-    return _interception
+    return _ic
 
 
 def enable():
     global _devices_ready
     if not _devices_ready:
-        ic = _get_interception()
-        print("Move your mouse once, then press any key to register devices...")
+        ic = _get_ic()
         ic.auto_capture_devices(keyboard=True, mouse=True)
         _devices_ready = True
 
@@ -46,11 +45,11 @@ def disable():
 
 
 def click_at(hwnd: int, rel_x_pct: float, rel_y_pct: float, delay: float = 1.5):
-    ic = _get_interception()
+    ic = _get_ic()
     left, top, right, bottom = get_window_rect(hwnd)
     w, h = right - left, bottom - top
     x = left + int(w * rel_x_pct)
-    y = top  + int(h * rel_y_pct)
+    y = top + int(h * rel_y_pct)
     ic.move_to(x, y)
     time.sleep(0.05)
     ic.left_click()
@@ -58,15 +57,15 @@ def click_at(hwnd: int, rel_x_pct: float, rel_y_pct: float, delay: float = 1.5):
 
 
 def scroll_down(amount: int = 3):
-    ic = _get_interception()
+    ic = _get_ic()
     for _ in range(amount):
         ic.scroll('down')
         time.sleep(0.05)
 
 
 def press_escape():
-    _get_interception().press('escape')
+    _get_ic().press('escape')
 
 
 def press_space():
-    _get_interception().press('space')
+    _get_ic().press('space')
