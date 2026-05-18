@@ -25,8 +25,6 @@ a = Analysis(
         'win32clipboard', 'pywintypes', 'winerror',
         # PyQt6
         'PyQt6.sip',
-        # interception (pure-Python, no native ext — but enumerate submodules to be safe)
-        *collect_submodules('interception'),
         # EasyOCR + torch hidden imports discovered by collect_all
         *easyocr_hiddenimports,
         *torch_hiddenimports,
