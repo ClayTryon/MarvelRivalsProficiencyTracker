@@ -6,12 +6,12 @@ block_cipher = None
 # EasyOCR bundles model-loading code and its dependencies (torch, etc.)
 easyocr_datas, easyocr_binaries, easyocr_hiddenimports = collect_all('easyocr')
 torch_datas,   torch_binaries,   torch_hiddenimports   = collect_all('torch')
-mpl_datas,     mpl_binaries,     mpl_hiddenimports     = collect_all('matplotlib')
+mpl_datas = collect_data_files('matplotlib')
 
 a = Analysis(
     ['src/main.py'],
     pathex=['src'],
-    binaries=easyocr_binaries + torch_binaries + mpl_binaries,
+    binaries=easyocr_binaries + torch_binaries,
     datas=[
         ('Icons', 'Icons'),
         ('Icons/app_icon.ico', 'Icons'),
@@ -32,10 +32,14 @@ a = Analysis(
         'scipy',
         'scipy.special',
         'scipy.special._cdflib',
-        # matplotlib QtAgg backend
+        # matplotlib — explicit imports only (collect_all causes circular import)
+        'matplotlib',
+        'matplotlib._c_internal_utils',
         'matplotlib.backends.backend_qtagg',
         'matplotlib.backends.backend_agg',
-        *mpl_hiddenimports,
+        'matplotlib.figure',
+        'matplotlib.axes',
+        'matplotlib.pyplot',
         # openpyxl (pure Python but has lazy-loaded sub-packages)
         *collect_submodules('openpyxl'),
     ],
@@ -43,7 +47,7 @@ a = Analysis(
     hooksconfig={},
     runtime_hooks=[],
     # Strip heavy packages we definitely don't use
-    excludes=['tkinter', 'matplotlib', 'IPython', 'jupyter', 'notebook'],
+    excludes=['tkinter', 'IPython', 'jupyter', 'notebook'],
     win_no_prefer_redirects=False,
     win_private_assemblies=False,
     cipher=block_cipher,
