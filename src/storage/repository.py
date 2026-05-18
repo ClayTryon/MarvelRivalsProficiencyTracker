@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from models.hero import Hero
 from models.capture_run import CaptureRun, CaptureStatus
 from storage.database import Database
@@ -94,3 +94,60 @@ class HeroRepository:
             capture_run_id=row["capture_run_id"],
             updated_at=row["updated_at"],
         )
+
+
+class SnapshotRepository:
+    def __init__(self, db: Database):
+        self.db = db
+
+    def insert(self, hero: Hero):
+        self.db.conn.execute(
+            """INSERT INTO hero_snapshot
+               (hero_name, capture_run_id, level, xp, xp_required, is_max_level, recorded_at)
+               VALUES (?, ?, ?, ?, ?, ?, ?)""",
+            (
+                hero.name, hero.capture_run_id, hero.level, hero.xp, hero.xp_required,
+                1 if hero.is_max_level else 0,
+                hero.updated_at,
+            ),
+        )
+        self.db.conn.commit()
+
+    def backfill_from_heroes(self):
+        """Insert a snapshot for any hero that has no snapshot for its current capture_run_id."""
+        self.db.conn.execute(
+            """INSERT INTO hero_snapshot
+               (hero_name, capture_run_id, level, xp, xp_required, is_max_level, recorded_at)
+               SELECT h.name, h.capture_run_id, h.level, h.xp, h.xp_required, h.is_max_level, h.updated_at
+               FROM hero h
+               WHERE NOT EXISTS (
+                   SELECT 1 FROM hero_snapshot s
+                   WHERE s.hero_name = h.name AND s.capture_run_id = h.capture_run_id
+               )"""
+        )
+        self.db.conn.commit()
+
+    def get_xp_history(self, days: int | None) -> dict[str, list[tuple[datetime, int]]]:
+        from data.xp_table import total_xp_earned
+        if days is not None:
+            cutoff = (datetime.now(timezone.utc) - timedelta(days=days)).isoformat()
+            rows = self.db.conn.execute(
+                """SELECT hero_name, recorded_at, level, xp
+                   FROM hero_snapshot
+                   WHERE recorded_at >= ?
+                   ORDER BY hero_name, recorded_at""",
+                (cutoff,),
+            ).fetchall()
+        else:
+            rows = self.db.conn.execute(
+                """SELECT hero_name, recorded_at, level, xp
+                   FROM hero_snapshot
+                   ORDER BY hero_name, recorded_at"""
+            ).fetchall()
+
+        result: dict[str, list[tuple[datetime, int, int]]] = {}
+        for row in rows:
+            dt = datetime.fromisoformat(row["recorded_at"]).replace(tzinfo=None)
+            total_xp = total_xp_earned(row["level"], row["xp"])
+            result.setdefault(row["hero_name"], []).append((dt, total_xp, row["level"]))
+        return result

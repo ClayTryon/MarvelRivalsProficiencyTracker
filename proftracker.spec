@@ -6,15 +6,18 @@ block_cipher = None
 # EasyOCR bundles model-loading code and its dependencies (torch, etc.)
 easyocr_datas, easyocr_binaries, easyocr_hiddenimports = collect_all('easyocr')
 torch_datas,   torch_binaries,   torch_hiddenimports   = collect_all('torch')
+mpl_datas,     mpl_binaries,     mpl_hiddenimports     = collect_all('matplotlib')
 
 a = Analysis(
     ['src/main.py'],
     pathex=['src'],
-    binaries=easyocr_binaries + torch_binaries,
+    binaries=easyocr_binaries + torch_binaries + mpl_binaries,
     datas=[
         ('Icons', 'Icons'),
+        ('Icons/app_icon.ico', 'Icons'),
         *easyocr_datas,
         *torch_datas,
+        *mpl_datas,
     ],
     hiddenimports=[
         # pywin32
@@ -31,6 +34,12 @@ a = Analysis(
         'scipy',
         'scipy.special',
         'scipy.special._cdflib',
+        # matplotlib QtAgg backend
+        'matplotlib.backends.backend_qtagg',
+        'matplotlib.backends.backend_agg',
+        *mpl_hiddenimports,
+        # openpyxl (pure Python but has lazy-loaded sub-packages)
+        *collect_submodules('openpyxl'),
     ],
     hookspath=[],
     hooksconfig={},
@@ -51,6 +60,7 @@ exe = EXE(
     [],
     exclude_binaries=True,
     name='ProfTracker',
+    icon='Icons/app_icon.ico',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,

@@ -5,9 +5,13 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt, pyqtSignal
 
+from gui.excel_import import generate_template, import_from_excel
 from gui.hero_card import HeroCard
 from gui.hero_detail import HeroDetailPanel
+from gui.manual_entry_dialog import ManualEntryDialog
 from models.hero import Hero
+from storage.database import Database
+from storage.repository import HeroRepository
 
 _SORT_OPTIONS = {
     "Closest to Lord":     lambda h: (0 if h.level < 20 else 1, 20 - h.level, -(h.xp or 0)),
@@ -97,10 +101,9 @@ class _HeroGrid(QWidget):
 
 
 class HeroBrowser(QWidget):
-    new_scan_requested = pyqtSignal()
-
-    def __init__(self, parent=None):
+    def __init__(self, db: Database = None, parent=None):
         super().__init__(parent)
+        self._db = db
         layout = QVBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(0)
@@ -109,15 +112,25 @@ class HeroBrowser(QWidget):
         toolbar.setContentsMargins(8, 6, 8, 6)
         toolbar.setSpacing(8)
 
-        new_scan_btn = QPushButton("← New Scan")
-        new_scan_btn.setFixedWidth(110)
-        new_scan_btn.clicked.connect(self.new_scan_requested)
-        toolbar.addWidget(new_scan_btn)
-
         export_btn = QPushButton("Export CSV")
         export_btn.setFixedWidth(100)
         export_btn.clicked.connect(self._export_csv)
         toolbar.addWidget(export_btn)
+
+        template_btn = QPushButton("Get Template")
+        template_btn.setFixedWidth(110)
+        template_btn.clicked.connect(self._save_template)
+        toolbar.addWidget(template_btn)
+
+        import_btn = QPushButton("Import Excel")
+        import_btn.setFixedWidth(110)
+        import_btn.clicked.connect(self._import_excel)
+        toolbar.addWidget(import_btn)
+
+        manual_btn = QPushButton("+ Manual Entry")
+        manual_btn.setFixedWidth(120)
+        manual_btn.clicked.connect(self._open_manual_entry)
+        toolbar.addWidget(manual_btn)
 
         toolbar.addWidget(QLabel("Role:"))
         self._role_combo = QComboBox()
@@ -178,6 +191,51 @@ class HeroBrowser(QWidget):
     def _show_detail(self, hero: Hero):
         dlg = _HeroDetailDialog(hero, self)
         dlg.exec()
+
+    def _save_template(self):
+        path, _ = QFileDialog.getSaveFileName(
+            self, "Save Template", "ProfTracker_Template.xlsx",
+            "Excel Files (*.xlsx)"
+        )
+        if not path:
+            return
+        try:
+            generate_template(path)
+            QMessageBox.information(self, "Template Saved", f"Template saved to:\n{path}")
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"Failed to save template:\n{e}")
+
+    def _import_excel(self):
+        if not self._db:
+            QMessageBox.warning(self, "Import Excel", "No database connection available.")
+            return
+        path, _ = QFileDialog.getOpenFileName(
+            self, "Import Excel", "", "Excel Files (*.xlsx)"
+        )
+        if not path:
+            return
+        try:
+            success, errors = import_from_excel(path, self._db)
+        except Exception as e:
+            QMessageBox.critical(self, "Import Failed", f"Could not read file:\n{e}")
+            return
+
+        self.load_heroes(HeroRepository(self._db).get_all())
+
+        msg = f"Imported {success} hero{'es' if success != 1 else ''}."
+        if errors:
+            msg += f"\n\n{len(errors)} row(s) skipped:\n" + "\n".join(f"• {e}" for e in errors)
+            QMessageBox.warning(self, "Import Complete", msg)
+        else:
+            QMessageBox.information(self, "Import Complete", msg)
+
+    def _open_manual_entry(self):
+        if not self._db:
+            QMessageBox.warning(self, "Manual Entry", "No database connection available.")
+            return
+        dlg = ManualEntryDialog(self._db, self)
+        if dlg.exec() == QDialog.DialogCode.Accepted:
+            self.load_heroes(HeroRepository(self._db).get_all())
 
     def _export_csv(self):
         if not self._heroes:

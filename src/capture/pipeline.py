@@ -16,7 +16,7 @@ from capture import clipboard_capture, ocr, navigator
 from capture.window import is_window_alive
 from capture.debug import save_debug_image, clear_temp
 from storage.database import Database
-from storage.repository import HeroRepository, CaptureRunRepository
+from storage.repository import HeroRepository, CaptureRunRepository, SnapshotRepository
 from models.hero import Hero
 from models.capture_run import CaptureStatus
 from exceptions import CaptureError, ParseError, ValidationError
@@ -39,7 +39,8 @@ _PROFICIENCY_TAB_Y = 0.067
 
 
 def _build_and_save_hero(hero_name: str, capture_run_id: int, level: int,
-                         xp: int, xp_req: int, is_max: bool, repo: HeroRepository) -> Hero:
+                         xp: int, xp_req: int, is_max: bool,
+                         repo: HeroRepository, snapshot_repo: SnapshotRepository) -> Hero:
     hero = Hero(
         name=hero_name,
         role=HERO_ROLES.get(hero_name, "Unknown"),
@@ -52,6 +53,7 @@ def _build_and_save_hero(hero_name: str, capture_run_id: int, level: int,
     )
     hero.validate()
     repo.upsert(hero)
+    snapshot_repo.insert(hero)
     return hero
 
 
@@ -70,7 +72,7 @@ def capture_one_hero(hwnd: int, db: Database, capture_run_id: int, hero_name: st
 
     _name, level, xp, xp_req, is_max = ocr.parse_proficiency_bar(image)
     return _build_and_save_hero(hero_name, capture_run_id, level, xp, xp_req, is_max,
-                                HeroRepository(db))
+                                HeroRepository(db), SnapshotRepository(db))
 
 
 def run_scan(hwnd: int, db: Database, on_log, on_hero, check_cancelled) -> int:
@@ -90,6 +92,7 @@ def run_scan(hwnd: int, db: Database, on_log, on_hero, check_cancelled) -> int:
     clear_temp()
     run_repo = CaptureRunRepository(db)
     hero_repo = HeroRepository(db)
+    snapshot_repo = SnapshotRepository(db)
     capture_run = run_repo.create()
     hero_count = 0
 
@@ -157,7 +160,7 @@ def run_scan(hwnd: int, db: Database, on_log, on_hero, check_cancelled) -> int:
             try:
                 _, level, xp, xp_req, is_max = ocr.parse_proficiency_bar(prof_image)
                 hero = _build_and_save_hero(hero_name, capture_run.id, level, xp, xp_req,
-                                            is_max, hero_repo)
+                                            is_max, hero_repo, snapshot_repo)
                 hero_count += 1
                 on_hero(hero)
                 on_log(f"✓ {hero_name} LV{level}")

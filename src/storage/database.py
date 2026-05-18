@@ -23,8 +23,21 @@ CREATE TABLE IF NOT EXISTS hero (
     updated_at     TEXT    NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS hero_snapshot (
+    id             INTEGER PRIMARY KEY AUTOINCREMENT,
+    hero_name      TEXT    NOT NULL,
+    capture_run_id INTEGER NOT NULL REFERENCES capture_run(id) ON DELETE CASCADE,
+    level          INTEGER NOT NULL,
+    xp             INTEGER NOT NULL,
+    xp_required    INTEGER NOT NULL,
+    is_max_level   INTEGER NOT NULL DEFAULT 0,
+    recorded_at    TEXT    NOT NULL
+);
+
 CREATE INDEX IF NOT EXISTS idx_hero_capture_run ON hero(capture_run_id);
 CREATE INDEX IF NOT EXISTS idx_hero_name ON hero(name);
+CREATE INDEX IF NOT EXISTS idx_snapshot_hero ON hero_snapshot(hero_name);
+CREATE INDEX IF NOT EXISTS idx_snapshot_time ON hero_snapshot(recorded_at);
 """
 
 

@@ -28,7 +28,6 @@ from storage.repository import CaptureRunRepository
 
 class ScanPanel(QWidget):
     scan_complete = pyqtSignal(list)
-    back_requested = pyqtSignal()
 
     # Cross-thread signals — Qt requires GUI updates to happen on the main thread
     _log_sig = pyqtSignal(str)
@@ -55,10 +54,6 @@ class ScanPanel(QWidget):
         title.setStyleSheet("font-size: 16px; font-weight: bold;")
         header_row.addWidget(title)
         header_row.addStretch()
-        self._back_btn = QPushButton("← Back to Results")
-        self._back_btn.setVisible(False)
-        self._back_btn.clicked.connect(self.back_requested)
-        header_row.addWidget(self._back_btn)
         layout.addLayout(header_row)
 
         self._status_label = QLabel("No window selected.")
@@ -285,9 +280,6 @@ class ScanPanel(QWidget):
         self._auto_scan_btn.setEnabled(True)
 
     # ------------------------------------------------------------------
-
-    def set_has_results(self, has_results: bool):
-        self._back_btn.setVisible(has_results)
 
     def _append_log(self, text: str):
         self._log.append(text)

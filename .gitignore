@@ -4,5 +4,9 @@ __pycache__/
 proficiency_tracker.db
 .temp/
 build/
+dist/
+.pytest_cache/
 debug/
 .vs/
+.claude/
+CLAUDE.md
