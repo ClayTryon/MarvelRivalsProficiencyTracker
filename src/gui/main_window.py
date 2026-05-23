@@ -212,15 +212,8 @@ class MainWindow(QMainWindow):
         self._hero_info.set_query(f"Tell me about {hero_name}")
 
     def _on_sync_complete(self):
-        import importlib
         import data.heroes as _heroes_mod
-        _old_roster = _heroes_mod.HERO_ROSTER
-        _old_roles  = _heroes_mod.HERO_ROLES
-        importlib.reload(_heroes_mod)
-        _old_roster.clear()
-        _old_roster.extend(_heroes_mod.HERO_ROSTER)
-        _old_roles.clear()
-        _old_roles.update(_heroes_mod.HERO_ROLES)
+        _heroes_mod._reload()
 
         self._teamups_panel.load()
 

@@ -1,4 +1,17 @@
-HERO_ROSTER = [
+import json
+import os
+import sys
+
+
+def _json_path() -> str:
+    if getattr(sys, 'frozen', False):
+        return os.path.join(os.path.dirname(sys.executable), 'heroes.json')
+    return os.path.normpath(
+        os.path.join(os.path.dirname(__file__), '..', '..', 'heroes.json')
+    )
+
+
+_DEFAULT_ROSTER = [
     "Adam Warlock",
     "Angela",
     "Black Cat",
@@ -51,7 +64,7 @@ HERO_ROSTER = [
     "Wolverine",
 ]
 
-HERO_ROLES: dict[str, str] = {
+_DEFAULT_ROLES: dict[str, str] = {
     "Adam Warlock": "Strategist",
     "Angela": "Vanguard",
     "Black Cat": "Duelist",
@@ -103,3 +116,27 @@ HERO_ROLES: dict[str, str] = {
     "Winter Soldier": "Duelist",
     "Wolverine": "Duelist",
 }
+
+
+def _load() -> tuple[list, dict]:
+    path = _json_path()
+    if os.path.exists(path):
+        try:
+            with open(path, encoding='utf-8') as f:
+                data = json.load(f)
+            return data['roster'], data['roles']
+        except Exception:
+            pass
+    return list(_DEFAULT_ROSTER), dict(_DEFAULT_ROLES)
+
+
+def _reload():
+    """Re-read heroes.json and update the module-level lists in-place."""
+    roster, roles = _load()
+    HERO_ROSTER.clear()
+    HERO_ROSTER.extend(roster)
+    HERO_ROLES.clear()
+    HERO_ROLES.update(roles)
+
+
+HERO_ROSTER, HERO_ROLES = _load()

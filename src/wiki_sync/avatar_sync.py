@@ -104,35 +104,27 @@ def _slug_to_name(slug: str) -> str:
     return slug.replace("_", " ").replace("%26", "&")
 
 
-_HEROES_PY = os.path.normpath(
-    os.path.join(os.path.dirname(__file__), "..", "data", "heroes.py")
-)
+def _heroes_json_path() -> str:
+    import sys
+    if getattr(sys, 'frozen', False):
+        return os.path.join(os.path.dirname(sys.executable), 'heroes.json')
+    return os.path.normpath(
+        os.path.join(os.path.dirname(__file__), '..', '..', 'heroes.json')
+    )
 
 
 def write_heroes_py(icon_sets: list[dict]) -> int:
-    """
-    Regenerate src/data/heroes.py from primary icon sets.
-    Returns the number of heroes written.
-    """
+    """Write hero roster to heroes.json next to the exe (or project root in dev)."""
+    import json
     primary = sorted(
         [s for s in icon_sets if s["is_primary"]],
         key=lambda s: _slug_to_name(s["slug"]),
     )
+    names = [_slug_to_name(s["slug"]) for s in primary]
+    roles = {_slug_to_name(s["slug"]): s["role"] for s in primary}
 
-    names  = [_slug_to_name(s["slug"]) for s in primary]
-    roles  = {_slug_to_name(s["slug"]): s["role"] for s in primary}
-
-    lines = ["HERO_ROSTER = ["]
-    for name in names:
-        lines.append(f'    "{name}",')
-    lines.append("]\n")
-    lines.append("HERO_ROLES: dict[str, str] = {")
-    for name in names:
-        lines.append(f'    "{name}": "{roles[name]}",')
-    lines.append("}\n")
-
-    with open(_HEROES_PY, "w", encoding="utf-8") as f:
-        f.write("\n".join(lines))
+    with open(_heroes_json_path(), 'w', encoding='utf-8') as f:
+        json.dump({'roster': names, 'roles': roles}, f, indent=2, ensure_ascii=False)
 
     return len(names)
 
