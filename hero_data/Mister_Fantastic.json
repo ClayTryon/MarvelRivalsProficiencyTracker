@@ -1,0 +1,115 @@
+[
+  {
+    "section": "Normal Attack",
+    "name": "Stretch Punch",
+    "key": "Left Click",
+    "icon": "Stretch_Punch.png",
+    "description": "Stretch out a forward punch to attack enemies.",
+    "stats": {
+      "CASTING": "Straight Spell Field",
+      "AMMO": "∞",
+      "FIRE RATE": "1.1s per hit",
+      "CRITICAL HIT": "None",
+      "SPELL FIELD RANGE": "15m",
+      "SPELL FIELD DAMAGE": "65"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Brainiac Bounce",
+    "key": "Q",
+    "icon": "Brainiac_Bounce.png",
+    "description": "Leap upward and smash the ground, slowing enemies within range. Can leap again upon landing a hit.",
+    "stats": {
+      "CASTING": "Spherical Spell Field",
+      "RANGE": "10m spherical radius",
+      "SPELL FIELD DAMAGE": "Initial 70, Each Additional Leap +14, Max 140",
+      "DAMAGE FALLOFF": "Start at 3m, 71.4% falloff at 10m",
+      "SLOW RATE": "Per Leap -10%, Can Stack, Max -60%",
+      "SLOW DURATION": "3s",
+      "MINIMUM LEAPS": "3",
+      "MAXIMUM LEAPS": "6",
+      "ENERGY COST": "3400"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Distended Grip",
+    "key": "Right Click",
+    "icon": "Distended_Grip.png",
+    "description": "Extend arms forward to entangle an enemy, then press File:Lmb.png to pull the hit enemy toward you, or select and yank another enemy, knocking them airborne against each other.",
+    "stats": {
+      "CASTING": "Projectile that fires in a straight trajectory",
+      "PROJECTILE SPEED": "60 m/s",
+      "INITIAL PROJECTILE RANGE": "20m",
+      "SECONDARY RELEASE MAXIMUM DISTANCE": "25m",
+      "INITIAL PROJECTILE DAMAGE": "20",
+      "SECONDARY PROJECTILE DAMAGE": "20",
+      "SINGLE-TARGET PULL RANGE": "10m",
+      "SINGLE-TARGET PULL DAMAGE": "50",
+      "DUAL-TARGET PULL DAMAGE": "30",
+      "GAINED ELASTICITY": "30",
+      "COOLDOWN": "6s"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Reflexive Rubber",
+    "key": "SHIFT",
+    "icon": "Reflexive_Rubber.png",
+    "description": "Stretch body to absorb damage before launching stored damage in the targeted direction.",
+    "stats": {
+      "SHIELD VALUE": "300",
+      "MAXIMUM DURATION": "3s",
+      "SELF SLOW RATE": "-35%",
+      "DAMAGE ABSORBED - DAMAGE REFLECTED CONVERSION RATE": "60%",
+      "REFLECTED PROJECTILE SPEED": "80 m/s",
+      "COOLDOWN": "12s"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Flexible Elongation",
+    "key": "E",
+    "icon": "Flexible_Elongation.png",
+    "description": "Gain a Shield, select a target, and dash towards them, dealing damage to enemies and granting Shield to allies.",
+    "stats": {
+      "MAXIMUM SELECT DISTANCE": "15m",
+      "BONUS HEALTH (SELF)": "75",
+      "BONUS HEALTH (ALLY)": "75",
+      "DAMAGE": "30",
+      "CHARGES": "2",
+      "RECHARGE TIME": "8s",
+      "SLOW RATE": "35% for 1.5s",
+      "GAINED ELASTICITY": "20"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Elastic Strength",
+    "key": "Passive",
+    "icon": "Elastic_Strength.png",
+    "description": "Using abilities generates Elasticity, boosting attack power. Reaching full Elasticity triggers an Inflated state that increases Maximum Health, further boosts damage, and enables the use of Reflexive Rubber.",
+    "stats": {
+      "MAX ELASTICITY": "100",
+      "INFLATED DURATION": "6s",
+      "DAMAGE": "80",
+      "MAXIMUM DISTANCE": "8m",
+      "ATTACK INTERVAL": "0.92s per hit",
+      "EXTRA MAXIMUM HEALTH": "350",
+      "MOVEMENT BOOST": "20%"
+    }
+  },
+  {
+    "section": "Team-Up Abilities",
+    "name": "Fantastic Amplifier",
+    "key": "C",
+    "icon": "Fantastic_Amplifier.png",
+    "description": "Rocket Raccoon upgrades his B.R.B. for Star-Lord and Mister Fantastic. Star-Lord gets an Astral Jump device, allowing him to teleport to its deployment point from anywhere on the map. Mister Fantastic receives a Fantastic Amplifier, removing his Elasticity limit and letting him actively enter Inflation state.",
+    "stats": {
+      "COOLDOWN": "25s",
+      "DURATION": "10s",
+      "ENERGY CONSUMED DURING INFLATED STATE": "16.67/s"
+    }
+  }
+]

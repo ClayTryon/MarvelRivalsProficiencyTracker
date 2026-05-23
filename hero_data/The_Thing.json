@@ -1,0 +1,134 @@
+[
+  {
+    "section": "Normal Attack",
+    "name": "Rocky Jab",
+    "key": "Left Click",
+    "icon": "Rocky_Jab.png",
+    "description": "Rapidly punch forward.",
+    "stats": {
+      "CASTING": "Single-cast Spell Field",
+      "DAMAGE": "40 per hit",
+      "INTERVAL": "Double strike 0.33s between attacks, 1s between sets.",
+      "RANGE": "4m"
+    }
+  },
+  {
+    "section": "Normal Attack",
+    "name": "Stone Haymaker",
+    "key": "Right Click",
+    "icon": "Stone_Haymaker.png",
+    "description": "Deliver a devastating Heavy Blow. Can Knock Down flying enemies.",
+    "stats": {
+      "CASTING": "Single-cast Spell Field",
+      "DAMAGE": "55 + 10% of enemy's Max Health",
+      "RANGE": "8m"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Clobberin' Time",
+    "key": "Q",
+    "icon": "Clobberin_Time.png",
+    "description": "Uses immense power to launch all enemies in front of you into the air.",
+    "stats": {
+      "RANGE": "Step spell field: 3m high, 10m wide, advancing 2m every 0.1 seconds, up to a maximum of 18m",
+      "DAMAGE": "100",
+      "ENERGY COST": "2800",
+      "STUN DURATION": "2.5s"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Yancy Street Charge",
+    "key": "SHIFT",
+    "icon": "Yancy_Street_Charge.png",
+    "description": "Continuously charge forward, launching up enemies and leaving behind a zone at the final position that prevents the use of mobility abilities.",
+    "stats": {
+      "MOVEMENT BOOST": "100%",
+      "DURATION": "5s",
+      "DAMAGE": "Charge: 30; ground slam: 20; immobilization zone: 15 per/s",
+      "SPELL FIELD RANGE": "Ground slam: 8m radius, 2.5m high cylindrical spell field. \nImmobilization zone: 8m radius, 4m high cylindrical spell field",
+      "COOLDOWN": "10s"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Embattled Leap",
+    "key": "E",
+    "icon": "Embattled_Leap.png",
+    "description": "Jump towards your ally and apply damage reduction to both of you.",
+    "stats": {
+      "CASTING": "Targeted",
+      "COOLDOWN": "3s",
+      "CHARGES": "2",
+      "RECHARGE TIME": "10s",
+      "RANGE": "20m"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Battle Blitz",
+    "key": "F",
+    "icon": "Battle_Blitz.png",
+    "description": "Jump toward an enemy and apply damage reduction to self.",
+    "stats": {
+      "CASTING": "Targeted",
+      "COOLDOWN": "3s",
+      "CHARGES": "2",
+      "RECHARGE TIME": "10s",
+      "RANGE": "20m"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Unyielding Will",
+    "key": "Passive",
+    "icon": "Unyielding_Will.png",
+    "description": "Immune to launch up, knockback, and other displacement effects.",
+    "stats": {}
+  },
+  {
+    "section": "Team-Up Abilities",
+    "name": "Gamma Gauntlets",
+    "key": "C",
+    "icon": "Gamma_Gauntlets.png",
+    "description": "Hulk charges Black Panther and The Thing with gamma radiation. When Black Panther's health is low, he gains a gamma shield, becoming Unstoppable and blocking attacks. The Thing gains Gamma Gauntlets, boosting Damage and range of his Rocky Jab and Stone Haymaker. Dealing damage with these attacks grants Bonus Health, and maximum Bonus Health cap is increased.",
+    "stats": {
+      "DURATION": "8s",
+      "COOLDOWN": "25s",
+      "MAX RANGE": "5m (Rocky Jab) - 9m (Stone Haymaker)",
+      "DAMAGE": "45 (Rocky Jab) - 60 + 11% of enemy's Max Health (Stone Haymaker)",
+      "BONUS MAX HEALTH": "120",
+      "DAMAGE/BONUS HEALTH CONVERSION": "1"
+    }
+  },
+  {
+    "section": "Team-Up Abilities",
+    "name": "Cosmic Fastball",
+    "key": "Z",
+    "icon": "Cosmic_Fastball.png",
+    "description": "Wolverine, Hulk and The Thing can interact with each other. Once both parties can confirm, Hulk or The Thing can lift Wolverine and press the button to hurl him forward.",
+    "stats": {
+      "CASTING": "Targeted",
+      "COOLDOWN": "3s when not thrown, 15s when thrown",
+      "MAXIMUM DISTANCE": "20m"
+    }
+  },
+  {
+    "section": "Team-Up Abilities",
+    "name": "Flying Thing",
+    "key": "X",
+    "icon": "Flying_Thing.png",
+    "description": "Human Torch can lift The Thing into the air and slam him down, dealing damage, launching enemies, and creating a zone that disables mobility abilities.",
+    "stats": {
+      "COOLDOWN": "Successfully interacted: 30s; fail to interact: 3s",
+      "MAXIMUM DISTANCE": "20m",
+      "FLIGHT SPEED": "15m/s",
+      "SLAM DOWN INITIAL HORIZONTAL VELOCITY": "15m/s",
+      "MAXIMUM FLIGHT DURATION": "8s",
+      "DAMAGE": "Launch-up spell field causes 30 damage; mobility abilities disabling spell field causes 15 damage per second",
+      "LAUNCH UP RANGE": "A cylindrical spell field with a radius of 8m and a height of 1m",
+      "MOBILITY ABILITIES DISABLING RANGE": "A cylindrical spell field with a radius of 8m and a height of 8m"
+    }
+  }
+]

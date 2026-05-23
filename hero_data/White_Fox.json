@@ -1,0 +1,183 @@
+[
+  {
+    "section": "Normal Attack",
+    "name": "Yeowoo Guseul",
+    "key": "Left Click",
+    "icon": "Yeowoo_Guseul.png",
+    "description": "Fire a Fox Marble forward that bounces off terrain or heroes, then homes in on nearby heroes. It damages enemies, heals allies, and restores Spirit Tail energy.",
+    "stats": {
+      "PROJECTILE SPEED": "120m/s",
+      "BOUNCE PROJECTILE SPEED": "80m/s",
+      "MAXIMUM DISTANCE": "35m",
+      "BOUNCE PROJECTILE MAX DISTANCE": "6m",
+      "HEALING AMOUNT": "Direct hit: 50 per round; bounce hit: 35 per round",
+      "DAMAGE": "Direct hit: 40 per round; bounce hit: 25 per round",
+      "FIRE RATE": "0.45s per round"
+    },
+    "form": "Standard"
+  },
+  {
+    "section": "Normal Attack",
+    "name": "Claw Strike",
+    "key": "Left Click",
+    "icon": "Claw_Strike.png",
+    "description": "While Awakened, slash forward with a flurry of attacks.",
+    "stats": {
+      "ATTACK INTERVAL": "0.45s per use",
+      "DAMAGE": "35 per hit",
+      "ATTACK RANGE": "4m"
+    },
+    "form": "Standard"
+  },
+  {
+    "section": "Abilities",
+    "name": "Kumiho Unleashed",
+    "key": "Q",
+    "icon": "Kumiho_Unleashed.png",
+    "description": "Manifest the full Nine-Tailed Fox form and continuously heal nearby allies. Cannot receive healing effects from others while in this form.",
+    "stats": {
+      "CASTING": "Transformation",
+      "ENERGY COST": "4800",
+      "MAXIMUM HEALTH": "900",
+      "CONTINUOUS HEALING SPELL FIELD RANGE": "10m radius spherical spell field",
+      "HEALING AMOUNT": "85/s",
+      "DURATION": "10s"
+    },
+    "form": "Standard"
+  },
+  {
+    "section": "Abilities",
+    "name": "Spirit Sanctuary",
+    "key": "SHIFT",
+    "icon": "Spirit_Sanctuary.png",
+    "description": "Teleport to a chosen ally, instantly healing White Fox and allies in the area while generating a shield. While the shield is active, White Fox and allies within gain Healing Over Time.",
+    "stats": {
+      "SUMMON HEALTH": "200",
+      "ONE-TIME HEALING AMOUNT": "50",
+      "HEALING OVER TIME AMOUNT": "20/s",
+      "MAXIMUM DISTANCE": "30m",
+      "HEALING SPELL FIELD RANGE": "5m radius spherical spell field",
+      "SUMMON DURATION": "5s",
+      "COOLDOWN": "12s"
+    },
+    "form": "Standard"
+  },
+  {
+    "section": "Abilities",
+    "name": "Spectral Surge",
+    "key": "Right Click",
+    "icon": "Spectral_Surge.png",
+    "description": "Consume one Spirit Tail to send a spectral fox forward and instantly restore Health. It heals and grants invulnerability to allies it passes through, while damaging and Charming enemies, luring them toward White Fox.",
+    "stats": {
+      "PROJECTILE SPEED": "60m/s",
+      "DAMAGE/HEALING RADIUS": "3m",
+      "CHARM/INVINCIBILITY RADIUS": "0.8m",
+      "DAMAGE": "65",
+      "HEALING AMOUNT": "50 (self) - 65 (ally)",
+      "CHARM/INVINCIBILITY DURATION": "0.4s",
+      "COOLDOWN": "6s"
+    },
+    "form": "Standard"
+  },
+  {
+    "section": "Abilities",
+    "name": "Fox Form Awakening",
+    "key": "E",
+    "icon": "Fox_Form_Awakening.png",
+    "description": "Enter Awakened state, transforming Spirit Tails into physical tails. While active, continuously drain Spirit Tail energy and heal nearby allies. Striking enemies provides additional area healing.",
+    "stats": {
+      "ATTACK GENERATED HEALING SPELL FIELD RANGE": "10m radius spherical spell field",
+      "HEALING AMOUNT": "25/s",
+      "ABILITY DURATION": "Transform 3 tails: 9s; 2 tails: 8s; 1 tail: 7s",
+      "COOLDOWN": "15s"
+    },
+    "form": "Standard"
+  },
+  {
+    "section": "Abilities",
+    "name": "Predatory Pounce",
+    "key": "Shift",
+    "icon": "Predatory_Pounce.png",
+    "description": "While Awakened, dash forward. Hit an enemy to Slow and flip over them, enabling a second dash that knocks back enemies.",
+    "stats": {
+      "DASH DURATION": "10m",
+      "DAMAGE": "40",
+      "COOLDOWN": "6s"
+    },
+    "form": "Standard"
+  },
+  {
+    "section": "Abilities",
+    "name": "Tail Sweep",
+    "key": "Right Click",
+    "icon": "Tail_Sweep.png",
+    "description": "While Awakened, sweep forward tails to launch up hit enemies.",
+    "stats": {
+      "ATTACK RANGE": "5m",
+      "DAMAGE": "50",
+      "COOLDOWN": "3s"
+    },
+    "form": "Standard"
+  },
+  {
+    "section": "Team-Up Abilities",
+    "name": "Spirit Fox Ward",
+    "key": "Passive",
+    "icon": "Spirit_Fox_Ward.png",
+    "description": "White Fox grants Luna Snow a spirit fox for protection. Luna can activate it for a burst of speed and fire it forward, healing allies in its path while applying Charm to enemies.",
+    "stats": {
+      "TEAM-UP BONUS": "10% Healing Boost"
+    },
+    "form": "Standard"
+  },
+  {
+    "section": "Team-Up Abilities",
+    "name": "Nine-Tailed Aura",
+    "key": "C",
+    "icon": "Nine-Tailed_Aura.png",
+    "description": "Black Cat shares her luck with her allies. When White Fox embraces her newfound fortune, she unleashes tracking Spirit Tails to grant Healing and Speed to allies, while damaging and Slowing foes. When Captain America enjoys his luck, his shield's block radius expands and allows him to aim deflected Projectiles directly toward his target.",
+    "stats": {
+      "COOLDOWN": "20s",
+      "RANGE": "10m spherical spell field",
+      "MOVEMENT BOOST": "30% for 2s",
+      "SLOW EFFECT": "30% for 2s",
+      "ONE-TIME HEALING": "60",
+      "ONE-TIME DAMAGE": "40",
+      "SPIRIT TAILS RECOVERED": "1"
+    },
+    "form": "Standard"
+  },
+  {
+    "section": "Normal Attack",
+    "name": "Ninefold Slam",
+    "key": "Left Click",
+    "icon": "Ninefold_Slam.png",
+    "description": "In Kumiho Form, slam the ground, causing an explosive shockwave. Hitting enemies or summons grants One-Time Healing to self and nearby allies.",
+    "stats": {
+      "DAMAGE": "50 per hit",
+      "MAX ATTACK RANGE": "5m",
+      "EXPLOSION DAMAGE": "50 per hit",
+      "EXPLOSION SPELL FIELD RANGE": "6m radius spherical spell field",
+      "ATTACK INTERVAL": "1/s",
+      "HEALING AMOUNT": "100 per hit",
+      "ATTACK GENERATED HEALING SPELL FIELD RANGE": "10m radius spherical spell field"
+    },
+    "form": "Kumiho Form"
+  },
+  {
+    "section": "Abilities",
+    "name": "Blessed By The Nine",
+    "key": "Right Click",
+    "icon": "Blessed_By_The_Nine.png",
+    "description": "In Kumiho Form, select an ally to grant Continuous Healing, Unstoppable, and Life-Steal for a short time.",
+    "stats": {
+      "MAXIMUM SELECT DISTANCE": "50m",
+      "HEALING OVER TIME AMOUNT": "40/s",
+      "UNSTOPPABLE STATE DURATION": "3s",
+      "LIFESTEAL RATE": "25%",
+      "PROJECTILE SPEED": "100m/s",
+      "COOLDOWN": "2s"
+    },
+    "form": "Kumiho Form"
+  }
+]

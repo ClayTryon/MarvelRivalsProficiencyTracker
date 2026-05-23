@@ -1,0 +1,191 @@
+[
+  {
+    "name": "Arcane Order",
+    "anchor": "Doctor Strange",
+    "partners": [
+      "Scarlet Witch",
+      "Magik"
+    ]
+  },
+  {
+    "name": "Bestial Hunt",
+    "anchor": "Daredevil",
+    "partners": [
+      "The Punisher"
+    ]
+  },
+  {
+    "name": "Blade of Khonshu",
+    "anchor": "Moon Knight",
+    "partners": [
+      "Blade"
+    ]
+  },
+  {
+    "name": "Blessing of the Kumiho",
+    "anchor": "White Fox",
+    "partners": [
+      "Luna Snow"
+    ]
+  },
+  {
+    "name": "Chilling Assault",
+    "anchor": "Luna Snow",
+    "partners": [
+      "Iron Fist",
+      "Emma Frost"
+    ]
+  },
+  {
+    "name": "Cosmic Cyclone",
+    "anchor": "Storm",
+    "partners": [
+      "Adam Warlock"
+    ]
+  },
+  {
+    "name": "Deep Wrath",
+    "anchor": "Hela",
+    "partners": [
+      "Namor"
+    ]
+  },
+  {
+    "name": "Divine Armory",
+    "anchor": "Angela",
+    "partners": [
+      "Thor"
+    ]
+  },
+  {
+    "name": "Explosive Entanglement",
+    "anchor": "Gambit",
+    "partners": [
+      "Magneto",
+      "Rogue"
+    ]
+  },
+  {
+    "name": "Fastball Special",
+    "anchor": "Wolverine",
+    "partners": [
+      "Bruce Banner",
+      "The Thing"
+    ]
+  },
+  {
+    "name": "First Steps",
+    "anchor": "Human Torch",
+    "partners": [
+      "The Thing"
+    ]
+  },
+  {
+    "name": "Gamma Charge",
+    "anchor": "Bruce Banner",
+    "partners": [
+      "Black Panther",
+      "The Thing"
+    ]
+  },
+  {
+    "name": "Mr. Pool's Interdimensional Toy Box",
+    "anchor": "Deadpool",
+    "partners": [
+      "Jeff the Land Shark",
+      "Elsa Bloodstone"
+    ]
+  },
+  {
+    "name": "Lucky Loan",
+    "anchor": "Black Cat",
+    "partners": [
+      "White Fox",
+      "Captain America"
+    ]
+  },
+  {
+    "name": "Parker Power-Up",
+    "anchor": "Peni Parker",
+    "partners": [
+      "Spider-Man"
+    ]
+  },
+  {
+    "name": "Planet X Pals",
+    "anchor": "Groot",
+    "partners": [
+      "Rocket Raccoon",
+      "Jeff the Land Shark"
+    ]
+  },
+  {
+    "name": "Primal Flame",
+    "anchor": "Phoenix",
+    "partners": [
+      "Wolverine",
+      "Black Widow"
+    ]
+  },
+  {
+    "name": "Primal Punishment",
+    "anchor": "Devil Dinosaur",
+    "partners": [
+      "The Punisher"
+    ]
+  },
+  {
+    "name": "Psionic Mayhem",
+    "anchor": "Invisible Woman",
+    "partners": [
+      "Doctor Strange"
+    ]
+  },
+  {
+    "name": "Rocket Network",
+    "anchor": "Rocket Raccoon",
+    "partners": [
+      "Star-Lord",
+      "Mister Fantastic"
+    ]
+  },
+  {
+    "name": "Stark Protocol",
+    "anchor": "Iron Man",
+    "partners": [
+      "Ultron",
+      "Squirrel Girl"
+    ]
+  },
+  {
+    "name": "Stars Aligned",
+    "anchor": "Captain America",
+    "partners": [
+      "Winter Soldier"
+    ]
+  },
+  {
+    "name": "Sword of Duality",
+    "anchor": "Cloak & Dagger",
+    "partners": [
+      "Hawkeye",
+      "Psylocke"
+    ]
+  },
+  {
+    "name": "Symbiote Shenanigans",
+    "anchor": "Venom",
+    "partners": [
+      "Jeff the Land Shark",
+      "Hela"
+    ]
+  },
+  {
+    "name": "Vibrant Vitality",
+    "anchor": "Mantis",
+    "partners": [
+      "Loki",
+      "Groot"
+    ]
+  }
+]

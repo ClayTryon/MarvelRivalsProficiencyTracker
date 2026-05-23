@@ -1,0 +1,102 @@
+[
+  {
+    "section": "Normal Attack",
+    "name": "Repulsor Blast",
+    "key": "Left Click",
+    "icon": "Repulsor_Blast.png",
+    "description": "Fire nano pulse cannons forward.",
+    "stats": {
+      "CASTING": "Straight-line projectile that generates a spell field upon impact",
+      "DAMAGE": "35 (Normal Attack) \n45 (Dual Blasters, Armor Overdrive)",
+      "AMMO": "100  \n∞ (Armor Overdrive)",
+      "AMMO CONSUMPTION": "10 (Normal Attack)  \n14 (Dual Blasters)  \n1.33 (Armor Overdrive)",
+      "FIRE RATE": "1.67/s (Normal Attack)  \n1.33/s (Armor Overdrive)",
+      "RANGE": "3m spherical radius (Normal Attack)  \n5m spherical radius (Armor Overdrive)",
+      "CRITICAL HIT": "No",
+      "PROJECTILE SPEED": "60m/s (Normal Attack)  \n80m/s (Dual Blasters and Armor Overdrive)",
+      "SPELL FIELD DAMAGE": "35 (Normal Attack)  \n55 (Dual Blasters)  \n55 (Armor Overdrive)",
+      "SPELL FIELD DAMAGE FALLOFF": "40% falloff at 3m (Normal Attack)  \n40% falloff at 5m (Dual Blasters and Armor Overdrive)"
+    }
+  },
+  {
+    "section": "Normal Attack",
+    "name": "Unibeam",
+    "key": "Right Click",
+    "icon": "Unibeam.png",
+    "description": "Fire a unibeam forward.",
+    "stats": {
+      "CASTING": "Channeled",
+      "DAMAGE": "140/s (Normal Attack)  \n190/s (Armor Overdrive)",
+      "AMMO": "100 (Normal Attack)  \n∞ (Armor Overdrive)",
+      "AMMO CONSUMPTION": "10/s",
+      "RANGE": "25m"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Invincible Pulse Cannon",
+    "key": "Q",
+    "icon": "Invincible_Pulse_Cannon.png",
+    "description": "Fire a devastating pulse cannon in the targeted direction, delivering catastrophic damage to the targeted area upon impact.",
+    "stats": {
+      "CASTING": "Straight-line projectile that generates a spell field upon impact",
+      "DAMAGE": "300/s",
+      "PROJECTILE SPEED": "25m/s",
+      "SPELL FIELD RANGE": "10m spherical radius (Spell Field)",
+      "SPELL FIELD DAMAGE": "1000",
+      "SPELL FIELD DAMAGE FALLOFF": "5% falloff at 10m",
+      "ENERGY COST": "3400"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Hyper-Velocity",
+    "key": "SHIFT",
+    "icon": "Hyper-Velocity.png",
+    "description": "Activate Hyper-Velocity state for swift forward flight.",
+    "stats": {
+      "CASTING": "Movement",
+      "MAXIMUM ENERGY": "120 (Hyper-Velocity)  \n∞ (Armor Overdrive)",
+      "ENERGY RECOVERY SPEED": "10/s",
+      "MOVEMENT BOOST": "100%",
+      "ENERGY COST": "15/s"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Armor Overdrive",
+    "key": "E",
+    "icon": "Armor_Overdrive.png",
+    "description": "Activate Armor Overdrive state, enhancing the damage of Repulsor Blast and Unibeam, while also granting Bonus Health.",
+    "stats": {
+      "DURATION": "10s",
+      "BONUS HEALTH": "50",
+      "COOLDOWN": "20s"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Micro-Missile Barrage",
+    "key": "F",
+    "icon": "Micro-Missile_Barrage.png",
+    "description": "When Hyper-Velocity or Armor Overdrive is used, Iron Man can launch a missile bombardment.",
+    "stats": {
+      "CASTING": "Scatter-type projectile that generates a spell area upon impact",
+      "AMMO": "16 (Micro-Missile Barrage)  \n18 (Armor Overdrive)",
+      "COOLDOWN": "8s (Micro-Missile Barrage)  \n6s (Armor Overdrive)",
+      "RANGE": "2m spherical radius",
+      "PROJECTILE SPEED": "15m/s (Micro-Missile Barrage)  \n60m/s (Armor Overdrive)",
+      "SPELL FIELD DAMAGE": "20 per round (Micro-Missile Barrage)  \n15 per round (Armor Overdrive)"
+    }
+  },
+  {
+    "section": "Team-Up Abilities",
+    "name": "Nano Tech",
+    "key": "Passive",
+    "icon": "Nano_Tech.png",
+    "description": "When Iron Man, Ultron, and Squirrel Girl team up, Ultron's Encephalo-Ray upgrades to Nano-Ray, firing a beam that pierces through all characters, dealing continuous damage to foes while healing allies; Squirrel Girl gains the Squirrel Missile ability. She directs a squirrel to ride Iron Man's nanotech glove as a homing missile. Upon hit, the squirrel flees just before a fiery explosion!",
+    "stats": {
+      "TEAM-UP BONUS": "5% Damage Boost"
+    }
+  }
+]

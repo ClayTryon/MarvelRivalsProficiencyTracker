@@ -35,6 +35,7 @@ for _lo, _hi, _xp in _RANGES:
         _cumulative += _xp
 
 TOTAL_XP_FOR_CHAMPION: int = _XP_TO_REACH[50]  # 54,100
+TOTAL_XP_FOR_LORD: int = _XP_TO_REACH[20]      # 6,100
 
 
 def total_xp_earned(level: int, current_xp: int) -> int:

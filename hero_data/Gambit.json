@@ -1,0 +1,161 @@
+[
+  {
+    "section": "Normal Attack",
+    "name": "Kinetic Cards",
+    "key": "Left Click",
+    "icon": "Kinetic_Cards.png",
+    "description": "Launch three kinetic-charged cards in an arc ahead. Each card detonates on impact, creating a single-target explosion that damages enemies and heals allies.",
+    "stats": {
+      "CASTING": "Projectile that fires in a straight trajectory",
+      "CARDS LAUNCHED": "3 per unleash",
+      "ANGLE BETWEEN SIDE CARDS & CENTER CARD": "2°",
+      "DAMAGE": "20 per round",
+      "HEALING": "28 per round",
+      "FIRE RATE": "0.45s",
+      "PROJECTILE SPEED": "150m/s",
+      "AMMO": "21",
+      "CRITICAL HIT": "No"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Ragin' Royal Flush",
+    "key": "Q",
+    "icon": "Ragin_Royal_Flush.png",
+    "description": "Lock onto an ally within sight and unleash multiple Aces that heal and Purify. Both enter the Kinetic Transfer state, granting increased Movement Speed and Jump Boost, while enhancing attacks with additional single-target explosive damage and providing the ally with Ultimate Ability Charge Acceleration.",
+    "stats": {
+      "CASTING": "Targeted",
+      "ENERGY COST": "4500",
+      "RANGE": "Cone shaped spell field; Angle: 110°, Length: 40m",
+      "ONE-TIME HEALING": "100",
+      "HEALING OVER TIME": "55/s",
+      "MOVEMENT SPEED BOOST": "40%",
+      "ENHANCED DAMAGE RATIO": "25%",
+      "DAMAGE TRIGGER INTERVAL": "0.5s",
+      "ULTIMATE ABILITY CHARGE ACCELERATION": "20%",
+      "DURATION": "10s"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Bayou Bash",
+    "key": "Right Click",
+    "icon": "Bayou_Bash.png",
+    "description": "Channel kinetic energy into the bo staff, then slam it into the ground after a sweeping strike, creating a shockwave that damages nearby enemies and heals allies. Follow up Cajun Charge with Big Easy Impact to sprint forward while striking with the bo staff, triggering three kinetic explosions along the path.",
+    "stats": {
+      "CASTING": "Single-cast spell field that surrounds the caster",
+      "DAMAGE": "60",
+      "HEALING": "60",
+      "CHARGES": "2",
+      "RECHARGE TIME": "8s",
+      "SPELL FIELD RANGE": "5m spherical radius"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Cajun Charge",
+    "key": "SHIFT",
+    "icon": "Cajun_Charge.png",
+    "description": "Side-step forward with bo staff in hand, dashing a short distance.",
+    "stats": {
+      "CASTING": "Dash",
+      "CHARGES": "2",
+      "RECHARGE TIME": "12.5s per charge",
+      "DASH DISTANCE": "8m"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Healing Hearts",
+    "key": "E",
+    "icon": "Healing_Hearts.png",
+    "description": "Conjure a Heart card by consuming one stack of Sleight of Hand to Heal and switch to the Healing Hearts deck.",
+    "stats": {
+      "SLEIGHT OF HAND CHARGES": "4",
+      "SLEIGHT OF HAND RECHARGE TIME": "8s per charge",
+      "SELF-HEALING": "Heal 20/s within the duration",
+      "MAX DURATION": "6s"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Bridge Boost",
+    "key": "E",
+    "icon": "Bridge_Boost.png",
+    "description": "While Healing Hearts deck is active, trigger Flush Empowerment to card spring and fire a full deck forward. Cards bounce between allies on impact, granting Health and a Healing Boost.",
+    "stats": {
+      "CASTING": "Projectile that fires in a straight trajectory",
+      "HEALING": "50",
+      "HEALING BOOST": "15%",
+      "PROJECTILE SPEED": "120m/s",
+      "MAX NUMBER OF RICOCHETS": "6",
+      "EFFECT DURATION": "4s"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Purifying Pick-Up",
+    "key": "F",
+    "icon": "Purifying_Pick-Up.png",
+    "description": "While Healing Hearts deck is active, trigger Raise Empowerment to launch a cluster of cards in an arc ahead. Explosions heal nearby allies and Purify them.",
+    "stats": {
+      "CASTING": "Projectile that generates a spell field upon impact",
+      "HEALING": "70 per card",
+      "NUMBER OF GENERATED PROJECTILES": "10",
+      "MAX DISTANCE": "15m",
+      "SPELL FIELD RANGE": "5m spherical radius",
+      "PROJECTILE SPEED": "100m/s"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Breaking Spades",
+    "key": "F",
+    "icon": "Breaking_Spades.png",
+    "description": "Conjure a Spade card by consuming one stack of Sleight of Hand to gain a Damage Boost and switch to the Breaking Spades deck.",
+    "stats": {
+      "SLEIGHT OF HAND CHARGES": "4",
+      "SLEIGHT OF HAND RECHARGE TIME": "8s per charge",
+      "SELF DAMAGE BOOST": "10%",
+      "MAX DURATION": "6s"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Explosive Trick",
+    "key": "F",
+    "icon": "Explosive_Trick.png",
+    "description": "While Breaking Spades deck is active, trigger Flush Empowerment to fire a full set of cards forward. Cards explode on impact, dealing damage while inflicting Reduced Healing.",
+    "stats": {
+      "CASTING": "Projectile that generates a spell field upon impact",
+      "DAMAGE": "70",
+      "HEALING REDUCTION": "25%",
+      "EFFECT DURATION": "4s",
+      "SPELL FIELD RANGE": "5m spherical radius",
+      "PROJECTILE SPEED": "150m/s"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Bidding Barrage",
+    "key": "E",
+    "icon": "Bidding_Barrage.png",
+    "description": "While Breaking Spades deck is active, trigger Raise Empowerment to scatter cards in an arc in all directions. Explosions damage enemies and Launch them up.",
+    "stats": {
+      "CASTING": "Projectile that generates a spell field upon impact",
+      "DAMAGE": "70",
+      "NUMBER OF PROJECTILES": "10",
+      "MAX DISTANCE": "15m",
+      "SPELL FIELD RANGE": "5m spherical radius",
+      "PROJECTILE SPEED": "100m/s"
+    }
+  },
+  {
+    "section": "Team-Up Abilities",
+    "name": "Ace of Aces",
+    "key": "Passive",
+    "icon": "Ace_of_Aces.png",
+    "description": "Gambit shares kinetic energy with Magneto and Rogue. When Magneto activates this ability, Iron Volley is replaced with Ace Greatsword, which detonates upon striking enemies. The explosion leaves residual kinetic energy within the target, inflicting secondary damage after a brief delay. When Rogue activates the ability, each of her attacks causes a kinetic explosion that damages nearby enemies and heals nearby allies.",
+    "stats": {}
+  }
+]

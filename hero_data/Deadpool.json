@@ -1,0 +1,1069 @@
+[
+  {
+    "section": "Normal Attack",
+    "name": "Dual Desert Eagles - Vanguard",
+    "key": "Left Click",
+    "icon": "Dual_Desert_Eagles_-_Vanguard.png",
+    "description": "Shoot enemies with dual Desert Eagles.",
+    "stats": {
+      "CASTING": "Rapid-fire projectile",
+      "DAMAGE": "36 damage per round",
+      "DAMAGE FALLOFF": "Falloff begins at 15m, decreasing to 50% at 30m",
+      "FIRE RATE": "2.5 rounds per second",
+      "AMMO": "30"
+    },
+    "form": "Vanguard"
+  },
+  {
+    "section": "Abilities",
+    "name": "The Ban Hammer!",
+    "key": "Q",
+    "icon": "The_Ban_Hammer.png",
+    "description": "Select an enemy to taunt, while gaining Bonus Health and Healing Over Time. During the effect, they suffer continuous damage, and if they miss with an ability, they suffer extra damage and Deadpool gains more Bonus Health.",
+    "stats": {
+      "DAMAGE PER ABILITY MISSED": "45",
+      "ABILITY DURATION": "8s",
+      "BONUS HEALTH GAINED UPON ACTIVATION": "200",
+      "HEALING OVER TIME DURING ACTIVATION": "50/s",
+      "COOLDOWN": "60s"
+    },
+    "form": "Vanguard"
+  },
+  {
+    "section": "Abilities",
+    "name": "Slice And Dice!",
+    "key": "LSHIFT",
+    "icon": "Slice_And_Dice.png",
+    "description": "Switch to dual katanas.",
+    "stats": {},
+    "form": "Vanguard"
+  },
+  {
+    "section": "Abilities",
+    "name": "Deadpool In Your Area - Vanguard",
+    "key": "E",
+    "icon": "Deadpool_In_Your_Area_-_Vanguard.png",
+    "description": "Taunt and deal continuous damage to nearby enemies, disrupting their vision while dual katanas and dual pistols gain increased Attack Speed.",
+    "stats": {
+      "ABILITY DURATION": "5s",
+      "DAMAGE NEEDED TO REMOVE THE DISRUPTION": "100",
+      "SPELL FIELD DAMAGE": "10/s",
+      "SPELL FIELD RANGE": "A cylindrical spell field with a 6m radius and a height of 6m.",
+      "COOLDOWN": "12s"
+    },
+    "form": "Vanguard"
+  },
+  {
+    "section": "Abilities",
+    "name": "Upgrade!",
+    "key": "F",
+    "icon": "Upgrade.png",
+    "description": "Deal damage to accumulate XP. When maxed, choose an ability to upgrade. Landing final hits and taking a selfie grants bonus XP. Deadpool is Invincible while taking photos.",
+    "stats": {},
+    "form": "Vanguard"
+  },
+  {
+    "section": "Abilities",
+    "name": "Bunny Bounce",
+    "key": "SPACE",
+    "icon": "Bunny_Bounce.png",
+    "description": "Perform a double jump. Using Bunny Bounce over others' heads or off vertical walls during The Big Test and The Big Test - Upgraded refreshes the cooldown. Stomping enemies grants deals damage.",
+    "stats": {
+      "MAXIMUM JUMP DISTANCE": "16m",
+      "COOLDOWN": "6s"
+    },
+    "form": "Vanguard"
+  },
+  {
+    "section": "Abilities",
+    "name": "Magical Unicorn Shield!",
+    "key": "Right Click",
+    "icon": "Magical_Unicorn_Shield.png",
+    "description": "Throw a plush toy forward; upon landing, it generates a spherical shield that blocks enemy attacks.",
+    "stats": {
+      "MAXIMUM DURATION FOR SUMMONS": "4s",
+      "COOLDOWN": "12s"
+    },
+    "form": "Vanguard"
+  },
+  {
+    "section": "Abilities",
+    "name": "Healing Factor",
+    "key": "Passive",
+    "icon": "Healing_Factor.png",
+    "description": "Continuously heal while out of combat. When taking heavy damage, briefly become invincible and rapidly heal.",
+    "stats": {
+      "HEALING OVER TIME": "25/s",
+      "HEALING OVER TIME FROM ACTIVATED HEALING FACTOR": "50/s",
+      "COOLDOWN": "45s"
+    },
+    "form": "Vanguard"
+  },
+  {
+    "section": "Abilities",
+    "name": "Maximum Flair",
+    "key": "Passive",
+    "icon": "Maximum_Flair.png",
+    "description": "Increase your Style Rating by landing abilities. Ultimate Ability can be unleashed after reaching an \"S\" rating.",
+    "stats": {},
+    "form": "Vanguard"
+  },
+  {
+    "section": "Team-Up Abilities",
+    "name": "Comical Chaos",
+    "key": "Passive",
+    "icon": "Comical_Chaos.png",
+    "description": "Deadpool hands Jeff the Land Shark a plushie with attitude. Jeff can spit it ahead where it'll continuously Taunt nearby enemies and Block Vision, while allies in range enjoy a plush-powered healing party!",
+    "stats": {
+      "TEAM-UP BONUS": "+50 Max Health"
+    },
+    "form": "Vanguard"
+  },
+  {
+    "section": "Normal Attack",
+    "name": "Kick@$$ Katana - Vanguard",
+    "key": "Left Click",
+    "icon": "Kick_Katana_-_Vanguard.png",
+    "description": "Slash forward with dual katanas.",
+    "stats": {
+      "CASTING": "MELEE",
+      "DAMAGE": "30 per hit",
+      "ATTACK INTERVAL": "First strike: 0.6s; second strike: 0.53s; third strike: 0.6s",
+      "MAXIMUM DISTANCE": "4m"
+    },
+    "form": "Vanguard"
+  },
+  {
+    "section": "Abilities",
+    "name": "The Big Test",
+    "key": "Q",
+    "icon": "The_Big_Test.png",
+    "description": "Initiate a challenge for yourself, gaining minor Speed Boost and Healing Over Time. Also recharge Hazardous Hijinks - Vanguard attempts, while granting Bonus Health to self and surrounding allies. Hit enough enemies with the indicated abilities in time for greatly enhanced Speed, Healing, and refresh Healing Factor cooldown.",
+    "stats": {
+      "ABILITY DURATION": "The challenge lasts 12s. The buff lasts 6s after you complete it.",
+      "BOOST SPELL FIELD RANGE": "6m radius spherical spell field",
+      "BONUS HEALTH": "Self: 200; Allies: 50",
+      "HEALING OVER TIME": "Upon activation: 50/s; challenge completed: 100/s",
+      "MOVEMENT BOOST": "Upon activation: 15%; challenge completed: 30%",
+      "COOLDOWN": "60s"
+    },
+    "form": "Vanguard"
+  },
+  {
+    "section": "Abilities",
+    "name": "Lock And Load!",
+    "key": "LSHIFT",
+    "icon": "Lock_And_Load.png",
+    "description": "Switch to dual pistols.",
+    "stats": {},
+    "form": "Vanguard"
+  },
+  {
+    "section": "Abilities",
+    "name": "Deadpool In Your Area - Vanguard",
+    "key": "E",
+    "icon": "Deadpool_In_Your_Area_-_Vanguard.png",
+    "description": "Taunt and deal continuous damage to nearby enemies, disrupting their vision while dual katanas and dual pistols gain increased Attack Speed.",
+    "stats": {
+      "ABILITY DURATION": "5s",
+      "DAMAGE NEEDED TO REMOVE THE DISRUPTION": "100",
+      "SPELL FIELD DAMAGE": "10/s",
+      "SPELL FIELD RANGE": "A cylindrical spell field with a 6m radius and a height of 6m.",
+      "COOLDOWN": "12s"
+    },
+    "form": "Vanguard"
+  },
+  {
+    "section": "Abilities",
+    "name": "Upgrade!",
+    "key": "F",
+    "icon": "Upgrade.png",
+    "description": "Deal damage to accumulate XP. When maxed, choose an ability to upgrade. Landing final hits and taking a selfie grants bonus XP. Deadpool is Invincible while taking photos.",
+    "stats": {},
+    "form": "Vanguard"
+  },
+  {
+    "section": "Abilities",
+    "name": "Bunny Bounce",
+    "key": "SPACE",
+    "icon": "Bunny_Bounce.png",
+    "description": "Perform a double jump. Using Bunny Bounce over others' heads or off vertical walls during The Big Test and The Big Test - Upgraded refreshes the cooldown. Stomping enemies deals damage.",
+    "stats": {
+      "MAXIMUM JUMP DISTANCE": "16m",
+      "COOLDOWN": "6s"
+    },
+    "form": "Vanguard"
+  },
+  {
+    "section": "Abilities",
+    "name": "Hazardous Hijinks - Vanguard",
+    "key": "Right Click",
+    "icon": "Hazardous_Hijinks_-_Vanguard.png",
+    "description": "Dash forward and slash, striking enemies in your path. Hitting an enemy lets you unleash another Hazardous Hijinks 2.0, up to two times.",
+    "stats": {
+      "DAMAGE": "40",
+      "DASH DURATION": "Up to 12m",
+      "COOLDOWN": "10s"
+    },
+    "form": "Vanguard"
+  },
+  {
+    "section": "Abilities",
+    "name": "Healing Factor",
+    "key": "Passive",
+    "icon": "Healing_Factor.png",
+    "description": "Continuously heal while out of combat. When taking heavy damage, briefly become invincible and rapidly heal.",
+    "stats": {
+      "HEALING OVER TIME": "25/s",
+      "HEALING OVER TIME FROM ACTIVATED HEALING FACTOR": "50/s",
+      "COOLDOWN": "45s"
+    },
+    "form": "Vanguard"
+  },
+  {
+    "section": "Abilities",
+    "name": "Maximum Flair",
+    "key": "Passive",
+    "icon": "Maximum_Flair.png",
+    "description": "Increase your Style Rating by landing abilities. Ultimate Ability can be unleashed after reaching an \"S\" rating.",
+    "stats": {},
+    "form": "Vanguard"
+  },
+  {
+    "section": "Team-Up Abilities",
+    "name": "Comical Chaos",
+    "key": "Passive",
+    "icon": "Comical_Chaos.png",
+    "description": "Deadpool hands Jeff the Land Shark a plushie with attitude. Jeff can spit it ahead where it'll continuously Taunt nearby enemies and Block Vision, while allies in range enjoy a plush-powered healing party!",
+    "stats": {
+      "TEAM-UP BONUS": "+50 Max Health"
+    },
+    "form": "Vanguard"
+  },
+  {
+    "section": "Normal Attack",
+    "name": "Dual Desert Eagles - Vanguard Upgraded",
+    "key": "Left Click",
+    "icon": "Dual_Desert_Eagles_-_Vanguard_Upgraded.png",
+    "description": "Shoot enemies with dual Desert Eagles. After enough shots, unleash a powerful, explosive Boom Emoji for extra damage.",
+    "stats": {
+      "BEAM DAMAGE": "42 damage per round",
+      "BEAM ATTACK INTERVAL": "2.5 rounds per second",
+      "AMMO": "40",
+      "PROJECTILE ATTACK INTERVAL": "After every 5 beam bullets fired, the next shot fires 1 additional projectile",
+      "PROJECTILE SPEED": "60 m/s",
+      "SPELL FIELD DAMAGE": "25",
+      "SPELL FIELD RANGE": "3m radius spherical spell field"
+    },
+    "form": "Vanguard"
+  },
+  {
+    "section": "Normal Attack",
+    "name": "Kick@$$ Katana - Vanguard Upgraded",
+    "key": "Left Click",
+    "icon": "Kick_Katana_-_Vanguard_Upgraded.png",
+    "description": "Slash forward with dual katanas. Stabs can deal critical hits. After a Bunny Bounce, your next attack is guaranteed to be stabs.",
+    "stats": {
+      "DAMAGE": "35 per hit",
+      "ATTACK INTERVAL": "First strike: 0.5s; second strike: 0.43s; third strike: 0.5s",
+      "MAXIMUM DISTANCE": "4m"
+    },
+    "form": "Vanguard"
+  },
+  {
+    "section": "Abilities",
+    "name": "The Ban Hammer - Upgraded",
+    "key": "Q",
+    "icon": "The_Ban_Hammer_-_Upgraded.png",
+    "description": "Select an enemy to taunt, while gaining Bonus Health and Healing Over Time. During the effect, they suffer continuous damage, and if they miss with an ability, they suffer extra damage and Deadpool gains more Bonus Health.",
+    "stats": {
+      "DAMAGE PER ABILITY MISSED": "45",
+      "ABILITY DURATION": "8s",
+      "BONUS HEALTH GAINED UPON ACTIVATION": "200",
+      "HEALING OVER TIME DURING ACTIVATION": "50/s",
+      "DAMAGE OVER TIME": "25/s",
+      "COOLDOWN": "60s"
+    },
+    "form": "Vanguard"
+  },
+  {
+    "section": "Abilities",
+    "name": "The Big Test - Upgraded",
+    "key": "Q",
+    "icon": "The_Big_Test_-_Upgraded.png",
+    "description": "Initiate a challenge for yourself, gaining minor Speed Boost and Healing Over Time. Also recharge Hazardous Hijinks - Vanguard attempts, while granting Bonus Health to self and surrounding allies. Hit enough enemies with the indicated abilities in time to refresh Healing Factor cooldown and gain greatly enhanced Speed and Healing. For some time after, dealing damage grants Bonus Health to self and nearby allies.",
+    "stats": {
+      "ABILITY DURATION": "The challenge lasts 12s. The buff lasts 6s after you complete it.",
+      "BOOST SPELL FIELD RANGE": "6m radius spherical spell field",
+      "BONUS HEALTH": "Self: 300; Allies: 50",
+      "HEALING OVER TIME": "Upon activation: 50/s; challenge completed: 100/s",
+      "MOVEMENT BOOST": "Upon activation: 15%; challenge completed: 30%",
+      "COOLDOWN": "60s"
+    },
+    "form": "Vanguard"
+  },
+  {
+    "section": "Abilities",
+    "name": "Deadpool In Your Area - Vanguard Upgraded",
+    "key": "E",
+    "icon": "Deadpool_In_Your_Area_-_Vanguard_Upgraded.png",
+    "description": "Taunt and deal continuous damage to nearby enemies, disrupting their vision while dual katanas and dual pistols gain increased Attack Speed. Allies within range also gain Damage Reduction. If enemies don't escape in time, the bottom of their screen gets further blocked.",
+    "stats": {
+      "ABILITY DURATION": "5s",
+      "DAMAGE NEEDED TO REMOVE THE DISRUPTION": "100",
+      "SPELL FIELD DAMAGE": "10/s",
+      "SPELL FIELD RANGE": "A cylindrical spell field with a 6m radius and a height of 6m",
+      "DAMAGE REDUCTION": "Self: 30%; allies: 20%",
+      "COOLDOWN": "12s"
+    },
+    "form": "Vanguard"
+  },
+  {
+    "section": "Abilities",
+    "name": "Magical Unicorn Shield! - Upgraded",
+    "key": "Right Click",
+    "icon": "Magical_Unicorn_Shield_-_Upgraded.png",
+    "description": "Throw a golden plush toy forward; upon landing, it generates a large spherical shield that blocks enemy attacks.",
+    "stats": {
+      "MAXIMUM DURATION FOR SUMMONS": "4s",
+      "COOLDOWN": "12s"
+    },
+    "form": "Vanguard"
+  },
+  {
+    "section": "Abilities",
+    "name": "Hazardous Hijinks - Vanguard Upgraded",
+    "key": "Right Click",
+    "icon": "Hazardous_Hijinks_-_Vanguard_Upgraded.png",
+    "description": "Dash forward and slash, striking enemies in your path. Each hit refreshes the cooldown and launches you in your chosen direction, up to 2 times within a short period.",
+    "stats": {
+      "DAMAGE": "40",
+      "DASH DURATION": "Up to 12m",
+      "COOLDOWN": "2 charges, with each charge taking 10s to recharge."
+    },
+    "form": "Vanguard"
+  },
+  {
+    "section": "Normal Attack",
+    "name": "Dual Desert Eagles - Duelist",
+    "key": "Left Click",
+    "icon": "Dual_Desert_Eagles_-_Duelist.png",
+    "description": "Shoot enemies with dual Desert Eagles.",
+    "stats": {
+      "CASTING": "Rapid-fire projectile",
+      "DAMAGE": "38 damage per round",
+      "DAMAGE FALLOFF": "Falloff begins at 18m, decreasing to 80% at 30m",
+      "FIRE RATE": "2.5 rounds per second",
+      "AMMO": "30"
+    },
+    "form": "Duelist"
+  },
+  {
+    "section": "Abilities",
+    "name": "Skill Issue",
+    "key": "Q",
+    "icon": "Skill_Issue.png",
+    "description": "Select an enemy to taunt. They take damage whenever they miss an ability during the effect.",
+    "stats": {
+      "DAMAGE PER ABILITY MISSED": "60",
+      "ABILITY DURATION": "8s",
+      "COOLDOWN": "60s"
+    },
+    "form": "Duelist"
+  },
+  {
+    "section": "Abilities",
+    "name": "Slice And Dice!",
+    "key": "LSHIFT",
+    "icon": "Slice_And_Dice.png",
+    "description": "Switch to dual katanas.",
+    "stats": {},
+    "form": "Duelist"
+  },
+  {
+    "section": "Abilities",
+    "name": "Deadpool In Your Area - Duelist",
+    "key": "E",
+    "icon": "Deadpool_In_Your_Area_-_Duelist.png",
+    "description": "Taunt and deal continuous damage to nearby enemies, disrupting their vision while gaining Damage Reduction.",
+    "stats": {
+      "ABILITY DURATION": "5s",
+      "DAMAGE NEEDED TO REMOVE THE DISRUPTION": "100",
+      "SELF DAMAGE REDUCTION": "20%",
+      "SPELL FIELD DAMAGE": "15/s",
+      "SPELL FIELD RANGE": "A cylindrical spell field with a 6m radius and a height of 6m.",
+      "COOLDOWN": "12s"
+    },
+    "form": "Duelist"
+  },
+  {
+    "section": "Abilities",
+    "name": "Upgrade!",
+    "key": "F",
+    "icon": "Upgrade.png",
+    "description": "Deal damage to accumulate XP. When maxed, choose an ability to upgrade. Landing final hits and taking a selfie grants bonus XP. Deadpool is Invincible while taking photos.",
+    "stats": {},
+    "form": "Duelist"
+  },
+  {
+    "section": "Abilities",
+    "name": "Bunny Hop",
+    "key": "SPACE",
+    "icon": "Bunny_Hop.png",
+    "description": "Perform a double jump. Using Bunny Hop over others' heads or near vertical walls refreshes the cooldown. Stomping enemies grants Bonus Health and deals damage.",
+    "stats": {
+      "DAMAGE": "25",
+      "BONUS HEALTH": "25, maximum of 50",
+      "COOLDOWN": "6s"
+    },
+    "form": "Duelist"
+  },
+  {
+    "section": "Abilities",
+    "name": "Headshot! - Duelist",
+    "key": "Right Click",
+    "icon": "Headshot_-_Duelist.png",
+    "description": "Remove your Avatar and throw it, damaging enemies along the path and nearby; after a short time, it returns to you.",
+    "stats": {
+      "CASTING": "Single-cast projectile with delayed impact that also generates a spell field",
+      "PROJECTILE DAMAGE": "Unleash: 30; Return: 25",
+      "PROJECTILE SPEED": "80m/s",
+      "SPELL FIELD DAMAGE": "15/s",
+      "SPELL FIELD RANGE": "4m spherical radius spell field",
+      "SPELL FIELD DURATION": "1s",
+      "COOLDOWN": "10s"
+    },
+    "form": "Duelist"
+  },
+  {
+    "section": "Abilities",
+    "name": "Healing Factor",
+    "key": "Passive",
+    "icon": "Healing_Factor.png",
+    "description": "Continuously heal while out of combat. When taking heavy damage, briefly become invincible and rapidly heal.",
+    "stats": {
+      "HEALING OVER TIME": "25/s",
+      "HEALING OVER TIME FROM ACTIVATED HEALING FACTOR": "50/s",
+      "COOLDOWN": "45s"
+    },
+    "form": "Duelist"
+  },
+  {
+    "section": "Abilities",
+    "name": "Maximum Flair",
+    "key": "Passive",
+    "icon": "Maximum_Flair.png",
+    "description": "Increase your Style Rating by landing abilities. Ultimate Ability can be unleashed after reaching an \"S\" rating.",
+    "stats": {},
+    "form": "Duelist"
+  },
+  {
+    "section": "Team-Up Abilities",
+    "name": "Comical Chaos",
+    "key": "Passive",
+    "icon": "Comical_Chaos.png",
+    "description": "Deadpool hands Jeff the Land Shark a plushie with attitude. Jeff can spit it ahead where it'll continuously Taunt nearby enemies and Block Vision, while allies in range enjoy a plush-powered healing party!",
+    "stats": {
+      "TEAM-UP BONUS": "5% Damage Boost"
+    },
+    "form": "Duelist"
+  },
+  {
+    "section": "Normal Attack",
+    "name": "Kick@$$ Katana - Duelist",
+    "key": "Left Click",
+    "icon": "Kick_Katana_-_Duelist.png",
+    "description": "Slash forward with dual katanas.",
+    "stats": {
+      "CASTING": "MELEE",
+      "DAMAGE": "40 per hit",
+      "ATTACK INTERVAL": "First strike: 0.6s; second strike: 0.53s; third strike: 0.6s",
+      "MAXIMUM DISTANCE": "4m"
+    },
+    "form": "Duelist"
+  },
+  {
+    "section": "Abilities",
+    "name": "Pop Quiz!",
+    "key": "Q",
+    "icon": "Pop_Quiz.png",
+    "description": "Initiate a challenge for yourself while gaining minor Speed Boost and Healing Over Time. Hit enough enemies with the indicated abilities in time for greatly enhanced Speed and Healing.",
+    "stats": {
+      "ABILITY DURATION": "The challenge lasts 12s. The buff lasts 6s after you complete it.",
+      "HEALING OVER TIME": "Upon activation: 35/s; challenge completed: 70/s",
+      "MOVEMENT BOOST": "Upon activation: 15%; challenge completed: 30%",
+      "COOLDOWN": "60s"
+    },
+    "form": "Duelist"
+  },
+  {
+    "section": "Abilities",
+    "name": "Lock And Load!",
+    "key": "LSHIFT",
+    "icon": "Lock_And_Load.png",
+    "description": "Switch to dual pistols.",
+    "stats": {},
+    "form": "Duelist"
+  },
+  {
+    "section": "Abilities",
+    "name": "Deadpool In Your Area - Duelist",
+    "key": "E",
+    "icon": "Deadpool_In_Your_Area_-_Duelist.png",
+    "description": "Taunt and deal continuous damage to nearby enemies, disrupting their vision while gaining Damage Reduction.",
+    "stats": {
+      "ABILITY DURATION": "5s",
+      "DAMAGE NEEDED TO REMOVE THE DISRUPTION": "100",
+      "SELF DAMAGE REDUCTION": "20%",
+      "SPELL FIELD DAMAGE": "15/s",
+      "SPELL FIELD RANGE": "A cylindrical spell field with a 6m radius and a height of 6m.",
+      "COOLDOWN": "12s"
+    },
+    "form": "Duelist"
+  },
+  {
+    "section": "Abilities",
+    "name": "Upgrade!",
+    "key": "F",
+    "icon": "Upgrade.png",
+    "description": "Deal damage to accumulate XP. When maxed, choose an ability to upgrade. Landing final hits and taking a selfie grants bonus XP. Deadpool is Invincible while taking photos.",
+    "stats": {},
+    "form": "Duelist"
+  },
+  {
+    "section": "Abilities",
+    "name": "Bunny Hop",
+    "key": "SPACE",
+    "icon": "Bunny_Hop.png",
+    "description": "Perform a double jump. Using Bunny Hop over others' heads or near vertical walls refreshes the cooldown. Stomping enemies grants Bonus Health and deals damage.",
+    "stats": {
+      "DAMAGE": "25",
+      "BONUS HEALTH": "25, maximum of 50",
+      "COOLDOWN": "6s"
+    },
+    "form": "Duelist"
+  },
+  {
+    "section": "Abilities",
+    "name": "Hazardous Hijinks - Duelist",
+    "key": "Right Click",
+    "icon": "Hazardous_Hijinks_-_Duelist.png",
+    "description": "Dash forward and slash, striking enemies in your path. Hitting an enemy lets you unleash another Hazardous Hijinks - Duelist, up to two times.",
+    "stats": {
+      "DAMAGE": "40",
+      "DASH DURATION": "Up to 12m",
+      "COOLDOWN": "2 charges, with each charge taking 10s to recharge."
+    },
+    "form": "Duelist"
+  },
+  {
+    "section": "Abilities",
+    "name": "Healing Factor",
+    "key": "Passive",
+    "icon": "Healing_Factor.png",
+    "description": "Continuously heal while out of combat. When taking heavy damage, briefly become invincible and rapidly heal.",
+    "stats": {
+      "HEALING OVER TIME": "25/s",
+      "HEALING OVER TIME FROM ACTIVATED HEALING FACTOR": "50/s",
+      "COOLDOWN": "45s"
+    },
+    "form": "Duelist"
+  },
+  {
+    "section": "Abilities",
+    "name": "Maximum Flair",
+    "key": "Passive",
+    "icon": "Maximum_Flair.png",
+    "description": "Increase your Style Rating by landing abilities. Ultimate Ability can be unleashed after reaching an \"S\" rating.",
+    "stats": {},
+    "form": "Duelist"
+  },
+  {
+    "section": "Team-Up Abilities",
+    "name": "Comical Chaos",
+    "key": "Passive",
+    "icon": "Comical_Chaos.png",
+    "description": "Deadpool hands Jeff the Land Shark a plushie with attitude. Jeff can spit it ahead where it'll continuously Taunt nearby enemies and Block Vision, while allies in range enjoy a plush-powered healing party!",
+    "stats": {
+      "TEAM-UP BONUS": "5% Damage Boost"
+    },
+    "form": "Duelist"
+  },
+  {
+    "section": "Normal Attack",
+    "name": "Dual Desert Eagles - Duelist Upgraded",
+    "key": "Left Click",
+    "icon": "Dual_Desert_Eagles_-_Duelist_Upgraded.png",
+    "description": "Shoot enemies with dual Desert Eagles. After enough shots, unleash a powerful, explosive Boom Emoji for extra damage.",
+    "stats": {
+      "BEAM DAMAGE": "46 damage per round",
+      "BEAM ATTACK INTERVAL": "2 rounds per second",
+      "AMMO": "40",
+      "PROJECTILE ATTACK INTERVAL": "After every 5 beam bullets fired, the next shot fires 1 additional projectile",
+      "PROJECTILE SPEED": "60 m/s",
+      "SPELL FIELD DAMAGE": "25",
+      "SPELL FIELD RANGE": "3m radius spherical spell field"
+    },
+    "form": "Duelist"
+  },
+  {
+    "section": "Normal Attack",
+    "name": "Kick@$$ Katana - Duelist Upgraded",
+    "key": "Left Click",
+    "icon": "Kick_Katana_-_Duelist_Upgraded.png",
+    "description": "Slash forward with dual katanas. Stabs can deal critical hits. After a Bunny Hop, your next attack is guaranteed to be stabs.",
+    "stats": {
+      "DAMAGE": "45 per hit",
+      "ATTACK INTERVAL": "First strike: 0.5s; second strike: 0.43s; third strike: 0.5s",
+      "MAXIMUM DISTANCE": "4m"
+    },
+    "form": "Duelist"
+  },
+  {
+    "section": "Abilities",
+    "name": "Skill Issue - Upgraded",
+    "key": "Q",
+    "icon": "Skill_Issue_-_Upgraded.png",
+    "description": "Select an enemy to taunt, dealing continuous damage. If they miss with an ability during the effect, they suffer extra damage and Vulnerability.",
+    "stats": {
+      "DAMAGE PER ABILITY MISSED": "60",
+      "VULNERABILITY RATION FROM ABILITY MISSED": "10% for each stack. Up to 4 stacks.",
+      "ABILITY DURATION": "8s",
+      "DAMAGE OVER TIME": "25/s",
+      "COOLDOWN": "60s"
+    },
+    "form": "Duelist"
+  },
+  {
+    "section": "Abilities",
+    "name": "Pop Quiz! - Upgraded",
+    "key": "Q",
+    "icon": "Pop_Quiz_-_Upgraded.png",
+    "description": "Initiate a challenge for yourself while gaining minor Speed Boost, Healing Over Time, and Damage Boost. Hit enough enemies with the indicated abilities in time for greatly enhanced Speed, Healing, Damage, and refresh all cooldowns except Healing Factor.",
+    "stats": {
+      "ABILITY DURATION": "The challenge lasts 12s. The buff lasts 8s after you complete it.",
+      "HEALING OVER TIME": "Upon activation: 30/s; challenge completed: 60/s",
+      "MOVEMENT BOOST": "Upon activation: 15%; challenge completed: 30%",
+      "DAMAGE BOOST": "Upon activation: 15%; challenge completed: 30%",
+      "COOLDOWN": "60s"
+    },
+    "form": "Duelist"
+  },
+  {
+    "section": "Abilities",
+    "name": "Deadpool In Your Area - Duelist Upgraded",
+    "key": "E",
+    "icon": "Deadpool_In_Your_Area_-_Duelist_Upgraded.png",
+    "description": "Taunt and deal continuous damage to nearby enemies, disrupting their vision while gaining Damage Reduction. If enemies don't escape in time, the bottom of their screen gets further blocked.",
+    "stats": {
+      "ABILITY DURATION": "5s",
+      "DAMAGE NEEDED TO REMOVE THE DISRUPTION": "100",
+      "SPELL FIELD DAMAGE": "30/s",
+      "SPELL FIELD RANGE": "A cylindrical spell field with a 6m radius and a height of 6m",
+      "SELF DAMAGE REDUCTION": "35%",
+      "COOLDOWN": "12s"
+    },
+    "form": "Duelist"
+  },
+  {
+    "section": "Abilities",
+    "name": "Headshot! - Duelist Upgraded",
+    "key": "Right Click",
+    "icon": "Headshot_-_Duelist_Upgraded.png",
+    "description": "Remove your Avatar and throw it, damaging enemies along the path and nearby; after a short time, it returns to you. Catch it for up to two more throws. On the third toss, it explodes at the end to deal area damage.",
+    "stats": {
+      "PROJECTILE DAMAGE": "Unleash: 30; Return: 25",
+      "PROJECTILE SPEED": "80m/s",
+      "SPELL FIELD DAMAGE": "15/s",
+      "THIRD UNLEASH EXPLOSION DAMAGE": "45",
+      "SPELL FIELD DURATION": "First unleash: 1s; second unleash: 1s; third unleash: 2s",
+      "COOLDOWN": "10s"
+    },
+    "form": "Duelist"
+  },
+  {
+    "section": "Abilities",
+    "name": "Hazardous Hijinks - Duelist Upgraded",
+    "key": "Right Click",
+    "icon": "Hazardous_Hijinks_-_Duelist_Upgraded.png",
+    "description": "Dash forward and slash, striking enemies in your path. Each hit refreshes the cooldown and launches you in your chosen direction.",
+    "stats": {
+      "DAMAGE": "40",
+      "DASH DURATION": "Up to 12m",
+      "COOLDOWN": "2 charges, with each charge taking 10s to recharge."
+    },
+    "form": "Duelist"
+  },
+  {
+    "section": "Normal Attack",
+    "name": "Dual Desert Eagles - Strategist",
+    "key": "Left Click",
+    "icon": "Dual_Desert_Eagles_-_Strategist.png",
+    "description": "Shoot forward with dual Desert Eagles to heal allies or deal damage to enemies",
+    "stats": {
+      "CASTING": "Rapid-fire projectile",
+      "DAMAGE": "25 damage per round",
+      "HEALING": "45 per round",
+      "FIRE RATE": "2.5 rounds per second",
+      "AMMO": "30"
+    },
+    "form": "Strategist"
+  },
+  {
+    "section": "Abilities",
+    "name": "Pwnage Pound",
+    "key": "Q",
+    "icon": "Pwnage_Pound.png",
+    "description": "Select an enemy to Taunt. If they miss with an ability during the effect, they suffer extra damage and nearby allies gain Healing Over Time. Whenever an enemy takes damage from this ability, Deadpool and allies within range gain additional healing.",
+    "stats": {
+      "DAMAGE PER ABILITY MISSED": "60",
+      "ABILITY DURATION": "8s",
+      "HEALING OVER TIME DURING ACTIVATION": "80/s",
+      "HEALING PER ABILITY MISSED": "80 per ability missed",
+      "HEALING SPELL FIELD RANGE": "8m radius spherical spell field",
+      "COOLDOWN": "60s"
+    },
+    "form": "Strategist"
+  },
+  {
+    "section": "Abilities",
+    "name": "Slice And Dice!",
+    "key": "LSHIFT",
+    "icon": "Slice_And_Dice.png",
+    "description": "Switch to dual katanas.",
+    "stats": {},
+    "form": "Strategist"
+  },
+  {
+    "section": "Abilities",
+    "name": "Deadpool In Your Area - Strategist",
+    "key": "E",
+    "icon": "Deadpool_In_Your_Area_-_Strategist.png",
+    "description": "Taunt and deal continuous damage to nearby enemies, disrupting their vision while healing allies in range.",
+    "stats": {
+      "ABILITY DURATION": "5s",
+      "DAMAGE NEEDED TO REMOVE THE DISRUPTION": "100",
+      "SPELL FIELD DAMAGE": "10/s",
+      "SPELL FIELD HEALING": "60/s",
+      "SPELL FIELD RANGE": "A cylindrical spell field with a 6m radius and a height of 6m.",
+      "COOLDOWN": "12s"
+    },
+    "form": "Strategist"
+  },
+  {
+    "section": "Abilities",
+    "name": "Upgrade!",
+    "key": "F",
+    "icon": "Upgrade.png",
+    "description": "Deal damage to accumulate XP. When maxed, choose an ability to upgrade. Landing final hits and taking a selfie grants bonus XP. Deadpool is Invincible while taking photos.",
+    "stats": {},
+    "form": "Strategist"
+  },
+  {
+    "section": "Abilities",
+    "name": "Healing Hop",
+    "key": "SPACE",
+    "icon": "Healing_Hop.png",
+    "description": "Perform a double jump. Using Healing Hop over others' heads or off walls refreshes the cooldown. Stomping enemies deals damage, while bouncing on allies provides healing.",
+    "stats": {
+      "DAMAGE": "25",
+      "HEALING": "35",
+      "COOLDOWN": "6s"
+    },
+    "form": "Strategist"
+  },
+  {
+    "section": "Abilities",
+    "name": "Bouncing Bobblehead! - Strategist",
+    "key": "Right Click",
+    "icon": "Bouncing_Bobblehead_-_Strategist.png",
+    "description": "Remove your Avatar and throw it, damaging enemies along the path and nearby while also healing allies; after a short time, it returns to you.",
+    "stats": {
+      "CASTING": "Single-cast projectile with delayed impact that also generates a spell field",
+      "PROJECTILE DAMAGE": "Unleash: 20; Return: 20",
+      "PROJECTILE HEALING": "Unleash: 40; Return: 40",
+      "PROJECTILE SPEED": "80m/s",
+      "SPELL FIELD DAMAGE": "10/s",
+      "SPELL FIELD HEALING": "40/s",
+      "SPELL FIELD RANGE": "4m spherical radius spell field",
+      "SPELL FIELD DURATION": "1s",
+      "COOLDOWN": "8s"
+    },
+    "form": "Strategist"
+  },
+  {
+    "section": "Abilities",
+    "name": "Healing Factor",
+    "key": "Passive",
+    "icon": "Healing_Factor.png",
+    "description": "Continuously heal while out of combat. When taking heavy damage, briefly become invincible and rapidly heal.",
+    "stats": {
+      "HEALING OVER TIME": "25/s",
+      "HEALING OVER TIME FROM ACTIVATED HEALING FACTOR": "50/s",
+      "COOLDOWN": "30s"
+    },
+    "form": "Strategist"
+  },
+  {
+    "section": "Abilities",
+    "name": "Maximum Flair",
+    "key": "Passive",
+    "icon": "Maximum_Flair.png",
+    "description": "Increase your Style Rating by landing abilities. Ultimate Ability can be unleashed after reaching an \"S\" rating.",
+    "stats": {},
+    "form": "Strategist"
+  },
+  {
+    "section": "Team-Up Abilities",
+    "name": "Comical Chaos",
+    "key": "Passive",
+    "icon": "Comical_Chaos.png",
+    "description": "Deadpool hands Jeff the Land Shark a plushie with attitude. Jeff can spit it ahead where it'll continuously Taunt nearby enemies and Block Vision, while allies in range enjoy a plush-powered healing party!",
+    "stats": {
+      "TEAM-UP BONUS": "+5% Healing Bonus"
+    },
+    "form": "Strategist"
+  },
+  {
+    "section": "Normal Attack",
+    "name": "Kick@$$ Katana - Strategist",
+    "key": "Left Click",
+    "icon": "Kick_Katana_-_Strategist.png",
+    "description": "Slash forward with dual katanas. Hits on enemies also heal nearby allies.",
+    "stats": {
+      "CASTING": "MELEE",
+      "DAMAGE": "30 per hit",
+      "ATTACK INTERVAL": "First strike: 0.6s; second strike: 0.53s; third strike: 0.6s",
+      "MAXIMUM DISTANCE": "4m",
+      "HEALING SPELL FIELD DAMAGE": "5m radius spherical spell field",
+      "HEALING AMOUNT": "32"
+    },
+    "form": "Strategist"
+  },
+  {
+    "section": "Abilities",
+    "name": "Final Exam",
+    "key": "Q",
+    "icon": "Final_Exam.png",
+    "description": "Initiate a challenge for yourself while gaining Healing Over Time for you and nearby allies. Hit enough enemies with the indicated abilities in time for greatly enhanced Healing.",
+    "stats": {
+      "ABILITY DURATION": "The challenge lasts 12s. The buff lasts 6s after you complete it.",
+      "HEALING AMOUNT": "Upon activation: 75/s; challenge completed: 100/s",
+      "HEALING SPELL FIELD RANGE": "8m radius spherical spell field",
+      "COOLDOWN": "60s"
+    },
+    "form": "Strategist"
+  },
+  {
+    "section": "Abilities",
+    "name": "Lock And Load!",
+    "key": "LSHIFT",
+    "icon": "Lock_And_Load.png",
+    "description": "Switch to dual pistols.",
+    "stats": {},
+    "form": "Strategist"
+  },
+  {
+    "section": "Abilities",
+    "name": "Deadpool In Your Area - Strategist",
+    "key": "E",
+    "icon": "Deadpool_In_Your_Area_-_Strategist.png",
+    "description": "Taunt and deal continuous damage to nearby enemies, disrupting their vision while healing allies in range.",
+    "stats": {
+      "ABILITY DURATION": "5s",
+      "DAMAGE NEEDED TO REMOVE THE DISRUPTION": "100",
+      "SPELL FIELD DAMAGE": "10/s",
+      "SPELL FIELD HEALING": "60/s",
+      "SPELL FIELD RANGE": "A cylindrical spell field with a 6m radius and a height of 6m.",
+      "COOLDOWN": "12s"
+    },
+    "form": "Strategist"
+  },
+  {
+    "section": "Abilities",
+    "name": "Upgrade!",
+    "key": "F",
+    "icon": "Upgrade.png",
+    "description": "Deal damage to accumulate XP. When maxed, choose an ability to upgrade. Landing final hits and taking a selfie grants bonus XP. Deadpool is Invincible while taking photos.",
+    "stats": {},
+    "form": "Strategist"
+  },
+  {
+    "section": "Abilities",
+    "name": "Healing Hop",
+    "key": "SPACE",
+    "icon": "Healing_Hop.png",
+    "description": "Perform a double jump. Using Healing Hop over others' heads or off walls refreshes the cooldown. Stomping enemies deals damage, while bouncing on allies provides healing.",
+    "stats": {
+      "DAMAGE": "25",
+      "HEALING": "35",
+      "COOLDOWN": "6s"
+    },
+    "form": "Strategist"
+  },
+  {
+    "section": "Abilities",
+    "name": "Healing Hijinks - Strategist",
+    "key": "Right Click",
+    "icon": "Healing_Hijinks_-_Strategist.png",
+    "description": "Dash forward and slash, striking enemies in your path while healing allies in range.",
+    "stats": {
+      "DAMAGE": "30",
+      "DASH DURATION": "Up to 12m",
+      "HEALING AMOUNT": "45",
+      "HEALING SPELL FIELD RANGE": "5m spherical radius spell field",
+      "COOLDOWN": "2 charges, with each charge taking 10s to recharge."
+    },
+    "form": "Strategist"
+  },
+  {
+    "section": "Abilities",
+    "name": "Healing Factor",
+    "key": "Passive",
+    "icon": "Healing_Factor.png",
+    "description": "Continuously heal while out of combat. When taking heavy damage, briefly become invincible and rapidly heal.",
+    "stats": {
+      "HEALING OVER TIME": "25/s",
+      "HEALING OVER TIME FROM ACTIVATED HEALING FACTOR": "50/s",
+      "COOLDOWN": "45s"
+    },
+    "form": "Strategist"
+  },
+  {
+    "section": "Abilities",
+    "name": "Maximum Flair",
+    "key": "Passive",
+    "icon": "Maximum_Flair.png",
+    "description": "Increase your Style Rating by landing abilities. Ultimate Ability can be unleashed after reaching an \"S\" rating.",
+    "stats": {},
+    "form": "Strategist"
+  },
+  {
+    "section": "Team-Up Abilities",
+    "name": "Comical Chaos",
+    "key": "Passive",
+    "icon": "Comical_Chaos.png",
+    "description": "Deadpool hands Jeff the Land Shark a plushie with attitude. Jeff can spit it ahead where it'll continuously Taunt nearby enemies and Block Vision, while allies in range enjoy a plush-powered healing party!",
+    "stats": {
+      "TEAM-UP BONUS": "+5% Healing Boost"
+    },
+    "form": "Strategist"
+  },
+  {
+    "section": "Normal Attack",
+    "name": "Dual Desert Eagles - Strategist Upgraded",
+    "key": "Left Click",
+    "icon": "Dual_Desert_Eagles_-_Strategist_Upgraded.png",
+    "description": "Shoot enemies with dual Desert Eagles. After enough shots, unleash a powerful, explosive Boom Emoji that damages enemies and heals allies.",
+    "stats": {
+      "BEAM DAMAGE": "28",
+      "BEAM HEALING": "50",
+      "BEAM ATTACK INTERVAL": "2.5 rounds per second",
+      "AMMO": "40",
+      "PROJECTILE ATTACK INTERVAL": "After every 5 beam bullets fired, the next shot fires 1 additional projectile",
+      "PROJECTILE SPEED": "60/s",
+      "PROJECTILE HEALING": "15",
+      "SPELL FIELD HEALING": "40",
+      "SPELL FIELD DAMAGE": "20",
+      "SPELL FIELD RANGE": "3m radius spherical spell field"
+    },
+    "form": "Strategist"
+  },
+  {
+    "section": "Normal Attack",
+    "name": "Kick@$$ Katana - Strategist Upgraded",
+    "key": "Left Click",
+    "icon": "Kick_Katana_-_Strategist_Upgraded.png",
+    "description": "Slash forward with dual katanas. Stabs can deal critical hits. After a Healing Hop, your next attack is guaranteed to be stabs.",
+    "stats": {
+      "DAMAGE": "35 per hit",
+      "ATTACK INTERVAL": "First strike: 0.5s; second strike: 0.43s; third strike: 0.5s",
+      "MAXIMUM DISTANCE": "4m",
+      "HEALING SPELL FIELD DAMAGE": "8m radius spherical spell field",
+      "HEALING AMOUNT": "35"
+    },
+    "form": "Strategist"
+  },
+  {
+    "section": "Abilities",
+    "name": "Pwnage Pound - Upgraded",
+    "key": "Q",
+    "icon": "Pwnage_Pound_-_Upgraded.png",
+    "description": "Select an enemy to Taunt and deal continuous damage. If they miss with an ability during the effect, they suffer extra damage and nearby allies gain Healing Over Time. Whenever an enemy takes damage from this ability, Deadpool and allies within range gain additional healing.",
+    "stats": {
+      "DAMAGE PER ABILITY MISSED": "60",
+      "ABILITY DURATION": "8s",
+      "HEALING OVER TIME DURING ACTIVATION": "100/s",
+      "HEALING PER ABILITY MISSED": "90 per ability missed",
+      "HEALING SPELL FIELD RANGE": "8m radius spherical spell field",
+      "COOLDOWN": "60s"
+    },
+    "form": "Strategist"
+  },
+  {
+    "section": "Abilities",
+    "name": "Final Exam - Upgraded",
+    "key": "Q",
+    "icon": "Final_Exam_-_Upgraded.png",
+    "description": "Initiate a challenge for yourself while gaining Healing Over Time for you and nearby allies. Hit enough enemies with the indicated abilities in time for greatly enhanced Healing, Bonus Health, and refresh the cooldown of Healing Factor.",
+    "stats": {
+      "ABILITY DURATION": "The challenge lasts 12s. The buff lasts 8s after you complete it.",
+      "HEALING AMOUNT": "Upon activation: 80/s; challenge completed: 120/s",
+      "HEALING SPELL FIELD RANGE": "8m radius spherical spell field",
+      "BONUS HEALTH FROM COMPLETING THE CHALLENGE": "3000",
+      "COOLDOWN": "60s"
+    },
+    "form": "Strategist"
+  },
+  {
+    "section": "Abilities",
+    "name": "Deadpool In Your Area - Strategist Upgraded",
+    "key": "E",
+    "icon": "Deadpool_In_Your_Area_-_Strategist_Upgraded.png",
+    "description": "Taunt and deal continuous damage to nearby enemies, disrupting their vision while providing nearby allies with healing and a Damage Boost. If enemies don't escape in time, the bottom of their screen gets further blocked.",
+    "stats": {
+      "ABILITY DURATION": "5s",
+      "DAMAGE NEEDED TO REMOVE THE DISRUPTION": "100",
+      "SPELL FIELD DAMAGE": "30/s",
+      "SPELL FIELD HEALING": "70/s",
+      "SPELL FIELD RANGE": "A cylindrical spell field with a 6m radius and a height of 6m.",
+      "COOLDOWN": "12s"
+    },
+    "form": "Strategist"
+  },
+  {
+    "section": "Abilities",
+    "name": "Bouncing Bobblehead - Upgraded",
+    "key": "Right Click",
+    "icon": "Bouncing_Bobblehead_-_Upgraded.png",
+    "description": "Remove your Avatar and throw it, damaging enemies along the path and nearby; after a short time while also healing allies; after a short time, it returns to you. Catch it for up to two more throws. On the third toss, it explodes at the end to deal area damage.",
+    "stats": {
+      "CASTING": "Single-cast projectile with delayed impact that also generates a spell field",
+      "PROJECTILE DAMAGE": "Unleash: 25; Return: 20",
+      "PROJECTILE HEALING": "Unleash: 45; Return: 30",
+      "PROJECTILE SPEED": "80m/s",
+      "SPELL FIELD DAMAGE": "10/s",
+      "SPELL FIELD HEALING": "50/s",
+      "THIRD UNLEASH EXPLOSION DAMAGE": "20",
+      "THIRD UNLEASH EXPLOSION HEALING": "70",
+      "SPELL FIELD DURATION": "First unleash: 1s; second unleash: 1s; third unleash: 2s",
+      "COOLDOWN": "8s"
+    },
+    "form": "Strategist"
+  },
+  {
+    "section": "Abilities",
+    "name": "Healing Hijinks - Upgraded",
+    "key": "Right Click",
+    "icon": "Healing_Hijinks_-_Upgraded.png",
+    "description": "Dash forward and slash, striking enemies in your path while healing allies in range. Each hit refreshes the cooldown and launches you in your chosen direction, up to 2 times within a short period.",
+    "stats": {
+      "DAMAGE": "40",
+      "DASH DURATION": "Up to 12m",
+      "HEALING AMOUNT": "55",
+      "HEALING SPELL FIELD RANGE": "8m spherical radius spell field",
+      "COOLDOWN": "2 charges, with each charge taking 10s to recharge."
+    },
+    "form": "Strategist"
+  }
+]

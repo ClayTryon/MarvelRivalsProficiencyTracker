@@ -1,0 +1,260 @@
+[
+  {
+    "section": "Normal Attack",
+    "name": "Gamma Ray Gun",
+    "key": "Left Click",
+    "icon": "Gamma_Ray_Gun.png",
+    "description": "Fire with a Gamma Ray Gun.",
+    "stats": {
+      "CASTING": "Single-cast projectile with delayed impact",
+      "DAMAGE": "16",
+      "AMMO": "25",
+      "FIRE RATE": "5/s",
+      "CRITICAL HIT": "Yes",
+      "PROJECTILE SPEED": "80m/s"
+    },
+    "form": "Bruce Banner"
+  },
+  {
+    "section": "Abilities",
+    "name": "Puny Banner",
+    "key": "Q",
+    "icon": "Puny_Banner.png",
+    "description": "Transform from Bruce Banner into Hero Hulk.",
+    "stats": {
+      "ENERGY COST": "600",
+      "CASTING": "Transformation"
+    },
+    "form": "Bruce Banner"
+  },
+  {
+    "section": "Abilities",
+    "name": "Gamma Grenade",
+    "key": "SHIFT",
+    "icon": "Gamma_Grenade.png",
+    "description": "Launch a Gamma Grenade to inflict damage and Launch Up enemies.",
+    "stats": {
+      "CASTING": "Single-cast projectile with a downward delay that creates a spell field upon impact",
+      "DAMAGE": "40",
+      "COOLDOWN": "8s",
+      "RANGE": "3m spherical radius",
+      "SPECIAL EFFECT": "⚬ When the caster enters the spell field, it restores 50 gamma energy"
+    },
+    "form": "Bruce Banner"
+  },
+  {
+    "section": "Team-Up Abilities",
+    "name": "Gamma Boost",
+    "key": "Passive",
+    "icon": "Gamma_Boost.png",
+    "description": "Hulk charges Black Panther with gamma radiation, strengthening his Vibranium armor. When Black Panther's health is low, he receives a gamma shield, blocking incoming attacks and becoming Unstoppable.",
+    "stats": {},
+    "form": "Bruce Banner"
+  },
+  {
+    "section": "Normal Attack",
+    "name": "Heavy Blow",
+    "key": "Left Click",
+    "icon": "Heavy_Blow.png",
+    "description": "Swing fists forward to punch enemies.",
+    "stats": {
+      "CASTING": "Single-cast Spell Field",
+      "DAMAGE": "40",
+      "INTERVAL": "0.467/s",
+      "RANGE": "4.5m"
+    },
+    "form": "Hero Hulk"
+  },
+  {
+    "section": "Abilities",
+    "name": "Hulk Smash!",
+    "key": "Q",
+    "icon": "Hulk_Smash.png",
+    "description": "Unleash stored gamma energy, transforming from Hero Hulk into Monster Hulk for a limited time period.",
+    "stats": {
+      "CASTING": "Transformation",
+      "DURATION": "12s",
+      "ENERGY COST": "3400"
+    },
+    "form": "Hero Hulk"
+  },
+  {
+    "section": "Abilities",
+    "name": "Gamma Burst",
+    "key": "Right Click",
+    "icon": "Gamma_Burst.png",
+    "description": "Emit gamma-ray bursts to inflict damage. Reduce Indestructible Guard cooldown upon hit.",
+    "stats": {
+      "CASTING": "Single-cast projectile that can pierce through enemies",
+      "DAMAGE": "65",
+      "CHARGES": "2",
+      "COOLDOWN": "2s",
+      "RECHARGE TIME": "6s",
+      "PROJECTILE SPEED": "80m/s"
+    },
+    "form": "Hero Hulk"
+  },
+  {
+    "section": "Abilities",
+    "name": "Indestructible Guard",
+    "key": "SHIFT",
+    "icon": "Indestructible_Guard.png",
+    "description": "Generate gamma shields for Hero Hulk and nearby allies, absorbing and converting damage into energy for HULK SMASH.",
+    "stats": {
+      "CASTING": "Single-cast spell field that surrounds the caster",
+      "DURATION": "2.5s",
+      "COOLDOWN": "10s",
+      "RANGE": "5m spherical radius",
+      "MAXIMUM SHIELD VALUE": "200 (caster) - 100 (allies)"
+    },
+    "form": "Hero Hulk"
+  },
+  {
+    "section": "Abilities",
+    "name": "Radioactive Lockdown",
+    "key": "E",
+    "icon": "Radioactive_Lockdown.png",
+    "description": "Emit gamma energy to render enemies immobilized and immune to all ability effects. Using Heavy Blow or Gamma Burst will prematurely remove this status.",
+    "stats": {
+      "CASTING": "Single-cast projectile",
+      "DAMAGE": "5",
+      "DURATION": "2s",
+      "COOLDOWN": "15s",
+      "PROJECTILE SPEED": "100m/s"
+    },
+    "form": "Hero Hulk"
+  },
+  {
+    "section": "Abilities",
+    "name": "Incredible Leap",
+    "key": "SPACE",
+    "icon": "Incredible_Leap.png",
+    "description": "Hold {{#switch: {{{p|}}} | PC = Space | PS5 = link=| | Xbox = link=|}} to perform a charged leap that allows Hero Hulk to Knock Down flying enemies.",
+    "stats": {
+      "CASTING": "Charged Dash",
+      "MINIMUM CHARGE TIME": "0.4s",
+      "MAXIMUM CHARGE TIME": "1.7s",
+      "DASH SPEED": "19m/s (minimum charge) - 25m/s (maximum charge)"
+    },
+    "form": "Hero Hulk"
+  },
+  {
+    "section": "Team-Up Abilities",
+    "name": "Gamma Fastball",
+    "key": "C",
+    "icon": "Gamma_Fastball.png",
+    "description": "Wolverine, Hulk and The Thing can interact with each other. Once both parties can confirm, Hulk or The Thing can lift Wolverine and press the button to hurl him forward.",
+    "stats": {
+      "CASTING": "Targeted",
+      "COOLDOWN": "3s when not thrown, 15s when thrown",
+      "MAXIMUM DISTANCE": "20m"
+    },
+    "form": "Hero Hulk"
+  },
+  {
+    "section": "Team-Up Abilities",
+    "name": "Gamma Boost",
+    "key": "Passive",
+    "icon": "Gamma_Boost.png",
+    "description": "Hulk charges Black Panther and The Thing with gamma radiation. When Black Panther's health is low, he gains a gamma shield, becoming Unstoppable and blocking attacks. The Thing gains Gamma Gauntlets, boosting Damage and range of his Rocky Jab and Stone Haymaker. Dealing damage with these attacks grants Bonus Health, and maximum Bonus Health cap is increased.",
+    "stats": {
+      "TEAM-UP BONUS": "+100 Max Health"
+    },
+    "form": "Hero Hulk"
+  },
+  {
+    "section": "Normal Attack",
+    "name": "Heavy Blow",
+    "key": "Left Click",
+    "icon": "Heavy_Blow.png",
+    "description": "Swing fists forward to punch and launch up enemies.",
+    "stats": {
+      "CASTING": "Single-cast Spell Field",
+      "DAMAGE": "70",
+      "INTERVAL": "0.52/s",
+      "RANGE": "5m"
+    },
+    "form": "Monster Hulk"
+  },
+  {
+    "section": "Abilities",
+    "name": "World Breaker",
+    "key": "Q",
+    "icon": "World_Breaker.png",
+    "description": "Grab and smash the enemy in front.",
+    "stats": {
+      "CASTING": "Targeted",
+      "DAMAGE": "Delivers 5 hits, each dealing 40 damage",
+      "DURATION": "5s",
+      "RANGE": "5m"
+    },
+    "form": "Monster Hulk"
+  },
+  {
+    "section": "Abilities",
+    "name": "Gamma Burst",
+    "key": "Right Click",
+    "icon": "Gamma_Burst.png",
+    "description": "Emit gamma-ray bursts to inflict damage.",
+    "stats": {
+      "CASTING": "Single-cast projectile that can pierce through enemies",
+      "DAMAGE": "125",
+      "COOLDOWN": "1s",
+      "PROJECTILE SPEED": "60m/s"
+    },
+    "form": "Monster Hulk"
+  },
+  {
+    "section": "Abilities",
+    "name": "Radioactive Lockdown",
+    "key": "E",
+    "icon": "Radioactive_Lockdown.png",
+    "description": "Emit gamma energy to render enemies immobilized and immune to all ability effects. Using Heavy Blow or Gamma Burst will prematurely remove this status.",
+    "stats": {
+      "CASTING": "Single-cast projectile",
+      "DAMAGE": "5",
+      "DURATION": "2s",
+      "COOLDOWN": "5s",
+      "PROJECTILE SPEED": "150m/s"
+    },
+    "form": "Monster Hulk"
+  },
+  {
+    "section": "Abilities",
+    "name": "Incredible Leap",
+    "key": "SPACE",
+    "icon": "Incredible_Leap.png",
+    "description": "Hold {{#switch: {{{p|}}} | PC = Space | PS5 = link=| | Xbox = link=|}} to perform a charged leap that allows Monster Hulk to Knock Down flying enemies.",
+    "stats": {
+      "CASTING": "Charged Dash",
+      "MINIMUM CHARGE TIME": "0.7s",
+      "MAXIMUM CHARGE TIME": "1.5s",
+      "DASH SPEED": "19.4m/s (minimum charge) - 25m/s (maximum charge)"
+    },
+    "form": "Monster Hulk"
+  },
+  {
+    "section": "Team-Up Abilities",
+    "name": "Gamma Fastball",
+    "key": "C",
+    "icon": "Gamma_Fastball.png",
+    "description": "Wolverine, Hulk and The Thing can interact with each other. Once both parties can confirm, Hulk or The Thing can lift Wolverine and press the button to hurl him forward.",
+    "stats": {
+      "CASTING": "Targeted",
+      "COOLDOWN": "3s when not thrown, 15s when thrown",
+      "MAXIMUM DISTANCE": "20m"
+    },
+    "form": "Monster Hulk"
+  },
+  {
+    "section": "Team-Up Abilities",
+    "name": "Gamma Boost",
+    "key": "Passive",
+    "icon": "Gamma_Boost.png",
+    "description": "Hulk charges Black Panther with gamma radiation, strengthening his Vibranium armor. When Black Panther's health is low, he receives a gamma shield, blocking incoming attacks and becoming Unstoppable.",
+    "stats": {
+      "TEAM-UP BONUS": "+100 Max Health"
+    },
+    "form": "Monster Hulk"
+  }
+]

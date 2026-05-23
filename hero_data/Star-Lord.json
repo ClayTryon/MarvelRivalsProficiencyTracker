@@ -1,0 +1,87 @@
+[
+  {
+    "section": "Normal Attack",
+    "name": "Element Guns",
+    "key": "Left Click",
+    "icon": "Element_Guns.png",
+    "description": "Shoot enemies with dual Element Guns",
+    "stats": {
+      "CASTING": "Rapid-fire shots with spread.",
+      "DAMAGE": "6.5 damage per round",
+      "AMMO": "40",
+      "FIRE RATE": "40 rounds per second",
+      "CRITICAL HIT": "Yes",
+      "DAMAGE FALLOFF": "Falloff begins at 10m, decreasing to 60% at 25m"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Galactic Legend",
+    "key": "Q",
+    "icon": "Galactic_Legend.png",
+    "description": "Engage in free-flight and lock onto enemies in sight.",
+    "stats": {
+      "CASTING": "Rapid-fire projectile.",
+      "DAMAGE": "6.5 per round",
+      "DURATION": "8s",
+      "AMMO": "40",
+      "FIRE RATE": "40 rounds per sec",
+      "MOVEMENT BOOST": "20%",
+      "RELOAD TIME REDUCTION": "80m",
+      "ENERGY COST": "3400",
+      "MAXIMUM LOCKING DISTANCE": "70%"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Stellar Shift",
+    "key": "Right Click",
+    "icon": "Stellar_Shift.png",
+    "description": "Dodge in the direction of movement and swiftly reload. Become Unstoppable and Invincible while dodging.",
+    "stats": {
+      "CASTING": "Movement",
+      "DURATION": "0.37s",
+      "CHARGES": "2",
+      "COOLDOWN": "5s per charge",
+      "BONUS HEALTH": "Unleashing Stellar Shift will grant Star-Lord Gain 25 Bonus Health, which lasts for 3s before decaying to 0 over 1s."
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Rocket Propulsion",
+    "key": "SHIFT",
+    "icon": "Rocket_Propulsion.png",
+    "description": "Consume energy to gain a Movement Boost and soar forward.",
+    "stats": {
+      "CASTING": "Movement",
+      "MOVEMENT BOOST": "100%",
+      "ENERGY COST": "300/s",
+      "ENERGY RECOVERY SPEED": "100/s"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Blaster Barrage",
+    "key": "E",
+    "icon": "Blaster_Barrage.png",
+    "description": "Fire a frenzy of shots, causing damage to enemies within range.",
+    "stats": {
+      "CASTING": "Spherical Spell Field",
+      "DAMAGE": "8 damage per hit",
+      "DURATION": "3s",
+      "COOLDOWN": "8s",
+      "RANGE": "8m spherical radius"
+    }
+  },
+  {
+    "section": "Team-Up Abilities",
+    "name": "Network Leapspider",
+    "key": "C",
+    "icon": "Network_Leapspider.png",
+    "description": "Rocket Raccoon upgrades his B.R.B., which now creates Cyber-Webs upon placement and periodically spawns Arachno-Mines and Spider-Drones. Peni Parker can also deploy an Armored Spider-Nest that drops Armor Packs for Bonus Health. Star-Lord gets a teleport to its deployment point from anywhere on the map.",
+    "stats": {
+      "COOLDOWN": "Teleport Cooldown 30s; jump device deployment Cooldown 5s.",
+      "TELEPORT DELAY": "1s"
+    }
+  }
+]

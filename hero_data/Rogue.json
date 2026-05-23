@@ -1,0 +1,128 @@
+[
+  {
+    "section": "Normal Attack",
+    "name": "Power Surge Punch",
+    "key": "Left Click",
+    "icon": "Power_Surge_Punch.png",
+    "description": "Punch forward with both fists",
+    "stats": {
+      "CASTING": "Melee",
+      "DAMAGE": "The first two strikes deal 35 damage, while the third strike deals 45 damage",
+      "MAXIMUM DISTANCE": "4.5m",
+      "ATTACK SPEED": "The first two strikes: 0.33s/hit; the third strike: 0.73s/hit"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Heartbreaker",
+    "key": "Q",
+    "icon": "Heartbreaker.png",
+    "description": "Continuously absorb Ultimate Ability Energy from nearby enemies and steal stats based on their role.",
+    "stats": {
+      "DURATION": "8s",
+      "ENERGY COST": "3400",
+      "ULTIMATE ABILITY ENERGY ABSORPTION SPEED": "Absorb 4% of ultimate ability energy per second",
+      "MAXIMUM STATS STOLEN FROM VANGUARDS": "+400 maximum health",
+      "MAXIMUM STATS STOLEN FROM DUELISTS": "35% damage boost",
+      "MAXIMUM STATS STOLEN FROM STRATEGISTS": "Self healing 75/s",
+      "SPELL FIELD RANGE": "8m radius spherical spell field",
+      "SPELL FIELD DAMAGE": "15/s"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Fatal Attraction",
+    "key": "Shift",
+    "icon": "Fatal_Attraction.png",
+    "description": "Dash forward. Press again to unleash a burst of Chronovium Power from her ring, dealing continuous damage to nearby does; after a delay, the energy retracts, pulling all enemies towards Rogue.",
+    "stats": {
+      "DASH DISTANCE": "10m",
+      "DASH DAMAGE": "30",
+      "SPREADING SPELL FIELD RANGE": "Cylindrical Spell Field with a height of 3m, whose radius will expand to 8m after 0.8s",
+      "SPREADING SPELL FIELD DAMAGE": "40/s",
+      "RETRIEVE SPELL FIELD DAMAGE": "30",
+      "COOLDOWN": "14s"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Chrono Kick Combo",
+    "key": "E",
+    "icon": "Chrono_Kick_Combo.png",
+    "description": "Dash forward and launch the enemy, entering flight; activate again to Knock Down nearby enemies. Your next two Power Surge Punch attacks become ranged, piercing enemies and granting Bonus Health.",
+    "stats": {
+      "SPELL FIELD RANGE": "Box shaped spell field. Length: 6.5m; Width: 4.5m; Height: 2m",
+      "SPELL FIELD DAMAGE": "30",
+      "MAXIMUM FLIGHT DURATION": "3s",
+      "KNOCK DOWN SPELL FIELD DAMAGE": "30",
+      "KNOCK DOWN SPELL FIELD RANGE": "6m radius spherical spell field",
+      "PROJECTILE DAMAGE": "60",
+      "PROJECTILE SPEED": "100 m/s"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Ability Absorption",
+    "key": "F",
+    "icon": "Ability_Absorption.png",
+    "description": "Dash forward to knock down your target and absorb their energy; after absorbing, replace Ability Absorption with one of their abilities or refresh Fatal Attraction. Also, absorb Health and stats based on their role.",
+    "stats": {
+      "DASH DISTANCE": "10m",
+      "ABSORPTION DAMAGE OVER TIME": "30/s",
+      "ABSORPTION HEALING OVER TIME": "60/s",
+      "ABSORBED ABILITY DURATION": "10s",
+      "BOOST FROM VANGUARD ABILITY ABSORPTION": "125 Maximum Health",
+      "DEBUFF TO THE VANGUARD ABSORPTION TARGET": "Reduce 20 Maximum Health",
+      "BOOST FROM DUELIST ABILITY ABSORPTION": "20% Damage Boost",
+      "DEBUFF TO THE DUELIST ABSORPTION TARGET": "Reduce 3% damage dealt",
+      "BOOST FROM STRATEGIST ABILITY ABSORPTION": "Self healing 20/s",
+      "DEBUFF TO THE STRATEGIST ABSORPTION TARGET": "Reduce 4% healing dealt",
+      "ABSORPTION PROCESS": "0.75s"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Southern Brawl",
+    "key": "Left Click",
+    "icon": "Southern_Brawl.png",
+    "description": "While in Defensive Stance, dash forward and slam enemies in front, dealing area damage.",
+    "stats": {
+      "DASH DISTANCE": "8m",
+      "BASE DAMAGE": "40",
+      "BACKLASH ENERGY-EXTRA DAMAGE CONVERSION RATIO": "0.9",
+      "MAXIMUM DISTANCE": "8m",
+      "COOLDOWN": "6s"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Defensive Stance",
+    "key": "Right Click",
+    "icon": "Defensive_Stance.png",
+    "description": "Absorb nearby projectiles and reduce incoming damage; absorbed damage powers up your nest Southern Brawl.",
+    "stats": {
+      "DAMAGE REDUCTION": "60%",
+      "MAXIMUM ENERGY": "100",
+      "ENERGY RECOVERY SPEED": "15/s",
+      "ENERGY CONSUMPTION": "60/s",
+      "ENERGY REQUIRED TO ACTIVATE THE ABILITY": "30",
+      "REDUCED DAMAGE-BACKLASH ENERGY CONVERSION RATIO": "0.35",
+      "MAXIMUM BACKLASH ENERGY": "100",
+      "MAXIMUM BACKLASH ENERGY FALLOFF": "20/s"
+    }
+  },
+  {
+    "section": "Team-Up Abilities",
+    "name": "Hearts as One",
+    "key": "C",
+    "icon": "Hearts_as_One.png",
+    "description": "Gambit shares kinetic energy with Magneto and Rogue. When Magneto activates this ability, Iron Volley is replaced with Ace Greatsword, which detonates upon striking enemies. The explosion leaves residual kinetic energy within the target, inflicting secondary damage after a brief delay. When Rogue activates the ability, each of her attacks causes a kinetic explosion that damages nearby enemies and heals nearby allies.",
+    "stats": {
+      "SPELL FIELD DURATION": "8s",
+      "COOLDOWN": "30s",
+      "SPELL FIELD DAMAGE": "5 + 3% of targets' Max Health",
+      "SPELL FIELD HEALING": "55",
+      "SPELL FIELD RANGE": "8m radius spherical spell field"
+    }
+  }
+]

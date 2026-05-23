@@ -1,0 +1,130 @@
+[
+  {
+    "section": "Normal Attack",
+    "name": "Adjudication",
+    "key": "Left Click",
+    "icon": "Adjudication.png",
+    "description": "Fire at enemies with Adjudication, his Automatic Rifle.",
+    "stats": {
+      "CASTING": "Rapid-fire projectile",
+      "DAMAGE": "20 damage per round",
+      "DAMAGE FALLOFF": "Falloff begins at 20m, decreasing to 85% at 40m",
+      "CROSSHAIR SPREAD RADIUS (AT 10M)": "Up to a 0.075m radius",
+      "FIRE RATE": "10 rounds per second",
+      "AMMO": "40",
+      "CRITICAL HIT": "Yes"
+    }
+  },
+  {
+    "section": "Normal Attack",
+    "name": "Deliverance",
+    "key": "Left Click",
+    "icon": "Deliverance.png",
+    "description": "Fire at enemies with Deliverance, his Shotgun.",
+    "stats": {
+      "CASTING": "Shotgun projectiles that hit instantly",
+      "DAMAGE": "10 damage per round",
+      "DAMAGE FALLOFF": "Falloff begins at 8m, decreasing to 40% at 15m",
+      "BULLETS FIRED EACH CAST": "16",
+      "CROSSHAIR SPREAD RADIUS (AT 10M)": "0.6m",
+      "FIRE RATE": "1.43 rounds per second",
+      "AMMO": "8",
+      "CRITICAL HIT": "Yes"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Final Judgement",
+    "key": "Q",
+    "icon": "Final_Judgement.png",
+    "description": "Unleash two Gatling guns and missiles to attack enemies.",
+    "stats": {
+      "CASTING": "Rapid-fire projectiles that hit instantly and have a tracking trajectory",
+      "DURATION": "10s",
+      "SLOW RATE WHILE IDLING": "-10%",
+      "SLOW RATE WHILE SHOOTING": "-30%",
+      "ENERGY COST": "3400"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Scourge Grenade",
+    "key": "Right Click",
+    "icon": "Scourge_Grenade.png",
+    "description": "Throw a smoke grenade forward to Block Enemies' Vision and leap backward.",
+    "stats": {
+      "CASTING": "Projectile with an arced trajectory",
+      "PROJECTILE SPEED": "40 m/s",
+      "RANGE": "5m spherical radius",
+      "DAMAGE": "45",
+      "BACKWARD JUMP DISTANCE": "9m",
+      "COOLDOWN": "8s"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Vantage Connection",
+    "key": "SHIFT",
+    "icon": "Vantage_Connection.png",
+    "description": "Launch a hook to generate a cable that enables the Punisher to move rapidly by pressing {{#switch: {{{p|}}} | PC = F | PS5 = link=| | Xbox = link=|}}.",
+    "stats": {
+      "CASTING": "Dash",
+      "CABLE ATTACHMENT ANGLE": "20° - 160°",
+      "CABLE LENGTH": "5m - 35m",
+      "DASH SPEED": "25 m/s",
+      "COOLDOWN": "20s"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Culling Turret",
+    "key": "E",
+    "icon": "Culling_Turret.png",
+    "description": "Deploy a Culling Turret that grounds Punisher and blocks damage from the front while dealing massive damage.",
+    "stats": {
+      "CASTING": "Rapid-fire projectiles that create a spell field upon impact",
+      "DAMAGE": "10 damage per round",
+      "EXPLOSION DAMAGE": "10 damage per round",
+      "EXPLOSION RANGE": "3m spherical radius",
+      "CROSSHAIR SPREAD RADIUS (AT 10M)": "Start with a spread radius of 0.2m, which reduces to 0.1m after 10 shots, and further decreases to 0.05m after 20 shots",
+      "FIRE RATE": "12.5 rounds per second",
+      "AMMO": "200",
+      "TURRET HEALTH": "600",
+      "COOLDOWN": "20s"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Warrior's Gaze",
+    "key": "Passive",
+    "icon": "Warriors_Gaze.png",
+    "description": "Retain vision of enemies that disappear from view for a short duration.",
+    "stats": {
+      "DURATION": "3s",
+      "RANGE": "30m spherical radius"
+    }
+  },
+  {
+    "section": "Team-Up Abilities",
+    "name": "Justice Sense",
+    "key": "C",
+    "icon": "Justice_Sense.png",
+    "description": "Daredevil shares the location of his Sonic Pursuit target with The Punisher. At the same time, The Punisher can launch a devil-infused shock grenade to damage and Blind enemies.",
+    "stats": {
+      "CASTING": "Projectile with an arced trajectory",
+      "PROJECTILE SPEED": "40 m/s",
+      "RANGE": "5m spherical radius",
+      "DAMAGE": "45",
+      "COOLDOWN": "15s",
+      "BLIND EFFECT DURATION": "1.5s"
+    }
+  },
+  {
+    "section": "Team-Up Abilities",
+    "name": "Ancient Judgement",
+    "key": "X",
+    "icon": "Ancient_Judgement.png",
+    "description": "The Punisher rides atop Devil Dinosaur, restricting him to only Adjudication/Deliverance and Scourge Grenade while disabling other abilities. While mounted, Devil Dinosaur absorbs a portion of all damage inflicted on The Punisher.",
+    "stats": {}
+  }
+]

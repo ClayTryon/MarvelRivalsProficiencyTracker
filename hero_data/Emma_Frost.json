@@ -1,0 +1,101 @@
+[
+  {
+    "section": "Normal Attack",
+    "name": "Telepathic Pulse",
+    "key": "Left Click",
+    "icon": "Telepathic_Pulse.png",
+    "description": "Fire a psionic beam to deal damage; the longer the beam hits, the higher the damage.",
+    "stats": {},
+    "form": "Psionics"
+  },
+  {
+    "section": "Abilities",
+    "name": "Psionic Seduction",
+    "key": "Q",
+    "icon": "Psionic_Seduction.png",
+    "description": "Project a forward psychic assault that stuns foes and prevents them from unleashing their Ultimate Abilities; if the effect lingers, it gradually commandeers their mind, forcing them to move toward Emma Frost.",
+    "stats": {},
+    "form": "Psionics"
+  },
+  {
+    "section": "Abilities",
+    "name": "Mind's Aegis",
+    "key": "Right Click",
+    "icon": "Minds_Aegis.png",
+    "description": "Create a levitating barrier at the designated location.",
+    "stats": {
+      "COOLDOWN": "3s (manually canceled) - 4s (destroyed)"
+    },
+    "form": "Psionics"
+  },
+  {
+    "section": "Abilities",
+    "name": "Diamond Form",
+    "key": "SHIFT",
+    "icon": "Diamond_Form.png",
+    "description": "Activate Diamond Form to transform your attack style while gaining Damage Reduction and becoming Unstoppable.",
+    "stats": {},
+    "form": "Psionics"
+  },
+  {
+    "section": "Abilities",
+    "name": "Psychic Spear",
+    "key": "E",
+    "icon": "Psychic_Spear.png",
+    "description": "Seize control of an enemy's sentience - damage dealt to the sentience cascades to the physical form and can be pierced by Telepathic Pulse. When the sentience shatters, it unleashes extra damage on its owner.",
+    "stats": {},
+    "form": "Psionics"
+  },
+  {
+    "section": "Team-Up Abilities",
+    "name": "Iced Out Diamond",
+    "key": "C",
+    "icon": "Iced_Out_Diamond.png",
+    "description": "Luna Snow grants Winter's Chill to Iron Fist and Emma Frost. When Iron Fist activates Harmony Recover, he can heal nearby allies with Lunar Chi. Emma Frost can project ice energy forward, dealing damage and slowing enemies. She can also enhance her diamond form, condensing frost into an Iced Out Diamond barrier that blocks enemy attacks and movement.",
+    "stats": {
+      "ABILITY HEALTH": "250",
+      "SPELL FIELD RANGE": "A fan-shaped spell field with a radius of 8m, height of 3m, and an angle of 60°",
+      "SPELL FIELD DAMAGE": "60",
+      "SLOW RATE": "45%",
+      "SLOW DURATION": "3s",
+      "COOLDOWN": "20s"
+    },
+    "form": "Psionics"
+  },
+  {
+    "section": "Normal Attack",
+    "name": "Faceted Fury",
+    "key": "Left Click",
+    "icon": "Faceted_Fury.png",
+    "description": "In Diamond Form, deliver a crushing double-fisted strike to enemies.",
+    "stats": {},
+    "form": "Diamond Form"
+  },
+  {
+    "section": "Abilities",
+    "name": "Crystal Kick",
+    "key": "Right Click",
+    "icon": "Crystal_Kick.png",
+    "description": "In Diamond Form, unleash a flying kick forward and knock back enemies; extra damage is dealt if they're propelled into a wall.",
+    "stats": {},
+    "form": "Diamond Form"
+  },
+  {
+    "section": "Abilities",
+    "name": "Carbon Crush",
+    "key": "E",
+    "icon": "Carbon_Crush.png",
+    "description": "In Diamond Form, lunge forward to grab an enemy, then execute a back slam to inflict damage.",
+    "stats": {},
+    "form": "Diamond Form"
+  },
+  {
+    "section": "Team-Up Abilities",
+    "name": "Iced Out Diamond",
+    "key": "C",
+    "icon": "Iced_Out_Diamond.png",
+    "description": "Luna Snow grants Winter's Chill to Iron Fist and Emma Frost. When Iron Fist activates Harmony Recover, he can heal nearby allies with Lunar Chi. Emma Frost can project ice energy forward, dealing damage and slowing enemies. She can also enhance her diamond form, condensing frost into an Iced Out Diamond barrier that blocks enemy attacks and movement.",
+    "stats": {},
+    "form": "Diamond Form"
+  }
+]

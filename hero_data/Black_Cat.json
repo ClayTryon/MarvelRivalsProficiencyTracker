@@ -1,0 +1,152 @@
+[
+  {
+    "section": "Normal Attack",
+    "name": "Feline Fury",
+    "key": "Left Click",
+    "icon": "Feline_Fury.png",
+    "description": "Swipe forward with razor-sharp claws.",
+    "stats": {
+      "CASTING": "Melee",
+      "DAMAGE": "35",
+      "MAXIMUM DISTANCE": "3.5m"
+    }
+  },
+  {
+    "section": "Normal Attack",
+    "name": "Claw Whip",
+    "key": "Left Click",
+    "icon": "Claw_Whip.png",
+    "description": "Fire out tethered claws and whip them forward in a devastating arc, dealing damage to all enemies caught in range.",
+    "stats": {
+      "SPELL FIELD RANGE": "150° cone spell field with a radius of 7.5m and a height of 2.5m",
+      "SPELL FIELD DAMAGE": "65",
+      "ATTACK INTERVAL": "0.6s per hit",
+      "DAMAGE FALLOFF": "Falloff begins at 30°, drop to 30% of maximum damage at 75°",
+      "BONUS HEALTH PER HIT": "25",
+      "MAX BONUS HEALTH": "50"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Calling Card",
+    "key": "Q",
+    "icon": "Calling_Card.png",
+    "description": "Issue a Calling Card to all enemies. Instantly dash to any enemy in sight and range, tearing into them with your claws to deal Percentage Damage.",
+    "stats": {
+      "ENERGY COST": "3100",
+      "MAXIMUM DASH DISTANCE": "60m",
+      "FORE-SWING DAMAGE REDUCTION": "50%",
+      "ABILITY DURATION": "10s",
+      "MAXIMUM TARGETING DISTANCE": "8m",
+      "1ST CLAW STRIKE DAMAGE": "30",
+      "2ND CLAW STRIKE DAMAGE": "30+20% Target's Maximum Health"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Cat's Cradle",
+    "key": "Shift",
+    "icon": "Cats_Cradle.png",
+    "description": "Lunge forward with claws bared, slicing through any enemies caught in your path.",
+    "stats": {
+      "MAXIMUM DASH DISTANCE": "15m",
+      "DAMAGE": "50",
+      "COOLDOWN": "2 charges, with each charge taking 10s to recharge"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Turn of Fortune",
+    "key": "E",
+    "icon": "Turn_of_Fortune.png",
+    "description": "Launch a grappling hook forward that damages enemies on impact and steals Fortune.",
+    "stats": {
+      "HOOK SPEED": "120m/s",
+      "HOOK MAXIMUM DISTANCE": "30m",
+      "HOOK DAMAGE": "30",
+      "BONUS HEALTH FROM HOOK HIT": "50",
+      "COOLDOWN": "5s"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Phantom Pursuit",
+    "key": "E",
+    "icon": "Phantom_Pursuit.png",
+    "description": "Swiftly dash to an enemy, unleash a rapid flurry of claw attacks, and flash back to your starting position. Black Cat is Untargetable during this move.",
+    "stats": {
+      "DASH DURATION": "0.25s",
+      "DAMAGE": "75",
+      "MAXIMUM DASH DISTANCE": "20m",
+      "COOLDOWN": "2s"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Thieving Grace",
+    "key": "SPACE",
+    "icon": "Thieving_Grace.png",
+    "description": "Perform a double jump.",
+    "stats": {}
+  },
+  {
+    "section": "Abilities",
+    "name": "Fortune's Favor",
+    "key": "Right Click",
+    "icon": "Fortunes_Favor.png",
+    "description": "Spend Fortune to unleash either Claw Whip or Phantom Pursuit",
+    "stats": {
+      "GRAPPLE SWIPE FORTUNE CONSUMPTION": "150",
+      "PHANTOM PURSUIT FORTUNE CONSUMPTION": "300"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Gilded Deal",
+    "key": "F",
+    "icon": "Gilded_Deal.png",
+    "description": "Open a dimensional rift via the Randall Gate. Spend Fortune to barter with the Gilded Saint for rare relics from the New York Thieves Guild.",
+    "stats": {}
+  },
+  {
+    "section": "Abilities",
+    "name": "Stealthy Catwalk",
+    "key": "Passive",
+    "icon": "Stealthy_Catwalk.png",
+    "description": "Hold Jump to crawl up vertical surfaces.",
+    "stats": {}
+  },
+  {
+    "section": "Abilities",
+    "name": "Malkin Misfortune",
+    "key": "Passive",
+    "icon": "Malkin_Misfortune.png",
+    "description": "Apply Jinx to enemies hit. Jinxed foes have a chance to lose their bonus damage when striking Black Cat with a Critical Hit.",
+    "stats": {}
+  },
+  {
+    "section": "Abilities",
+    "name": "Sticky Paws",
+    "key": "Passive",
+    "icon": "Sticky_Paws.png",
+    "description": "Steal a set amount of Fortune whenever your attacks hit an enemy.",
+    "stats": {
+      "FORTUNE GAINED PER TARGET HIT (FELINE FURY)": "50, up to 50",
+      "FORTUNE GAINED PER TARGET HIT (CLAW WHIP)": "50, up to 100",
+      "FORTUNE GAINED PER TARGET HIT (PHANTOM PURSUIT)": "150, up to 150",
+      "FORTUNE GAINED PER HIT (TURN OF FORTUNE)": "300",
+      "FORTUNE GAINED PER HIT (CALLING CARD)": "300",
+      "FORTUNE LOST UPON DEATH": "Lose 50% of Fortune when defeated, with a minimum deduction of 200"
+    }
+  },
+  {
+    "section": "Team-Up Abilities",
+    "name": "Gift of Gold",
+    "key": "Passive",
+    "icon": "Gift_of_Gold.png",
+    "description": "Black Cat shares her luck with her allies. When White Fox embraces her newfound fortune, she unleashes tracking Spirit Tails to grant Healing and Speed to allies, while damaging and Slowing foes. When Captain America enjoys his luck, his shield's block radius expands and allows him to aim deflected Projectiles directly toward his target.",
+    "stats": {
+      "TEAM-UP BONUS": "5% Damage Boost"
+    }
+  }
+]

@@ -1,0 +1,103 @@
+[
+  {
+    "section": "Normal Attack",
+    "name": "Chaos Control",
+    "key": "Left Click",
+    "icon": "Chaos_Control.png",
+    "description": "Unleash Chaos Magic on enemies to deal damage and restore Chaos Energy.",
+    "stats": {
+      "CASTING": "Cylindrical Spell Field",
+      "DAMAGE": "8 per tick",
+      "AMMO": "∞",
+      "FIRE RATE": "10 ticks/s",
+      "CHTHONIAN BURST RECHARGE PER HIT": "0.1 per hit",
+      "RANGE": "A cylindrical spell field with a radius of 3m and a height of 20m"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Reality Erasure",
+    "key": "Q",
+    "icon": "Reality_Erasure.png",
+    "description": "Engage in free-flight while charging energy and continuously pulling in nearby enemies, then unleash it to deal massive damage.",
+    "stats": {
+      "CASTING": "Spherical Spell Field",
+      "DAMAGE": "9999",
+      "RANGE": "15m spherical radius",
+      "SLOW RATE": "Begin to slow down by 1.5s, with the effect gradually increasing to -25% by 3.5s",
+      "ABILITY DELAY": "4s charge",
+      "BONUS HEALTH (SELF)": "100",
+      "ENERGY COST": "3400"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Chthonian Burst",
+    "key": "Right Click",
+    "icon": "Chthonian_Burst.png",
+    "description": "Consume Chaos Energy to fire explosive magic missiles, damaging enemies.",
+    "stats": {
+      "CASTING": "Straight-line projectile that generates a spell field upon impact",
+      "DAMAGE": "40 per direct hit + 40 splash damage",
+      "CHARGES": "4",
+      "DEFAULT CHARGING SPEED": "0.2/s (without Chaos Control)",
+      "PROJECTILE SPEED": "120m/s"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Mystic Projection",
+    "key": "SHIFT",
+    "icon": "Mystic_Projection.png",
+    "description": "Enter the Phased state for free-flight. Press Shift to exit early.",
+    "stats": {
+      "CASTING": "Movement",
+      "DURATION": "1.5s",
+      "CHARGES": "2",
+      "COOLDOWN": "10s per charge",
+      "MOVEMENT BOOST": "50%"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Dark Seal",
+    "key": "E",
+    "icon": "Dark_Seal.png",
+    "description": "Land a hit on a target or the scene, or press again to generate a Force Field that periodically Stuns enemies within range.",
+    "stats": {
+      "CASTING": "Straight-line projectile that generates a spell field upon impact",
+      "DURATION": "4.5s spell field - 0.5s Stun duration",
+      "COOLDOWN": "12s",
+      "INTERVAL": "1.25/s",
+      "RANGE": "3m spherical radius",
+      "PROJECTILE SPEED": "40m/s",
+      "SPELL FIELD GENERATION DELAY": "0.8s"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Telekinesis",
+    "key": "SPACE",
+    "icon": "Telekinesis.png",
+    "description": "Hold {{#switch: {{{p|}}} | PC = Space | PS5 = File:PS5 Cross.png | Xbox = File:XboxSeriesX A.png |}} to fall slowly.",
+    "stats": {
+      "MOVEMENT SPEED": "6m/s, 3.5m/s descending"
+    }
+  },
+  {
+    "section": "Team-Up Abilities",
+    "name": "Sorcery Surge",
+    "key": "C",
+    "icon": "Sorcery_Surge.png",
+    "description": "Doctor Strange shares his arcane mastery with Scarlet Witch and Magik. Scarlet Witch's Chthonian Burst is replaced with Mystic Burst upon activation. Hold down the attack button to unleash a rapid, relentless salvo of magical missiles in the target direction. Magik can unleash a Chain of Cyttorak that links two enemies and slows them; the farther they are apart, the greater the Slow effect inflicted during the link.",
+    "stats": {
+      "DURATION": "10s",
+      "COOLDOWN": "30s (starts upon activation)",
+      "PROJECTILE SPEED": "120m/s",
+      "PROJECTILE DAMAGE": "10",
+      "SPELL FIELD RANGE": "1.5M spherical radius",
+      "SPELL FIELD DAMAGE": "6",
+      "FIRE RATE": "0.15S per round"
+    }
+  }
+]

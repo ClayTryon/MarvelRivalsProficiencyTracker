@@ -1,0 +1,111 @@
+[
+  {
+    "section": "Normal Attack",
+    "name": "Trident of Neptune",
+    "key": "Left Click",
+    "icon": "Trident_of_Neptune.png",
+    "description": "Throw the trident forward, reducing Aquatic Dominion's cooldown upon enemy impact. Critical hits cause Monstro Spawn to enter a berserk state, gaining increased Attack Speed.",
+    "stats": {
+      "CASTING": "Projectile with an arced trajectory",
+      "DAMAGE": "75",
+      "AMMO": "∞",
+      "FIRE RATE": "1.09/s",
+      "CRITICAL HIT": "Yes",
+      "PROJECTILE SPEED": "150m/s"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Horn of Proteus",
+    "key": "Q",
+    "icon": "Horn_of_Proteus.png",
+    "description": "Summon Giganto to leap atop enemies within range, disabling their mobility abilities.",
+    "stats": {
+      "CASTING": "Cylindrical Spell Field",
+      "DAMAGE": "500 (inner circle) - 180 (outer circle)",
+      "DURATION": "1.5s",
+      "RANGE": "A cylindrical spell field with an inner circle radius of 3.5m, an outer circle radius of 9m, and a height of 3m",
+      "MAXIMUM DISTANCE": "30m",
+      "ABILITY DELAY": "1.5s",
+      "ENERGY COST": "3100"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Wrath of the Seven Seas",
+    "key": "Right Click",
+    "icon": "Wrath_of_the_Seven_Seas.png",
+    "description": "Launch the trident forward to damage nearby enemies, then direct all Monstro Spawn to perform an enhanced attack on the nearest hit enemy. When the trident hits an enemy, Monstro Spawn enter a berserk state, gaining increased Attack Speed.",
+    "stats": {
+      "CASTING": "Arced projectile that generates a spell field upon impact",
+      "DAMAGE": "40 (Default) - 60 (Enhanced)",
+      "RANGE": "3m spherical radius",
+      "PROJECTILE SPEED": "150m/s",
+      "SPELL FIELD DAMAGE FALLOFF": "50% falloff at 3m"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Blessing of the Deep",
+    "key": "SHIFT",
+    "icon": "Blessing_of_the_Deep.png",
+    "description": "Summon a protective barrier while flying upwards.",
+    "stats": {
+      "DURATION": "3s",
+      "COOLDOWN": "20s",
+      "DASH DISTANCE": "7m (vertical)"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Aquatic Dominion",
+    "key": "E",
+    "icon": "Aquatic_Dominion.png",
+    "description": "Summon a Monstro Spawn that can autonomously attack enemies.",
+    "stats": {
+      "CASTING": "Arced Trajectory (Summon Monstro Spawn) - Direct Hit (Monstro Spawn)",
+      "DAMAGE": "17 (Default) - 11 (Enhanced)",
+      "DURATION": "8s (Summon Monstro Spawn) - 2s (Enhance Duration)",
+      "CHARGES": "2",
+      "FIRE RATE": "2/s (Default) - 5/s (Enhanced)",
+      "RANGE": "40m",
+      "MAXIMUM QUANTITY": "2",
+      "PROJECTILE SPEED": "30m/s (Summon Monstro Spawn)",
+      "DAMAGE FALLOFF": "Falloff begins at 20m, decreasing to 50% at 40m",
+      "MONSTRO SPAWN HEALTH": "100"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Tide Fall",
+    "key": "SPACE",
+    "icon": "Tide_Fall.png",
+    "description": "Hold {{#switch: {{{p|}}} | PC = Space | PS5 = File:PS5 Cross.png | Xbox = File:XboxSeriesX A.png |}} to fall slowly.",
+    "stats": {}
+  },
+  {
+    "section": "Team-Up Abilities",
+    "name": "Tidal Dirge",
+    "key": "C",
+    "icon": "Tidal_Dirge.png",
+    "description": "Hela channels energy of the undead to empower Namor. When Namor strikes with his trident, a spectral water column erupts at the target area, slowing enemies hit. Whenever Hela or Namor assist in a KO, an invulnerable Undead Monstro spawns at the fallen enemy's position, automatically attacking the nearest foe for a short time before vanishing.",
+    "stats": {
+      "INNER CIRCLE SPELL FIELD RANGE": "A cylindrical spell field with a radius of 3m and a height of 13m",
+      "OUTER CIRCLE SPELL FIELD RANGE": "A cylindrical spell field with a radius of 6m and a height of 11m",
+      "INNER CIRCLE DAMAGE": "65",
+      "OUTER CIRCLE DAMAGE": "45",
+      "REDUCED HEALING RATE": "20%",
+      "SLOW RATE": "35%",
+      "OUTER CIRCLE GENERATE DELAY": "0.5s",
+      "COOLDOWN": "20s",
+      "UNDEAD MONSTRO DURATION": "3s",
+      "UNDEAD MONSTRO DAMAGE": "12",
+      "UNDEAD MONSTRO FIRE RATE": "0.5s per hit",
+      "UNDEAD MONSTRO RAGE DAMAGE": "7",
+      "UNDEAD MONSTRO RAGE FIRE RATE": "5/s",
+      "UNDEAD MONSTRO MAXIMUM AMOUNT": "2",
+      "RAGE DURATION": "2s",
+      "DAMAGE FALLOFF": "Falloff begins at 20m, decreasing to 50% at 40m"
+    }
+  }
+]

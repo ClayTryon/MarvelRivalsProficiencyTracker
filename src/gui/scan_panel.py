@@ -1,102 +1,62 @@
-"""
-ScanPanel — the main screen shown before and during a scan session.
-
-Supports two modes:
-  Manual session — user navigates to each hero themselves and presses 2 (or clicks
-                   the button) to capture that hero's proficiency screen one at a time.
-  Auto scan      — app drives the game window automatically, capturing every hero in
-                   HERO_ROSTER via synthetic input, then OCR-processes all images.
-"""
 import threading
 import time
-import win32api
 from PyQt6.QtWidgets import (
-    QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QTextEdit, QComboBox
+    QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QTextEdit,
 )
-from PyQt6.QtCore import Qt, pyqtSignal, QTimer
+from PyQt6.QtCore import pyqtSignal
 
 from capture import navigator
-from capture.debug import clear_temp
-from capture.pipeline import capture_one_hero, run_scan
+from capture.pipeline import run_scan
 from capture.window_picker import pick_window
-from data.heroes import HERO_ROSTER
-from models.capture_run import CaptureStatus
 from models.hero import Hero
 from storage.database import Database
-from storage.repository import CaptureRunRepository
+from storage.repository import HeroRepository
 
 
 class ScanPanel(QWidget):
     scan_complete = pyqtSignal(list)
 
-    # Cross-thread signals — Qt requires GUI updates to happen on the main thread
-    _log_sig = pyqtSignal(str)
-    _hero_sig = pyqtSignal(object)
+    _log_sig          = pyqtSignal(str)
+    _hero_sig         = pyqtSignal(object)
     _scan_finished_sig = pyqtSignal(int)
-    _scan_failed_sig = pyqtSignal(str)
+    _scan_failed_sig  = pyqtSignal(str)
 
     def __init__(self, db: Database, parent=None):
         super().__init__(parent)
         self._db = db
         self._hwnd: int | None = None
         self._heroes: list[Hero] = []
-        self._capture_run_id: int | None = None
-        self._session_active = False
-        self._key2_was_down = False
         self._scan_cancelled = False
+        self._pre_scan_xp: dict[str, int] = {}
 
         layout = QVBoxLayout(self)
-        layout.setContentsMargins(20, 20, 20, 20)
-        layout.setSpacing(12)
+        layout.setContentsMargins(28, 24, 28, 24)
+        layout.setSpacing(14)
 
-        header_row = QHBoxLayout()
-        title = QLabel("ProfTracker — Marvel Rivals")
-        title.setStyleSheet("font-size: 16px; font-weight: bold;")
-        header_row.addWidget(title)
-        header_row.addStretch()
-        layout.addLayout(header_row)
+        title = QLabel("PROFICIENCY SCANNER")
+        title.setStyleSheet(
+            "font-family: Impact, 'Arial Narrow', Arial;"
+            " font-size: 20px; letter-spacing: 4px; color: #a0c8ff;"
+        )
+        layout.addWidget(title)
 
         self._status_label = QLabel("No window selected.")
-        self._status_label.setStyleSheet("color: #888;")
+        self._status_label.setStyleSheet("color: #484860; font-size: 12px;")
         layout.addWidget(self._status_label)
 
-        setup_row = QHBoxLayout()
+        btn_row = QHBoxLayout()
         self._select_btn = QPushButton("Select Window")
-        self._start_btn = QPushButton("Start Session")
-        self._start_btn.setEnabled(False)
         self._auto_scan_btn = QPushButton("Auto Scan")
         self._auto_scan_btn.setEnabled(False)
         self._auto_scan_btn.setStyleSheet("font-weight: bold; padding: 6px 14px;")
         self._cancel_btn = QPushButton("Cancel Scan")
         self._cancel_btn.setStyleSheet("color: #f88; padding: 6px 14px;")
         self._cancel_btn.setVisible(False)
-        setup_row.addWidget(self._select_btn)
-        setup_row.addWidget(self._start_btn)
-        setup_row.addWidget(self._auto_scan_btn)
-        setup_row.addWidget(self._cancel_btn)
-        setup_row.addStretch()
-        layout.addLayout(setup_row)
-
-        # Session controls — hidden until a manual session starts
-        session_row = QHBoxLayout()
-        self._hero_combo = QComboBox()
-        self._hero_combo.addItems(sorted(HERO_ROSTER))
-        self._hero_combo.setMinimumWidth(180)
-        self._capture_btn = QPushButton("2 · Capture Proficiency")
-        self._capture_btn.setStyleSheet("font-weight: bold; padding: 6px 14px;")
-        self._rescan_btn = QPushButton("↺ Rescan")
-        self._rescan_btn.setStyleSheet("color: #aaa; padding: 6px 10px;")
-        self._rescan_btn.setEnabled(False)
-        self._finish_btn = QPushButton("Finish")
-
-        for w in (self._hero_combo, self._capture_btn, self._rescan_btn, self._finish_btn):
-            w.setVisible(False)
-        session_row.addWidget(self._hero_combo)
-        session_row.addWidget(self._capture_btn)
-        session_row.addWidget(self._rescan_btn)
-        session_row.addWidget(self._finish_btn)
-        session_row.addStretch()
-        layout.addLayout(session_row)
+        btn_row.addWidget(self._select_btn)
+        btn_row.addWidget(self._auto_scan_btn)
+        btn_row.addWidget(self._cancel_btn)
+        btn_row.addStretch()
+        layout.addLayout(btn_row)
 
         self._log = QTextEdit()
         self._log.setReadOnly(True)
@@ -104,34 +64,13 @@ class ScanPanel(QWidget):
         layout.addWidget(self._log)
 
         self._select_btn.clicked.connect(self._select_window)
-        self._start_btn.clicked.connect(self._start_session)
         self._auto_scan_btn.clicked.connect(self._start_auto_scan)
         self._cancel_btn.clicked.connect(self._cancel_auto_scan)
-        self._capture_btn.clicked.connect(self._capture_proficiency)
-        self._rescan_btn.clicked.connect(self._capture_proficiency)
-        self._finish_btn.clicked.connect(self._finish_session)
 
         self._log_sig.connect(self._append_log)
         self._hero_sig.connect(self._on_auto_hero)
         self._scan_finished_sig.connect(self._on_scan_finished)
         self._scan_failed_sig.connect(self._on_scan_failed)
-
-        self._hotkey_timer = QTimer(self)
-        self._hotkey_timer.setInterval(100)
-        self._hotkey_timer.timeout.connect(self._poll_hotkeys)
-
-    # ------------------------------------------------------------------
-    # Hotkey polling (manual session only)
-    # ------------------------------------------------------------------
-
-    def _poll_hotkeys(self):
-        try:
-            key2_down = bool(win32api.GetAsyncKeyState(0x32) & 0x8000)  # '2'
-            if key2_down and not self._key2_was_down:
-                self._capture_proficiency()
-            self._key2_was_down = key2_down
-        except Exception as e:
-            self._append_log(f"✗ Hotkey error: {e}")
 
     # ------------------------------------------------------------------
     # Window selection
@@ -143,86 +82,47 @@ class ScanPanel(QWidget):
             hwnd, title = result
             self._hwnd = hwnd
             self._status_label.setText(f"Window: {title}")
-            self._start_btn.setEnabled(True)
             self._auto_scan_btn.setEnabled(True)
 
     # ------------------------------------------------------------------
-    # Manual session lifecycle
+    # Pre/post scan XP delta
     # ------------------------------------------------------------------
 
-    def _start_session(self):
-        self._heroes = []
-        clear_temp()
+    def _snapshot_pre_scan(self):
+        from data.xp_table import total_xp_earned
+        self._pre_scan_xp = {
+            h.name: total_xp_earned(h.level, h.xp)
+            for h in HeroRepository(self._db).get_all()
+        }
 
-        run = CaptureRunRepository(self._db).create()
-        self._capture_run_id = run.id
-
-        win = self.window()
-        win.setWindowFlags(win.windowFlags() | Qt.WindowType.WindowStaysOnTopHint)
-        win.resize(560, 260)
-        win.show()
-
-        self._select_btn.setEnabled(False)
-        self._start_btn.setVisible(False)
-        self._auto_scan_btn.setVisible(False)
-        for w in (self._hero_combo, self._capture_btn, self._rescan_btn, self._finish_btn):
-            w.setVisible(True)
-
-        self._session_active = True
-        self._key2_was_down = False
-        self._hotkey_timer.start()
-        self._append_log(
-            "Session started.\n"
-            "Select a hero from the dropdown, navigate to their Proficiency tab, then press 2."
-        )
-
-    def _finish_session(self):
-        self._session_active = False
-        self._hotkey_timer.stop()
-
-        CaptureRunRepository(self._db).update_status(
-            self._capture_run_id, CaptureStatus.COMPLETED, hero_count=len(self._heroes)
-        )
-
-        win = self.window()
-        win.setWindowFlags(win.windowFlags() & ~Qt.WindowType.WindowStaysOnTopHint)
-        win.resize(900, 600)
-        win.show()
-
-        self._select_btn.setEnabled(True)
-        self._start_btn.setVisible(True)
-        self._auto_scan_btn.setVisible(True)
-        for w in (self._hero_combo, self._capture_btn, self._rescan_btn, self._finish_btn):
-            w.setVisible(False)
-
-        self._append_log(f"Session complete — {len(self._heroes)} heroes captured.")
-        self.scan_complete.emit(self._heroes)
-
-    # ------------------------------------------------------------------
-    # Manual capture (single hero)
-    # ------------------------------------------------------------------
-
-    def _capture_proficiency(self):
-        hero_name = self._hero_combo.currentText()
-        try:
-            hero = capture_one_hero(self._hwnd, self._db, self._capture_run_id, hero_name)
-            self._heroes.append(hero)
-            xp_str = "MAX" if hero.is_max_level else f"{hero.xp}/{hero.xp_required} XP"
-            self._append_log(f"✓ {hero.name}  LV{hero.level}  {xp_str}")
-            self._rescan_btn.setEnabled(True)
-        except Exception as e:
-            self._append_log(f"✗ {hero_name}: {e}")
+    def _show_scan_delta(self, heroes: list):
+        if not heroes:
+            return
+        from data.xp_table import total_xp_earned
+        lines = []
+        for h in sorted(heroes, key=lambda x: x.name):
+            after_xp  = total_xp_earned(h.level, h.xp)
+            before_xp = self._pre_scan_xp.get(h.name)
+            if before_xp is None:
+                lines.append(f"  {h.name}: new  LV{h.level}")
+            else:
+                delta = after_xp - before_xp
+                if delta > 0:
+                    lines.append(f"  {h.name}: +{delta:,} XP")
+        if lines:
+            self._append_log("─── Changes since last scan ───\n" + "\n".join(lines))
+        self._pre_scan_xp = {}
 
     # ------------------------------------------------------------------
     # Auto scan
     # ------------------------------------------------------------------
 
     def _start_auto_scan(self):
+        self._snapshot_pre_scan()
         self._heroes = []
         self._scan_cancelled = False
 
         self._select_btn.setEnabled(False)
-        self._start_btn.setEnabled(False)
         self._auto_scan_btn.setEnabled(False)
         self._cancel_btn.setVisible(True)
 
@@ -239,7 +139,6 @@ class ScanPanel(QWidget):
         self._append_log("Cancelling scan...")
 
     def _auto_scan_thread(self):
-        # Background thread — must use its own DB connection (SQLite is not thread-safe)
         db = Database(self._db.db_path)
         db.connect()
         try:
@@ -266,6 +165,7 @@ class ScanPanel(QWidget):
 
     def _on_scan_finished(self, count: int):
         self._append_log(f"Auto scan complete — {count} heroes captured.")
+        self._show_scan_delta(self._heroes)
         self._reset_auto_scan_ui()
         self.scan_complete.emit(self._heroes)
 
@@ -276,7 +176,6 @@ class ScanPanel(QWidget):
     def _reset_auto_scan_ui(self):
         self._cancel_btn.setVisible(False)
         self._select_btn.setEnabled(True)
-        self._start_btn.setEnabled(True)
         self._auto_scan_btn.setEnabled(True)
 
     # ------------------------------------------------------------------

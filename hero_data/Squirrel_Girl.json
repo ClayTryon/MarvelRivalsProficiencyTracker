@@ -1,0 +1,86 @@
+[
+  {
+    "section": "Normal Attack",
+    "name": "Burst Acorn",
+    "key": "Left Click",
+    "icon": "Burst_Acorn.png",
+    "description": "Shoot bouncing Burst Acorns.",
+    "stats": {
+      "CASTING": "Arced projectile that generates a spell field upon impact",
+      "PROJECTILE SPEED": "80 m/s",
+      "SPELL FIELD RANGE": "3m spherical radius",
+      "SPELL FIELD DAMAGE": "100",
+      "DAMAGE FALLOFF": "70% falloff at 3m",
+      "FIRE RATE": "1.49 acorns per second",
+      "AMMO": "12",
+      "CRITICAL HIT": "No"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Unbeatable Squirrel Tsunami",
+    "key": "Q",
+    "icon": "Unbeatable_Squirrel_Tsunami.png",
+    "description": "Summon a horde of squirrels to charge forward, dealing damage while bouncing against structures.",
+    "stats": {
+      "DURATION": "10s",
+      "RANGE": "Length: 3m, Width: 5m, Height: 1.75m",
+      "DAMAGE": "150",
+      "SQUIRREL HORDE HEALTH": "300",
+      "SQUIRREL HORDE MOVEMENT SPEED": "9 m/s",
+      "ENERGY COST": "2800"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Squirrel Blockade",
+    "key": "Right Click",
+    "icon": "Squirrel_Blockade.png",
+    "description": "Launch an acorn to unleash Squirrel Guards, Imprisoning the first hit enemy",
+    "stats": {
+      "CASTING": "Charged projectile with an arced trajectory",
+      "MAXIMUM CHARGE TIME": "1.5s",
+      "PROJECTILE SPEED": "20 - 60 m/s (Maximum speed is achieved after 0.7s of charging)",
+      "DAMAGE": "50",
+      "IMPRISON DURATION": "1.33s",
+      "COOLDOWN": "8s"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Tail Bounce",
+    "key": "SHIFT",
+    "icon": "Tail_Bounce.png",
+    "description": "Rocket upwards with a bounce of her tail.",
+    "stats": {
+      "JUMP HEIGHT": "9m",
+      "COOLDOWN": "8s"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Mammal Bond",
+    "key": "E",
+    "icon": "Mammal_Bond.png",
+    "description": "Reload Burst Acorns and can use an ability without cooldown once in a short duration.",
+    "stats": {
+      "MAXIMUM DURATION": "5s",
+      "COOLDOWN": "15s"
+    }
+  },
+  {
+    "section": "Team-Up Abilities",
+    "name": "Squirrel Missile",
+    "key": "C",
+    "icon": "Squirrel_Missile.png",
+    "description": "When Iron Man, Ultron, and Squirrel Girl team up, Ultron's Encephalo-Ray upgrades to Nano-Ray, firing a beam that pierces through all characters, dealing continuous damage to foes while healing allies; Squirrel Girl gains the Squirrel Missile ability. She directs a squirrel to ride Iron Man's nanotech glove as a homing missile. Upon hit, the squirrel flees just before a fiery explosion!",
+    "stats": {
+      "DAMAGE": "75",
+      "DAMAGE FALLOFF": "Falloff begins at 4m, decreasing to 50% at 8m",
+      "COOLDOWN": "20s",
+      "SPELL FIELD RANGE": "8m spherical radius",
+      "PROJECTILE SPEED": "40 m/s",
+      "PROJECTILE RADIUS": "0.5m"
+    }
+  }
+]

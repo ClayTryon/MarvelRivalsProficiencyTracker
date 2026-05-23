@@ -1,0 +1,116 @@
+[
+  {
+    "section": "Normal Attack",
+    "name": "Iron Volley",
+    "key": "Left Click",
+    "icon": "Iron_Volley.png",
+    "description": "Fire a volley of magnetic orbs forward. The range of the resulting explosion increases based on distance flown.",
+    "stats": {
+      "CASTING": "Single-cast projectile with delayed impact that also generates a spell field",
+      "DAMAGE": "Projectile Damage: 40. The spell field deals 40 damage at its center, reducing to 50% within a 3m radius from the center",
+      "CHARGES": "10",
+      "INTERVAL": "0.8s",
+      "RANGE": "Initially, it produces a spell field with a 1m spherical radius; when the projectile reaches maximum distance, the explosion radius expands to a spell field with a 3m spherical radius",
+      "MAXIMUM DISTANCE": "25m",
+      "PROJECTILE SPEED": "80m/s"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Meteor M",
+    "key": "Q",
+    "icon": "Meteor_M.png",
+    "description": "Draw in all materials around to forge an iron meteor that deals massive damage upon impact. Absorbing enemy Projectiles can enhance the meteor's power, yet overloading will cause it to self-destruct.",
+    "stats": {
+      "CASTING": "Create a persistent spell field that launches a projectile upon completion, which generates another spell field on impact",
+      "DAMAGE": "The projectile deals no damage. The base damage at the center of the spell field starts at 100 and increases to 300 when fully charged. Each point of Energy adds an extra 3 points of damage to the spell field, with damage reducing to 50% at a distance of 6m from the center",
+      "DURATION": "4s",
+      "PROJECTILE SPEED": "45m/s",
+      "SPELL FIELD RANGE": "Initially, the ability has a spherical range with a radius of 5m. After charging for 4s, it expands to an 8m radius",
+      "PROJECTILE ABSORPTION RANGE": "15m spherical radius",
+      "ENERGY COST": "3400"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Mag-Cannon",
+    "key": "Right Click",
+    "icon": "Mag-Cannon.png",
+    "description": "Convert the iron rings on Magneto's back into a Mag-Cannon and launch a metallic mass forward. Higher stacks of rings increase damage, and full stacks Knock Back enemies.",
+    "stats": {
+      "CASTING": "Single-cast projectile with delayed impact",
+      "DAMAGE": "40 (Iron Rings first charge)  \n65 (Iron Rings second charge)  \n90 (Iron Rings third charge)",
+      "COOLDOWN": "No cooldown, but the ability can only be activated when the Iron Ring has at least one charge",
+      "PROJECTILE SPEED": "120m/s"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Metallic Curtain",
+    "key": "SHIFT",
+    "icon": "Metallic_Curtain.png",
+    "description": "Change the magnetic field around to form a metallic curtain, blocking all incoming Projectiles.",
+    "stats": {
+      "CASTING": "Shield",
+      "COOLDOWN": "3s",
+      "MAXIMUM ENERGY": "100",
+      "ENERGY RECOVERY DELAY": "1s",
+      "ENERGY RECOVERY SPEED": "11/s",
+      "ENERGY COST": "65/s"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Metal Bulwark",
+    "key": "E",
+    "icon": "Metal_Bulwark.png",
+    "description": "Conjure a metal shield around a chosen ally. Damage taken will transform into rings on Magneto's back.",
+    "stats": {
+      "CASTING": "Targeted",
+      "DURATION": "2.5s",
+      "COOLDOWN": "15s",
+      "MAXIMUM DISTANCE": "20m",
+      "MAXIMUM SHIELD VALUE": "200"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Iron Bulwark",
+    "key": "F",
+    "icon": "Iron_Bulwark.png",
+    "description": "Conjure an iron shield around himself. Damage taken will transform into rings on Magneto's back.",
+    "stats": {
+      "DURATION": "2.5s",
+      "COOLDOWN": "10s",
+      "MAXIMUM SHIELD VALUE": "200"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Magnetic Descent",
+    "key": "SPACE",
+    "icon": "Magnetic_Descent.png",
+    "description": "Hold Space to fall slowly.",
+    "stats": {
+      "MOVEMENT SPEED": "6m/s (horizontal) - 3.5m/s (descending)"
+    }
+  },
+  {
+    "section": "Team-Up Abilities",
+    "name": "Royal Blade",
+    "key": "C",
+    "icon": "Royal_Blade.png",
+    "description": "Gambit shares kinetic energy with Magneto and Rogue. When Magneto activates this ability, Iron Volley is replaced with Ace Greatsword, which detonates upon striking enemies. The explosion leaves residual kinetic energy within the target, inflicting secondary damage after a brief delay. When Rogue activates the ability, each of her attacks causes a kinetic explosion that damages nearby enemies and heals nearby allies.",
+    "stats": {
+      "DURATION": "10s",
+      "COOLDOWN": "30s",
+      "SHOOT INTERVAL": "First hit 0.6s, second hit 1s",
+      "PROJECTILE SPEED": "80m/s",
+      "PROJECTILE DAMAGE": "40",
+      "SPELL FIELD RANGE": "3m spherical radius spell field",
+      "SPELL FIELD DAMAGE": "30",
+      "EXPLOSION DELAY": "0.5s",
+      "DELAY EXPLOSION DAMAGE": "25"
+    }
+  }
+]

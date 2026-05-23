@@ -1,0 +1,120 @@
+[
+  {
+    "section": "Normal Attack",
+    "name": "Daggers of Denak",
+    "key": "Left Click",
+    "icon": "Daggers_of_Denak.png",
+    "description": "Cast Daggers of Denak forward.",
+    "stats": {
+      "CASTING": "Five-round delayed hit projectiles",
+      "DAMAGE": "16",
+      "AMMO": "10 (1 dagger per release)",
+      "FIRE RATE": "5.56 rounds per second, with a 0.03-second interval between every two rounds",
+      "CRITICAL HIT": "No",
+      "PROJECTILE SPEED": "60m/s",
+      "DAMAGE FALLOFF": "Falloff begins at 10m, decreasing to 80% at 20m"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Eye of Agamotto",
+    "key": "Q",
+    "icon": "Eye_of_Agamotto.png",
+    "description": "Separate nearby enemies' Souls from their bodies. Damage dealt to these Souls is transferred to their physical bodies.",
+    "stats": {
+      "CASTING": "Single-cast spell field that surrounds the caster",
+      "DAMAGE": "60",
+      "DURATION": "3s",
+      "RANGE": "10m spherical radius",
+      "ENERGY COST": "3100"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Shield of the Seraphim",
+    "key": "Right Click",
+    "icon": "Shield_of_the_Seraphim.png",
+    "description": "Create a protective barrier against damage.",
+    "stats": {
+      "CASTING": "Channeled",
+      "COOLDOWN": "3s (if destroyed)",
+      "MAXIMUM SHIELD VALUE": "700",
+      "RECOVERY SHIELD VALUE": "60/s",
+      "DELAYED RECOVERY AFTER RELEASE": "1s"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Cloak of Levitation",
+    "key": "SHIFT",
+    "icon": "Cloak_of_Levitation.png",
+    "description": "Ascend and then enter a brief state of sustained flight.",
+    "stats": {
+      "CASTING": "Instant Cast",
+      "DURATION": "6s",
+      "COOLDOWN": "12s",
+      "DASH DISTANCE": "8m"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Maelstrom of Madness",
+    "key": "E",
+    "icon": "Maelstrom_of_Madness.png",
+    "description": "Release Dark Magic to deal damage to nearby enemies.",
+    "stats": {
+      "CASTING": "Single-cast spell field that surrounds the caster",
+      "DAMAGE": "Each point of Dark Magic deals 1.3 damage",
+      "COOLDOWN": "6s",
+      "RANGE": "8m spherical radius"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Pentagram of Farallah",
+    "key": "F",
+    "icon": "Pentagram_of_Farallah.png",
+    "description": "Open portals between two locations, enabling all units to travel through them.",
+    "stats": {
+      "CASTING": "Multi-segment release",
+      "DURATION": "20s",
+      "COOLDOWN": "180s"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Price of Magic",
+    "key": "Passive",
+    "icon": "Price_of_Magic.png",
+    "description": "Dark Magic accumulates with every hit on an enemy. If Dark Magic peaks for too long, Doctor Strange will be cursed with Anti-Heal.",
+    "stats": {
+      "DURATION": "2s",
+      "ANTI-HEAL ACTIVATION DELAY AT PEAK DARK MAGIC": "3s",
+      "GENERATE DARK MAGIC": "Daggers of Denak: Each hit generates 3.5 Dark Magic. When using the Quick Melee attack ({{#switch: {{{p|}}} | PC = V | PS5 = link=| | Xbox = link=|}}), every enemy hit generates 10 Dark Magic"
+    }
+  },
+  {
+    "section": "Team-Up Abilities",
+    "name": "Enchanted Enhancement",
+    "key": "Passive",
+    "icon": "Enchanted_Enhancement.png",
+    "description": "Doctor Strange shares his arcane mastery with Scarlet Witch and Magik. Scarlet Witch's Chthonian Burst is replaced with Mystic Burst upon activation. Hold down the attack button to unleash a rapid, relentless salvo of magical missiles in the target direction. Magik can unleash a Chain of Cyttorak that links two enemies and slows them; the farther they are apart, the greater the Slow effect inflicted during the link.",
+    "stats": {
+      "TEAM-UP BONUS": "+100 Max Health"
+    }
+  },
+  {
+    "section": "Team-Up Abilities",
+    "name": "Psionic Vortex",
+    "key": "E",
+    "icon": "Psionic_Vortex.png",
+    "description": "Invisible Woman enhances Doctor Strange's Maelstrom of Madness with a psionic explosion. The explosion damages and pulls enemies toward Doctor Strange. Based on the explosion's damage, Doctor Strange and nearby allies gain Bonus Health.",
+    "stats": {
+      "COOLDOWN": "6s",
+      "DAMAGE": "Each point of Dark Magic deals 1.3 damage",
+      "RANGE": "8m spherical spell field",
+      "BONUS HEALTH CONVERSION": "0.3 (self) 0.2 (ally)",
+      "BONUS MAX HEALTH": "75"
+    }
+  }
+]

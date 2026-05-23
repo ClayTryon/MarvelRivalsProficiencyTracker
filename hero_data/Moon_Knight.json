@@ -1,0 +1,125 @@
+[
+  {
+    "section": "Normal Attack",
+    "name": "Crescent Dart",
+    "key": "Left Click",
+    "icon": "Crescent_Dart.png",
+    "description": "Unleash Crescent Darts forward that can bounce between enemies and Ankhs, dealing damage to enemies.",
+    "stats": {
+      "CASTING": "Triple shot that fires in a straight trajectory",
+      "DAMAGE": "25 per round",
+      "PROJECTILE SPEED": "150m/s",
+      "AMMO": "30",
+      "FIRE RATE": "0.05s between shots - 0.57s between rounds of shooting",
+      "CRITICAL HIT": "Yes",
+      "DAMAGE FALLOFF": "Falloff begins at 30m, decreasing to 50% at 50m  \n-20% per bounce",
+      "MAXIMUM BOUNCE DISTANCE": "7m",
+      "NUMBER OF BOUNCES": "3"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Hand of Khonshu",
+    "key": "Q",
+    "icon": "Hand_of_Khonshu.png",
+    "description": "Open a portal that allows Khonshu to bombard enemies with his talons.",
+    "stats": {
+      "CASTING": "Delayed Spherical Spell Field",
+      "DAMAGE": "150 per hit",
+      "DAMAGE FALLOFF": "Begins at 1.5m from the center of the spell field, decreasing to 70% falloff at 5m",
+      "DURATION": "4.5s",
+      "RANGE": "8m radius (area of effect) - 5m (projectile explosion)",
+      "NUMBER OF HITS": "18",
+      "FREQUENCY": "4 hits per second",
+      "ABILITY DELAY": "1.5s",
+      "ENERGY COST": "2800"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Moon Blade",
+    "key": "Right Click",
+    "icon": "Moon_Blade.png",
+    "description": "Launch forward a Moon Blade that can bounce between enemies and Ankhs, dealing damage to enemies while granting you Bonus Health.",
+    "stats": {
+      "CASTING": "Projectile that fires in a straight trajectory",
+      "DAMAGE": "80",
+      "CHARGES": "2",
+      "RECHARGE TIME": "6s",
+      "CRITICAL HIT": "Yes",
+      "PROJECTILE SPEED": "120m/s",
+      "DAMAGE FALLOFF": "Falloff begins at 30m, decreasing to 50% at 50m \n-20% per bounce",
+      "MAXIMUM BOUNCE DISTANCE": "7m",
+      "NUMBER OF BOUNCES": "3",
+      "BONUS HEALTH": "25 per bounce, up to a max of 75"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Night Glider",
+    "key": "SHIFT",
+    "icon": "Night_Glider.png",
+    "description": "Enter a gliding state.",
+    "stats": {
+      "MOVEMENT SPEED": "8.7m/s (horizontal) - 1.5m/s (descending)"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Ancient Ankh",
+    "key": "E",
+    "icon": "Ancient_Ankh.png",
+    "description": "Fire an Ankh to Knock enemies within its radius towards the center.",
+    "stats": {
+      "CASTING": "Straight-line projectile that generates a spell field upon impact",
+      "COOLDOWN": "12s",
+      "PROJECTILE SPEED": "60m/s",
+      "BOUNCING RANGE": "7m spherical radius",
+      "PULL-IN RANGE": "5m spherical radius",
+      "PULL-IN DAMAGE": "20"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Moonlight Hook",
+    "key": "F",
+    "icon": "Moonlight_Hook.png",
+    "description": "Launch a frontal grappling hook that pulls Moon Knight towards it.",
+    "stats": {
+      "CASTING": "Dash",
+      "COOLDOWN": "15s",
+      "RANGE": "25m",
+      "MAXIMUM DISTANCE": "21.5m/s",
+      "GRAPPLING HOOK SPEED": "120m/s"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Triple Eclipse",
+    "key": "V",
+    "icon": "Triple_Eclipse.png",
+    "description": "Perform a combo with his truncheon, and the third strike will slightly Launch Up enemies.",
+    "stats": {
+      "CASTING": "Melee",
+      "RANGE": "3m"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Rising Leap",
+    "key": "SPACE",
+    "icon": "Rising_Leap.png",
+    "description": "Perform a double jump.",
+    "stats": {
+      "COOLDOWN": "6s"
+    }
+  },
+  {
+    "section": "Team-Up Abilities",
+    "name": "Moon God's Chosen",
+    "key": "Passive",
+    "icon": "Moon_Gods_Chosen.png",
+    "description": "Blessed by Khonshu, Blade gains a new ability. When activated, Blade swings his Ancestral Sword in a powerful slash, dashing forward a short distance. At the end of the dash, he swiftly slashes four times, each strike sending a Darkmoon Blade forward. When a Darkmoon Blade hits an enemy, it bounces to nearby targets.",
+    "stats": {}
+  }
+]

@@ -1,0 +1,118 @@
+[
+  {
+    "section": "Normal Attack",
+    "name": "Orb Projection",
+    "key": "Left Click",
+    "icon": "Orb_Projection.png",
+    "description": "Launch a force field that can pierce heroes, flying to maximum distance before returning to Invisible Woman; damaging enemies and healing teammates.",
+    "stats": {
+      "CASTING": "Single-cast projectile with delayed impact",
+      "DAMAGE": "30 per hit (on launch) \n15 per hit (on return)",
+      "HEALING": "45 per hit (on launch) \n35 per hit (on return)",
+      "AMMO": "10",
+      "FIRE RATE": "0.5s per hit",
+      "MAXIMUM DISTANCE": "35m",
+      "PROJECTILE SPEED": "150m/s",
+      "CRITICAL HIT": "No"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Invisible Boundary",
+    "key": "Q",
+    "icon": "Invisible_Boundary.png",
+    "description": "Manifest an unseen force field within a chosen area, rendering allies inside undetectable by enemies and providing Healing Over Time and enemies inside suffer a persistent Slow effect. Enemies that pass through the field are also slowed.",
+    "stats": {
+      "CASTING": "Targeted, generates a cylindrical spell field",
+      "HEALING": "180/s",
+      "DURATION": "8s",
+      "RANGE": "10m radius, 40m height",
+      "PASS-THROUGH SLOW RATE": "55% for 1s",
+      "ENERGY COST": "4500",
+      "SPECIAL EFFECT": "⚬ Slows enemies within range by 20%"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Guardian Shield",
+    "key": "Right Click",
+    "icon": "Guardian_Shield.png",
+    "description": "Generate a force field in front of a selected ally. The shield can block damage and provide Healing Over Time to nearby allies. Enemies that pass through the shield are slowed.",
+    "stats": {
+      "CASTING": "Targeted",
+      "HEALING": "50/s (ally) 15/s (self)",
+      "COOLDOWN": "6s upon destruction",
+      "RANGE": "3m radius",
+      "SLOW RATE": "35% for 3s",
+      "MAXIMUM SHIELD VALUE": "200",
+      "RECOVERY SHIELD VALUE": "34/s"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Psionic Vortex",
+    "key": "SHIFT",
+    "icon": "Psionic_Vortex.png",
+    "description": "Gather psionic energy and then cast it, upon hitting a target, scene or pressing the Shift key again, it erupts into a psionic vortex, continuously drawing in enemies and causing damage.",
+    "stats": {
+      "CASTING": "Single-cast projectile with delayed impact that also generates a spell field",
+      "DAMAGE": "35/s",
+      "DURATION": "4s",
+      "COOLDOWN": "12s",
+      "RANGE": "5m radius",
+      "PROJECTILE SPEED": "80m/s",
+      "SLOW RATE": "Center 50% - Edge 0%"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Force Physics",
+    "key": "E",
+    "icon": "Force_Physics.png",
+    "description": "Manipulate psionic energy to push or pull enemies in front of you.",
+    "stats": {
+      "CASTING": "Cylindrical Spell Field",
+      "DAMAGE": "55",
+      "COOLDOWN": "10s",
+      "RANGE": "1.5m radius, 35m length (Cast)   12m (Push)   7m (Pull)"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Agile Strike",
+    "key": "V",
+    "icon": "Agile_Strike.png",
+    "description": "Release a three-hit combo, the third attack will launch up enemies in front.",
+    "stats": {}
+  },
+  {
+    "section": "Abilities",
+    "name": "Veiled Step",
+    "key": "SPACE",
+    "icon": "Veiled_Step.png",
+    "description": "Generate a force field at your feet, stepping on it propels you into Invisible state.",
+    "stats": {
+      "COOLDOWN": "6s"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Covert Advance",
+    "key": "Passive",
+    "icon": "Covert_Advance.png",
+    "description": "Enter Invisible state some time after disengaging from combat and grant yourself Healing Over Time.",
+    "stats": {
+      "HEALING": "30/s"
+    }
+  },
+  {
+    "section": "Team-Up Abilities",
+    "name": "Psionic Force",
+    "key": "Passive",
+    "icon": "Psionic_Force.png",
+    "description": "Invisible Woman enhances Doctor Strange's Maelstrom of Madness with a psionic explosion. The explosion damages and pulls enemies toward Doctor Strange. Based on the explosion's damage, Doctor Strange and nearby allies gain Bonus Health.",
+    "stats": {
+      "TEAM-UP BONUS": "15% Healing Boost"
+    }
+  }
+]

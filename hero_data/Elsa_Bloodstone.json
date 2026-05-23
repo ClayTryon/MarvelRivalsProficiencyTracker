@@ -1,0 +1,133 @@
+[
+  {
+    "section": "Normal Attack",
+    "name": "Double-Barrel Blaster",
+    "key": "Left Click",
+    "icon": "Double-Barrel_Blaster.png",
+    "description": "Fire your shotgun forward.",
+    "stats": {
+      "CASTING": "Shotgun projectiles that hit instantly",
+      "DAMAGE": "4.5 per round",
+      "DAMAGE FALLOFF": "Falloff begins at 20m, decreasing to 80% at 40m",
+      "BULLETS FIRED EACH CAST": "10",
+      "CROSSHAIR SPREAD RADIUS(AT 10M)": "0.13m",
+      "FIRE RATE": "The firing interval between shots is 0.12s, with an interval of 0.8s between each round of shooting",
+      "AMMO": "8",
+      "CRITICAL HIT": "Yes"
+    }
+  },
+  {
+    "section": "Normal Attack",
+    "name": "Monster-Piercer",
+    "key": "Left Click",
+    "icon": "Monster-Piercer.png",
+    "description": "Unleash your elephant gun forward. Bullets pierce enemies and deal high damage.",
+    "stats": {
+      "CASTING": "Shotgun projectiles that hit instantly",
+      "DAMAGE": "15 + 1.2% of enemy's maximum health",
+      "BULLETS FIRED EACH CAST": "5",
+      "CROSSHAIR SPREAD RADIUS(AT 10M)": "6m",
+      "CRITICAL HIT": "No"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Apex Predator",
+    "key": "Q",
+    "icon": "Apex_Predator.png",
+    "description": "Summon the Glartrox to charge forward. The Glartrox can be recalled to charge back along the same path. When colliding with terrain or upon return, it bites fiercely, dealing heavy damage.",
+    "stats": {
+      "GLARTROX HEALTH": "400",
+      "GLARTROX SEIZE DAMAGE": "75",
+      "GLARTROX BITE DAMAGE": "125",
+      "GLARTROX MOVEMENT SPEED": "15m/s",
+      "GLARTROX MAXIMUM DASH DURATION": "Maximum durations for dashing and returning are 3.5s each",
+      "ENERGY COST": "3400"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Helix Advance",
+    "key": "Shift",
+    "icon": "Helix_Advance.png",
+    "description": "Dash forward. Your next Double-Barrel Blaster becomes Monster-Piercer.",
+    "stats": {
+      "MAX DASH SPEED": "27.5m/s",
+      "MAX DASH DURATION": "0.28s",
+      "COOLDOWN": "8s"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Ruthless Pursuit",
+    "key": "E",
+    "icon": "Ruthless_Pursuit.png",
+    "description": "Dash forward, gaining Bonus Health and launching enemies hit. Follow up with a Double-Barrel Blaster shot that propels you backward and Slows enemies. Using either stage empowers your next Double-Barrel Blaster, transforming it into Monster-Piercer.",
+    "stats": {
+      "CASTING": "Movement-based damage ability",
+      "MAX DASH SPEED": "40m/s",
+      "MAX DASH DURATION": "0.3s",
+      "DAMAGE": "30",
+      "BONUS HEALTH": "Every unleash of Ruthless Pursuit and Helix Advance grants 30 bonus health. Max bonus health is 75",
+      "COOLDOWN": "8s"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Smoky Snare",
+    "key": "F",
+    "icon": "Smoky_Snare.png",
+    "description": "Launch a trap containing the monster Diablo. Once deployed, it becomes Invisible and Invulnerable. When an enemy triggers it, Diablo Immobilizes and damages them. Use {{#switch: {{{p|}}} | PC = F | PS5 =  | Xbox = }} to dash to the trapped enemy. Enemies can destroy Diablo to break free.",
+    "stats": {
+      "TRAP HEALTH": "100",
+      "MAXIMUM IMMOBILIZING DURATION": "1.2s",
+      "TRIGGERED TRAP DAMAGE": "Cause 5 damage every 0.2s, last 1.2s",
+      "MAXIMUM SELECT DISTANCE": "30m",
+      "MAXIMUM SELECT DURATION": "0.25s",
+      "MAXIMUM DASH SPEED": "60m/s",
+      "COOLDOWN": "12s"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Living Bullet",
+    "key": "Right Click",
+    "icon": "Living_Bullet.png",
+    "description": "Fire a Living Bullet round that splits upon impact, seeking nearby enemies and marking each with a Spectral Sigil. Hitting marked targets with Double-Barrel Blaster or Monster-Piercer grants Elsa a brief Speed boost. Living Bullets deal extra damage to shields and enemies with Bonus Health.",
+    "stats": {
+      "PROJECTILE SPEED": "60m/s",
+      "PROJECTILE DAMAGE": "60",
+      "TRACING RANGE": "8m radius spherical spell field",
+      "MAXIMUM SPLITS": "3",
+      "SPEED BOOST": "Increase movement speed by 40% for 1s",
+      "COOLDOWN": "8s"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Inherited Instinct",
+    "key": "PASSIVE",
+    "icon": "Inherited_Instinct.png",
+    "description": "Dealing damage increases hunting Instinct. Defeating enemies caught by Smoky Snare grants additional Instinct. Higher Instinct reduces the cooldown of Helix Advance.",
+    "stats": {
+      "INSTINCT FROM KOS": "100",
+      "ADDITIONAL INSTINCT FROM KOS CAUGHT BY SMOKY SNARE": "200",
+      "DAMAGE/INSTINCT CONVERSION RATE": "0.06"
+    }
+  },
+  {
+    "section": "Team-Up Abilities",
+    "name": "Bloodstone's Boombox Bullets",
+    "key": "Right Click",
+    "icon": "Bloodstones_Boombox_Bullets.png",
+    "description": "Deadpool hands Jeff the Land Shark a plushie. Jeff can spit it ahead where it'll continuously Taunt nearby enemies and Block Vision, while allies in range are healed! Elsa's Bloodstone Living Bullet changes to special rounds that Taunt targets with Deadpool's chatter, while Slowing, and damaging nearby enemies over time. Elsa can recall the rounds to heal based on damage dealt.",
+    "stats": {
+      "PROJECTILE SPEED": "60m/s",
+      "PROJECTILE DAMAGE": "First hit: 60; second hit: 40",
+      "SECOND HIT DAMAGE OVER TIME": "20/s for 2s",
+      "SLOW EFFECT": "Reduce movement speed by 35% for 2s",
+      "TAUNT DURATION": "2s",
+      "DAMAGE/HEALING CONVERSION RATE": "30%"
+    }
+  }
+]

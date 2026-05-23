@@ -1,0 +1,70 @@
+[
+  {
+    "section": "Normal Attack",
+    "name": "Vibranium Claws",
+    "key": "Left Click",
+    "icon": "Vibranium_Claws.png",
+    "description": "Slice Vibranium Claws forward.",
+    "stats": {}
+  },
+  {
+    "section": "Abilities",
+    "name": "Bast's Descent",
+    "key": "Q",
+    "icon": "Basts_Descent.png",
+    "description": "Summon Bast, pouncing forward, dealing damage, and attaching a Vibranium Mark to enemies hit while refreshing Spirit Rend.",
+    "stats": {}
+  },
+  {
+    "section": "Abilities",
+    "name": "Spear Toss",
+    "key": "Right Click",
+    "icon": "Spear_Toss.png",
+    "description": "Toss a Vibranium energy spear forward, creating a Vibranium Force Field and attaching a Vibranium Mark to enemies in its radius.",
+    "stats": {}
+  },
+  {
+    "section": "Abilities",
+    "name": "Spirit Rend",
+    "key": "SHIFT",
+    "icon": "Spirit_Rend.png",
+    "description": "Lunge forward and deal damage to enemies. Vibranium Mark produces Bonus Health and refreshes the ability.",
+    "stats": {}
+  },
+  {
+    "section": "Abilities",
+    "name": "Spinning Kick",
+    "key": "E",
+    "icon": "Spinning_Kick.png",
+    "description": "Spiral forward and attach a Vibranium Mark to hit enemies.",
+    "stats": {}
+  },
+  {
+    "section": "Abilities",
+    "name": "Subtle Step",
+    "key": "SPACE",
+    "icon": "Subtle_Step.png",
+    "description": "Hold {{#switch: {{{p|}}} | PC = Space | PS5 = Cross | Xbox = File:XboxSeriesX A.png}} to run on a wall; perform a jump after detaching from the wall.",
+    "stats": {}
+  },
+  {
+    "section": "Abilities",
+    "name": "Panther's Cunning",
+    "key": "Passive",
+    "icon": "Panthers_Cunning.png",
+    "description": "Deal higher damage when at low Health.",
+    "stats": {}
+  },
+  {
+    "section": "Team-Up Abilities",
+    "name": "Gamma Vibranium Armor",
+    "key": "Passive",
+    "icon": "Gamma_Vibranium_Armor.png",
+    "description": "Hulk charges Black Panther with gamma radiation, strengthening his Vibranium armor. When Black Panther's health is low, he receives a gamma shield, blocking incoming attacks and becoming Unstoppable.",
+    "stats": {
+      "SHIELD VALUE": "100",
+      "HEALTH THRESHOLD FOR ABILITY ACTIVATION": "100",
+      "COOLDOWN": "45s"
+    }
+  }
+]

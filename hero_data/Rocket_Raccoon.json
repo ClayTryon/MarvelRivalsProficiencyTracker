@@ -1,0 +1,74 @@
+[
+  {
+    "section": "Normal Attack",
+    "name": "Bombard Mode",
+    "key": "Left Click",
+    "icon": "Bombard_Mode.png",
+    "description": "Fire energy projectiles that deal damage.\n\n    CASTINGProjectile\n    AMMO45\n    FIRE RATE12.33 rounds/s\n    RELOAD TIME1.1s\n    PROJECTILE SPEED180m/s\n    DAMAGE16\n    CRITICAL HITYes\n    DAMAGE FALLOFFBegins at 10m, decreasing to 40% at 20m",
+    "stats": {}
+  },
+  {
+    "section": "Normal Attack",
+    "name": "Repair Mode",
+    "key": "Right Click",
+    "icon": "Repair_Mode.png",
+    "description": "Shoot bouncing spheres to heal allies. Directly hitting an ally provides extra healing.\n\n    CASTINGProjectile (5m radius)\n    AMMO8\n    FIRE RATE1.8 spheres/s\n    RELOAD TIME1.1s\n    PROJECTILE SPEED80m/s (slows to 7m/s while healing allies)\n    MAX ACTIVE SPHERES7\n    HEALINGAlly: 50/s, Self: 30/s\n    DIRECT HIT HEALING50 (once per ally)\n    MAX HEALING PER SPHEREAlly: ''TBA'', Self: 63\n    BOUNCE MECHANICSBounces off surfaces up to 10 times. Can reapply Direct Hit Healing to the same ally after each bounce.",
+    "stats": {}
+  },
+  {
+    "section": "Abilities",
+    "name": "C.Y.A.",
+    "key": "Q",
+    "icon": "CYA.png",
+    "description": "Deploy a Cosmic Yarn Amplifier that grants allies a Damage Boost, while continuously providing them with Bonus Health.\n\n    ENERGY COST4300\n    CASTINGTargeted (Deployable)\n    CASTING RANGE• Horizontal: Up to 25m • Vertical: Up to at least 40m\n    AMPLIFIER HEALTH800\n    DURATION12s\n    LINK RANGEUp to 20m (Radius)\n    DAMAGE BOOST40%\n    BONUS HEALTH RATE100/s\n    MAX BONUS HEALTH150\n    BONUS HEALTH DECAY75/s (begins 1s after breaking the link)",
+    "stats": {}
+  },
+  {
+    "section": "Abilities",
+    "name": "Jetpack Dash",
+    "key": "SHIFT",
+    "icon": "Jetpack_Dash.png",
+    "description": "Dash forward.\n\n    CASTINGDash\n    CHARGES2\n    COOLDOWN10s per charge\n    DASH DIRECTIONToward crosshair\n    DASH DISTANCE8m\n    DASH DURATION0.433s\n    WITH WILD CRAWL\n    DASH DIRECTIONDirection Rocket is facing\n    DASH DISTANCE20m\n    DASH DURATION0.633s",
+    "stats": {}
+  },
+  {
+    "section": "Abilities",
+    "name": "B.R.B.",
+    "key": "E",
+    "icon": "BRB.png",
+    "description": "Deploy a Battle Rebirth Beacon that revives a fallen ally and periodically produces armor packs and rocket jet packs.\n\n    CASTINGProjectile (Deployable)\n    HEALTH150\n    DURATION300s (5 minutes)\n    MAX REVIVE DISTANCE50m\n    PACK UPGRADESOne upgrade is generated every 3s in fixed locations. Repeats: Armor Packs ×3, then Rocket Pack ×1 • Armor Pack: 25 Bonus Health (does not decay) • Rocket Pack: Up to 28m Jump Height\n    REVIVE TIMING3.4s total (1.4s to queue fallen ally + 2s revival animation)\n    REVIVE RULES• Beacon cannot be reclaimed once an ally is queued • Revive continues even if Rocket dies • Revive cancels if beacon is destroyed during the 3.4s\n    COOLDOWNMaximum (40s): • Ally gets revived • Enemy destroys the beacon • Max duration is reached  Minimum (5s): • Reclaimed at full health • Destroyed by environment/mission vehicle • Self-destructs on failed deployment  Dynamic (Damaged & Reclaimed): • 5s base + 0.25s per 1 HP damage • Example: 45 damage = 16.25s cooldown\n    SPECIAL EFFECTBeacon is immediately reclaimed if Rocket dies",
+    "stats": {}
+  },
+  {
+    "section": "Abilities",
+    "name": "Wild Crawl",
+    "key": "SPACE",
+    "icon": "Wild_Crawl.png",
+    "description": "Hold {{#switch: {{{p|}}} | PC = Space | PS5 = File:PS5 Cross.png | Xbox = File:XboxSeriesX A.png |}} to run on a wall.\n\n    CASTINGMovement\n    MOVEMENT SPEED8m/s\n    COOLDOWN1s",
+    "stats": {}
+  },
+  {
+    "section": "Abilities",
+    "name": "Flying Ace",
+    "key": "SPACE",
+    "icon": "Flying_Ace.png",
+    "description": "Hold {{#switch: {{{p|}}} | PC = Space | PS5 = File:PS5 Cross.png | Xbox = File:XboxSeriesX A.png |}} to fall slowly.\n\n    CASTINGMovement\n    MOVEMENT SPEED3.5m/s (Descending)",
+    "stats": {}
+  },
+  {
+    "section": "Team-Up Abilities",
+    "name": "Old Friends",
+    "key": "C",
+    "icon": "Old_Friends.png",
+    "description": "Jeff the Land Shark and Rocket Raccoon can ride on Groot's shoulders, receiving Damage Reduction.\n\n    CASTINGTargeted\n    PROMPT RANGEUp to 12m\n    DAMAGE REDUCTION35%\n    SPECIAL EFFECTPressing Shift will end the Team-Up with Groot.",
+    "stats": {}
+  },
+  {
+    "section": "Team-Up Abilities",
+    "name": "Rocket Network",
+    "key": "Passive",
+    "icon": "Rocket_Network.png",
+    "description": "Rocket Raccoon upgrades his B.R.B. Star-Lord gets a teleport to its deployment point from anywhere on the map.\n\n    TEAM-UP BONUS+5% Healing Bonus\n    NOTEDespite the game claiming his B.R.B. gets upgraded, the ability's functionality remains unchanged.",
+    "stats": {}
+  }
+]

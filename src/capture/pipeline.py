@@ -75,6 +75,15 @@ def capture_one_hero(hwnd: int, db: Database, capture_run_id: int, hero_name: st
                                 HeroRepository(db), SnapshotRepository(db))
 
 
+def capture_one_hero_from_image(image, db: Database, capture_run_id: int, hero_name: str) -> Hero:
+    """OCR a pre-captured PIL Image (e.g. from clipboard) for a single hero."""
+    save_debug_image(image, "proficiency_raw_clipboard")
+    save_debug_image(ocr.preprocess(image.crop(ocr.XP_REGION)), "proficiency_xp_crop")
+    _name, level, xp, xp_req, is_max = ocr.parse_proficiency_bar(image)
+    return _build_and_save_hero(hero_name, capture_run_id, level, xp, xp_req, is_max,
+                                HeroRepository(db), SnapshotRepository(db))
+
+
 def run_scan(hwnd: int, db: Database, on_log, on_hero, check_cancelled) -> int:
     """Automatically scan every hero in HERO_ROSTER and persist proficiency data.
 

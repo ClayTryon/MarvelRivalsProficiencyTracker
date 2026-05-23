@@ -1,6 +1,7 @@
 __pycache__/
 *.pyc
 .venv/
+.env
 proficiency_tracker.db
 .temp/
 build/

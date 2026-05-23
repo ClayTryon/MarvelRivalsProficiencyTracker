@@ -87,4 +87,13 @@ QMessageBox QLabel  { color: #dcdce8; }
 
 /* ── Form row labels ── */
 QFormLayout QLabel { color: #606078; }
+
+/* ── Menus ── */
+QMenu {
+    background: #16162a; color: #a8a8c0;
+    border: 1px solid #26263c; padding: 4px 0;
+}
+QMenu::item { padding: 6px 20px; }
+QMenu::item:selected { background: #222240; color: #f4d641; }
+QMenu::separator { height: 1px; background: #26263c; margin: 4px 0; }
 """

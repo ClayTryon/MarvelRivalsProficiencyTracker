@@ -1,0 +1,129 @@
+[
+  {
+    "section": "Normal Attack",
+    "name": "Piercing Arrow",
+    "key": "Left Click",
+    "icon": "Piercing_Arrow.png",
+    "description": "Shoot a powerful arrow.",
+    "stats": {
+      "CASTING": "Charged projectile with an arced trajectory",
+      "MINIMUM CHARGE TIME": "0.7s",
+      "DAMAGE": "28 - 70 (Maximum damage is achieved after 0.9s of charging)",
+      "AMMO": "∞",
+      "CRITICAL HIT": "Yes",
+      "PROJECTILE SPEED": "120 - 180 m/s (Maximum speed is achieved after 0.9s of charging)",
+      "SLOW RATE WHILE CHARGING": "20%"
+    }
+  },
+  {
+    "section": "Normal Attack",
+    "name": "Blast Arrow",
+    "key": "Left Click",
+    "icon": "Blast_Arrow.png",
+    "description": "Shoot three explosive arrows.",
+    "stats": {
+      "CASTING": "Arced projectile that generates a spell field upon impact",
+      "DAMAGE": "16 (per projectile) - 34 (spell field)",
+      "CHARGES": "3",
+      "COOLDOWN": "0.5s",
+      "RANGE": "3m spherical radius",
+      "PROJECTILE SPEED": "60m/s",
+      "SLOW RATE WHILE CHARGING": "20%",
+      "SPREAD ANGLE": "11.3°"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Hunter's Sight",
+    "key": "Q",
+    "icon": "Hunters_Sight.png",
+    "description": "Capture Afterimages of enemies in his view. Damage dealt to an Afterimage is transferred to the corresponding enemy.",
+    "stats": {
+      "DURATION": "10s",
+      "AFTERIMAGE GENERATION INTERVAL": "0.5s",
+      "AFTERIMAGE DURATION": "3s",
+      "ENERGY COST": "3100",
+      "DRAW SPEED BOOST MULTIPLIER": "1.5"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Crescent Slash",
+    "key": "Shift",
+    "icon": "Crescent_Slash.png",
+    "description": "Unsheathe a katana and slash forward, Launching Up enemies hit.",
+    "stats": {
+      "CASTING": "Melee",
+      "DAMAGE": "40",
+      "COOLDOWN": "12s",
+      "MAXIMUM DISTANCE": "8m"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Hypersonic Arrow",
+    "key": "E",
+    "icon": "Hypersonic_Arrow.png",
+    "description": "Shoot a Hypersonic Arrow, dealing two instances of damage to enemies in its path and inflicting them with Slow. This ability can Knock Down flying heroes.",
+    "stats": {
+      "CASTING": "Straight-line projectile that is accompanied by a spell field",
+      "DAMAGE": "55 per hit",
+      "SLOW DURATION": "1s",
+      "COOLDOWN": "12s",
+      "RANGE": "Length: 3m, Width: 3m, Height: 2.7m (first hit)  \nLength: 3m, Width: 5m, Height: 1.6m (second hit)",
+      "PROJECTILE SPEED": "150m/s",
+      "SLOW RATE": "40%"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Ronin Slash",
+    "key": "V",
+    "icon": "Ronin_Slash.png",
+    "description": "Swing a wakizashi to strike frontal enemies, deflecting all incoming projectiles.",
+    "stats": {
+      "CASTING": "Melee",
+      "MAXIMUM DISTANCE": "3m"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Skyward Leap",
+    "key": "Space",
+    "icon": "Skyward_Leap.png",
+    "description": "Perform a double jump in the direction of movement.",
+    "stats": {
+      "COOLDOWN": "6s"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Archer's Focus",
+    "key": "Passive",
+    "icon": "Archers_Focus.png",
+    "description": "Aim at an enemy to improve focus, enhancing the damage inflicted by Piercing Arrow.",
+    "stats": {
+      "DAMAGE": "0 - 90 (Maximum damage is achieved after 0.9s of aiming)",
+      "TRIGGERING DISTANCE": "40m",
+      "CRITICAL HIT": "Yes"
+    }
+  },
+  {
+    "section": "Team-Up Abilities",
+    "name": "Moonlit Slash",
+    "key": "Shift",
+    "icon": "Moonlit_Slash.png",
+    "description": "Cloak & Dagger share light and dark energy with Hawkeye and Psylocke. When Hawkeye uses Crescent Slash, he also releases a blade wave that heals and boosts healing for teammates, while inflicting damage and Vulnerability on enemies. Psylocke can launch a Light Boomerang Dart that heals allies, harms enemies, and provides her with temporary healing upon return. She can also unleash a ring of Dark Darts that slow enemies while she briefly enters a Phased state.",
+    "stats": {
+      "COOLDOWN": "12s",
+      "BLADE WAVE SPEED": "60 m/s",
+      "BLADE WAVE RANGE": "Length: 2m, Width: 6m, Height: 2m",
+      "BLADE WAVE DAMAGE": "60",
+      "VULNERABILITY EFFECT": "15%",
+      "VULNERABILITY DURATION": "4s",
+      "BLADE WAVE HEALING": "60",
+      "HEALING BOOST": "15%",
+      "HEALING BOOST DURATION": "4s"
+    }
+  }
+]

@@ -1,0 +1,110 @@
+[
+  {
+    "section": "Normal Attack",
+    "name": "Cyber-Web Cluster",
+    "key": "Left Click",
+    "icon": "Cyber-Web_Cluster.png",
+    "description": "Launch forward a Cyber-Web Cluster",
+    "stats": {
+      "CASTING": "Rapid-fire, delayed projectile that is accompanied by a spell field.",
+      "DAMAGE": "15 (projectile & spell field)",
+      "FIRE RATE": "3.33 rounds/s",
+      "RANGE": "1.5m spherical radius",
+      "PROJECTILE SPEED": "120m/s"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Spider-Sweeper",
+    "key": "Q",
+    "icon": "Spider-Sweeper.png",
+    "description": "Enhance the SP//dr suit, Launching Up enemies in its path and deploying Arachno-Mines, Spider-Drones, and Cyber-Webs repeatedly. Spider-Drones inflict a Slow effect on hit, which can stack and refresh its effect period with multiple hits.",
+    "stats": {
+      "ENERGY COST": "3400",
+      "CASTING": "Enhancement",
+      "DAMAGE": "60 per sweep",
+      "AMMO": "7 (Arachno-Mines)",
+      "INTERVAL": "1s (sweep)  \n0.7s (Arachno-Mines)  \n0.7s (Spider-Drones)",
+      "RANGE": "5m (sweep)  \n4m spherical radius"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Cyber-Web Snare",
+    "key": "Right Click",
+    "icon": "Cyber-Web_Snare.png",
+    "description": "Cast futuristic webbing that Immobilizes enemies or creates a Cyber-Web. While in the Cyber-Web, gain Healing Over Time and a Movement Boost. Excess healing converts into Bonus Health.",
+    "stats": {
+      "CASTING": "Single-cast projectile with delayed impact",
+      "DAMAGE": "5",
+      "COOLDOWN": "3s",
+      "RANGE": "3m spherical radius",
+      "PROJECTILE SPEED": "60m/s"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Bionic Spider-Nest",
+    "key": "SHIFT",
+    "icon": "Bionic_Spider-Nest.png",
+    "description": "Generate a Bionic Spider-Nest at a targeted area, periodically spawning Spider-Drones and creating Cyber-Webs. While in the Cyber-Web, gain Healing Over Time and a Movement Boost. Excess healing converts into Bonus Health. Spider-Drones inflict a Slow effect on hit, which can stack and refresh its effect period with multiple hits.",
+    "stats": {
+      "CASTING": "Targeted",
+      "DAMAGE": "40 per Spider-Drone",
+      "COOLDOWN": "15s",
+      "INTERVAL": "Two Spider-Drones every 3s",
+      "RANGE": "12m spherical radius",
+      "MAXIMUM DISTANCE": "10m",
+      "ABILITY HEALTH": "350"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Arachno-Mine",
+    "key": "E",
+    "icon": "Arachno-Mine.png",
+    "description": "Deploy Arachno-Mines that can be concealed within the confines of a Cyber-Web.",
+    "stats": {
+      "CASTING": "Single-cast Spell Field",
+      "DAMAGE": "100",
+      "CHARGES": "4",
+      "COOLDOWN": "4s per charge",
+      "RANGE": "3m spherical radius"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Cyber-Bond",
+    "key": "F",
+    "icon": "Cyber-Bond.png",
+    "description": "Shoot a web strand that links to the targeted area or Cyber-Web. If stretched too far, it will trigger a pullback.",
+    "stats": {
+      "CASTING": "Dash",
+      "COOLDOWN": "3s",
+      "RANGE": "10m pullback range",
+      "MAXIMUM DISTANCE": "19m",
+      "PROJECTILE SPEED": "100m/s",
+      "DASH DISTANCE": "Min. 10m - Max. 30m"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Wall Crawl",
+    "key": "SPACE",
+    "icon": "Wall_Crawl.png",
+    "description": "Hold Space to crawl on vertical surfaces.",
+    "stats": {
+      "MOVEMENT SPEED": "7.2m/s"
+    }
+  },
+  {
+    "section": "Team-Up Abilities",
+    "name": "Spider-Tech",
+    "key": "C",
+    "icon": "Spider-Tech.png",
+    "description": "Cyber-Spiders Peni Parker whips up a Sticky Bomb for Spider-Man! Prime it, then toss it before the timer's up for a blast that damages nearby enemies and attaches a Spider-Tracer to them. If not thrown in time, it explodes on Spider-Man, recharging a Web-Cluster shot and granting Bonus Health.",
+    "stats": {
+      "TEAM-UP BONUS": "+50 Max Health"
+    }
+  }
+]

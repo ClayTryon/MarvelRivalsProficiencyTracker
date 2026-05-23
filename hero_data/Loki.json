@@ -1,0 +1,113 @@
+[
+  {
+    "section": "Normal Attack",
+    "name": "Mystical Missile",
+    "key": "Left Click",
+    "icon": "Mystical_Missile.png",
+    "description": "Fire Mystical Missiles to heal allies or deal damage to enemies.",
+    "stats": {
+      "ABILITY TYPE": "Single-cast projectile with delayed impact that also generates a spell field",
+      "DAMAGE": "The projectile deals no damage, while the spell field inflicts 25 damage per cast",
+      "HEALING": "10 (projectile) - 40 (spell field)",
+      "AMMO": "10",
+      "FIRE RATE": "1.75/s",
+      "SPELL FIELD RANGE": "3m spherical radius",
+      "CRITICAL HIT": "No",
+      "PROJECTILE SPEED": "100m/s",
+      "DAMAGE FALLOFF": "Falloff begins at 0.5m from the center of the spell field, decreasing to 50% at 2.5m"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "God of Mischief",
+    "key": "Q",
+    "icon": "God_of_Mischief.png",
+    "description": "Shapeshift into a targeted ally or enemy hero and use all their abilities except any of their Team-Up Abilities.",
+    "stats": {
+      "ABILITY TYPE": "Targeted",
+      "DURATION": "12s",
+      "ENERGY COST": "4300"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Deception",
+    "key": "Right Click",
+    "icon": "Deception.png",
+    "description": "Become Invisible and conjure an Illusion to deceive enemies.",
+    "stats": {
+      "ABILITY TYPE": "Instant Cast",
+      "HEALING": "20/s whilst invisible",
+      "COOLDOWN": "15s"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Regeneration Domain",
+    "key": "SHIFT",
+    "icon": "Regeneration_Domain.png",
+    "description": "Use Rune Stones to create a magical field that provides allies Healing Over Time and converts incoming damage into further healing.",
+    "stats": {
+      "ABILITY TYPE": "Release a spell field at the location of Loki and the Illusion",
+      "HEALING": "100/s",
+      "DURATION": "5s",
+      "COOLDOWN": "30s",
+      "RANGE": "A cylindrical spell field with a radius of 5m and a height of 2m",
+      "ABILITY HEALTH": "100",
+      "CONVERSION RATE": "30%"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Doppelganger",
+    "key": "E",
+    "icon": "Doppelganger.png",
+    "description": "Project an Illusion that can cast some of Loki's abilities.",
+    "stats": {
+      "ABILITY TYPE": "Targeted",
+      "CHARGES": "2",
+      "RECHARGE TIME": "12s",
+      "MAXIMUM DISTANCE": "30m"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Devious Exchange",
+    "key": "F",
+    "icon": "Devious_Exchange.png",
+    "description": "Swap with the selected Illusion.",
+    "stats": {
+      "ABILITY TYPE": "Targeted",
+      "COOLDOWN": "15s",
+      "MAXIMUM DISTANCE": "30m"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Backstab",
+    "key": "V",
+    "icon": "Backstab.png",
+    "description": "Pull out a dagger to stab enemies, dealing extra damage when attacking an enemy from behind.",
+    "stats": {
+      "ABILITY TYPE": "Single-cast Spell Field",
+      "DAMAGE": "30 (Melee) - 45 (Backstab)",
+      "RANGE": "3m"
+    }
+  },
+  {
+    "section": "Team-Up Abilities",
+    "name": "Deific Blessing",
+    "key": "SHIFT",
+    "icon": "Deific_Blessing.png",
+    "description": "Mantis enhances Groot's wooden walls and Loki's Rune Stones with life energy. Groot can additionally unleash a Wild Wall, which, when in Flora Colossus state, restores health to random nearby allies and grants them Damage Reduction. Loki's Rune Stones grant allies within Regeneration Domain a Damage Boost.",
+    "stats": {
+      "RANGE": "A cylindrical spell field with a radius of 6.5m and a height of 2m.",
+      "DURATION": "5s",
+      "CONVERSION RATE": "30%",
+      "HEALING AMOUNT": "100/s",
+      "ABILITY HEALTH": "100",
+      "COOLDOWN": "30s",
+      "DAMAGE BOOST": "15%"
+    }
+  }
+]

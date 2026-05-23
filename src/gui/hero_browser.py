@@ -1,9 +1,9 @@
 import csv
 from PyQt6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QComboBox, QLabel,
-    QFileDialog, QMessageBox, QScrollArea, QGridLayout, QDialog,
+    QFileDialog, QMessageBox, QScrollArea, QGridLayout, QDialog, QMenu, QLineEdit,
 )
-from PyQt6.QtCore import Qt, pyqtSignal
+from PyQt6.QtCore import Qt, pyqtSignal, QSettings
 
 from gui.excel_import import generate_template, import_from_excel
 from gui.hero_card import HeroCard
@@ -29,22 +29,25 @@ _ROLE_FILTERS = {
 
 
 class _HeroDetailDialog(QDialog):
-    def __init__(self, hero: Hero, parent=None):
+    def __init__(self, hero: Hero, db=None, parent=None):
         super().__init__(parent)
         self.setWindowTitle(hero.name)
-        self.setMinimumWidth(480)
+        self.setMinimumSize(560, 680)
         self.setModal(True)
 
         lay = QVBoxLayout(self)
         lay.setContentsMargins(0, 0, 0, 0)
 
-        panel = HeroDetailPanel()
+        panel = HeroDetailPanel(db)
         panel.set_hero(hero)
         lay.addWidget(panel)
 
 
 class _HeroGrid(QWidget):
-    card_clicked = pyqtSignal(object)
+    card_clicked                  = pyqtSignal(object)
+    card_edit_requested           = pyqtSignal(object)
+    card_wiki_requested           = pyqtSignal(object)
+    card_clipboard_scan_requested = pyqtSignal(object)
 
     _GAP = 10
     _PAD = 16
@@ -67,6 +70,9 @@ class _HeroGrid(QWidget):
         for hero in heroes:
             card = HeroCard(hero)
             card.clicked.connect(self.card_clicked)
+            card.edit_requested.connect(self.card_edit_requested)
+            card.wiki_requested.connect(self.card_wiki_requested)
+            card.clipboard_scan_requested.connect(self.card_clipboard_scan_requested)
             self._cards.append(card)
 
         self._cols = self._calc_cols(self.width())
@@ -84,7 +90,6 @@ class _HeroGrid(QWidget):
         for i, card in enumerate(self._cards):
             row, col = divmod(i, self._cols)
             self._lay.addWidget(card, row, col)
-        # Push cards to the top; don't stretch them vertically
         bottom_row = (len(self._cards) + self._cols - 1) // self._cols if self._cards else 0
         self._lay.setRowStretch(bottom_row, 1)
 
@@ -101,66 +106,95 @@ class _HeroGrid(QWidget):
 
 
 class HeroBrowser(QWidget):
+    wiki_hero_requested = pyqtSignal(str)
+
     def __init__(self, db: Database = None, parent=None):
         super().__init__(parent)
         self._db = db
+        self._settings = QSettings("ProfTracker", "HeroBrowser")
+
         layout = QVBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(0)
 
-        toolbar = QHBoxLayout()
-        toolbar.setContentsMargins(8, 6, 8, 6)
+        # ── Toolbar ──────────────────────────────────────────────────────────
+        toolbar_widget = QWidget()
+        toolbar_widget.setStyleSheet(
+            "QWidget { background: #080810; border-bottom: 1px solid #1a1a2c; }"
+        )
+        toolbar = QHBoxLayout(toolbar_widget)
+        toolbar.setContentsMargins(14, 8, 14, 8)
         toolbar.setSpacing(8)
 
-        export_btn = QPushButton("Export CSV")
-        export_btn.setFixedWidth(100)
-        export_btn.clicked.connect(self._export_csv)
-        toolbar.addWidget(export_btn)
-
-        template_btn = QPushButton("Get Template")
-        template_btn.setFixedWidth(110)
-        template_btn.clicked.connect(self._save_template)
-        toolbar.addWidget(template_btn)
-
-        import_btn = QPushButton("Import Excel")
-        import_btn.setFixedWidth(110)
-        import_btn.clicked.connect(self._import_excel)
-        toolbar.addWidget(import_btn)
-
-        manual_btn = QPushButton("+ Manual Entry")
-        manual_btn.setFixedWidth(120)
+        manual_btn = QPushButton("+ Add Hero")
         manual_btn.clicked.connect(self._open_manual_entry)
         toolbar.addWidget(manual_btn)
 
-        toolbar.addWidget(QLabel("Role:"))
+        more_btn = QPushButton("⋯")
+        more_btn.setFixedWidth(36)
+        more_menu = QMenu(more_btn)
+        more_menu.addAction("Export CSV", self._export_csv)
+        more_menu.addSeparator()
+        more_menu.addAction("Import Excel", self._import_excel)
+        more_menu.addAction("Get Template", self._save_template)
+        more_btn.setMenu(more_menu)
+        toolbar.addWidget(more_btn)
+
+        self._search = QLineEdit()
+        self._search.setPlaceholderText("Search heroes...")
+        self._search.setFixedWidth(150)
+        self._search.setClearButtonEnabled(True)
+        self._search.textChanged.connect(self._apply_sort)
+        toolbar.addWidget(self._search)
+
+        toolbar.addStretch()
+
+        role_lbl = QLabel("ROLE")
+        role_lbl.setStyleSheet("color: #484860; font-size: 10px; letter-spacing: 1px;")
+        toolbar.addWidget(role_lbl)
         self._role_combo = QComboBox()
         self._role_combo.addItems(_ROLE_FILTERS.keys())
         self._role_combo.setFixedWidth(110)
         self._role_combo.currentIndexChanged.connect(self._apply_sort)
         toolbar.addWidget(self._role_combo)
 
-        toolbar.addWidget(QLabel("Sort:"))
+        sort_lbl = QLabel("SORT")
+        sort_lbl.setStyleSheet("color: #484860; font-size: 10px; letter-spacing: 1px;")
+        toolbar.addWidget(sort_lbl)
         self._sort_combo = QComboBox()
         self._sort_combo.addItems(_SORT_OPTIONS.keys())
         self._sort_combo.setFixedWidth(160)
         self._sort_combo.currentIndexChanged.connect(self._apply_sort)
         toolbar.addWidget(self._sort_combo)
 
-        self._dir_btn = QPushButton("↑ Asc")
-        self._dir_btn.setFixedWidth(60)
+        self._dir_btn = QPushButton("↑")
+        self._dir_btn.setFixedWidth(32)
         self._dir_btn.setCheckable(True)
         self._dir_btn.clicked.connect(self._toggle_direction)
         toolbar.addWidget(self._dir_btn)
 
-        toolbar.addStretch()
-        layout.addLayout(toolbar)
+        layout.addWidget(toolbar_widget)
 
+        # ── Stats bar ────────────────────────────────────────────────────────
+        self._stats_bar = QLabel()
+        self._stats_bar.setStyleSheet(
+            "background: #0a0a12; color: #484860; font-size: 10px;"
+            " padding: 3px 14px; border-bottom: 1px solid #141424;"
+        )
+        layout.addWidget(self._stats_bar)
+
+        # ── Hero grid ────────────────────────────────────────────────────────
         scroll = QScrollArea()
         scroll.setWidgetResizable(True)
         scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
 
         self._grid = _HeroGrid()
         self._grid.card_clicked.connect(self._show_detail)
+        self._grid.card_edit_requested.connect(self._edit_hero)
+        self._grid.card_wiki_requested.connect(
+            lambda hero: self.wiki_hero_requested.emit(hero.name)
+        )
+        self._grid.card_clipboard_scan_requested.connect(self._clipboard_scan)
         scroll.setWidget(self._grid)
         layout.addWidget(scroll)
 
@@ -168,28 +202,68 @@ class HeroBrowser(QWidget):
         self._heroes: list[Hero] = []
         self._descending = False
 
+        # Restore saved sort/filter preferences
+        self._load_settings()
+
+    def _load_settings(self):
+        saved_sort = self._settings.value("sort_key", "")
+        saved_role = self._settings.value("role_filter", "")
+        saved_dir  = self._settings.value("descending", False, type=bool)
+
+        idx = self._sort_combo.findText(saved_sort)
+        if idx >= 0:
+            self._sort_combo.blockSignals(True)
+            self._sort_combo.setCurrentIndex(idx)
+            self._sort_combo.blockSignals(False)
+
+        idx = self._role_combo.findText(saved_role)
+        if idx >= 0:
+            self._role_combo.blockSignals(True)
+            self._role_combo.setCurrentIndex(idx)
+            self._role_combo.blockSignals(False)
+
+        if saved_dir:
+            self._descending = True
+            self._dir_btn.setChecked(True)
+            self._dir_btn.setText("↓")
+
     def load_heroes(self, heroes: list[Hero]):
         self._all_heroes = list(heroes)
         self._apply_sort()
 
     def _apply_sort(self):
+        search = self._search.text().strip().lower()
         role_filter = _ROLE_FILTERS[self._role_combo.currentText()]
-        filtered = (
-            [h for h in self._all_heroes if h.role == role_filter]
-            if role_filter else list(self._all_heroes)
-        )
+        filtered = [
+            h for h in self._all_heroes
+            if (not role_filter or h.role == role_filter)
+            and (not search or search in h.name.lower())
+        ]
         key_fn = _SORT_OPTIONS[self._sort_combo.currentText()]
         filtered.sort(key=key_fn, reverse=self._descending)
         self._heroes = filtered
         self._grid.set_heroes(filtered)
 
+        lord  = sum(1 for h in self._all_heroes if 20 <= h.level < 50 and not h.is_max_level)
+        champ = sum(1 for h in self._all_heroes if h.is_max_level)
+        total = len(self._all_heroes)
+        shown = len(filtered)
+        count_str = f"{shown} of {total}" if search or role_filter else str(total)
+        self._stats_bar.setText(
+            f"{count_str} heroes  ·  {lord} Lord  ·  {champ} Champion"
+        )
+
+        self._settings.setValue("sort_key", self._sort_combo.currentText())
+        self._settings.setValue("role_filter", self._role_combo.currentText())
+        self._settings.setValue("descending", self._descending)
+
     def _toggle_direction(self):
         self._descending = self._dir_btn.isChecked()
-        self._dir_btn.setText("↓ Desc" if self._descending else "↑ Asc")
+        self._dir_btn.setText("↓" if self._descending else "↑")
         self._apply_sort()
 
     def _show_detail(self, hero: Hero):
-        dlg = _HeroDetailDialog(hero, self)
+        dlg = _HeroDetailDialog(hero, self._db, self)
         dlg.exec()
 
     def _save_template(self):
@@ -228,6 +302,43 @@ class HeroBrowser(QWidget):
             QMessageBox.warning(self, "Import Complete", msg)
         else:
             QMessageBox.information(self, "Import Complete", msg)
+
+    def _clipboard_scan(self, hero: Hero):
+        if not self._db:
+            return
+        from PyQt6.QtWidgets import QApplication
+        from PyQt6.QtGui import QImage
+        from PIL import Image
+        from storage.repository import CaptureRunRepository
+        from models.capture_run import CaptureStatus
+
+        qimg = QApplication.instance().clipboard().image()
+        if qimg.isNull():
+            QMessageBox.warning(self, "Clipboard Scan", "Clipboard is empty or contains no image.")
+            return
+
+        qimg = qimg.convertToFormat(QImage.Format.Format_RGBA8888)
+        ptr = qimg.bits()
+        ptr.setsize(qimg.height() * qimg.width() * 4)
+        pil_image = Image.frombytes('RGBA', (qimg.width(), qimg.height()), bytes(ptr))
+
+        try:
+            from capture.pipeline import capture_one_hero_from_image
+            run = CaptureRunRepository(self._db).create()
+            result = capture_one_hero_from_image(pil_image, self._db, run.id, hero.name)
+            CaptureRunRepository(self._db).update_status(run.id, CaptureStatus.COMPLETED, hero_count=1)
+            self.load_heroes(HeroRepository(self._db).get_all())
+            xp_str = "MAX" if result.is_max_level else f"{result.xp:,} / {result.xp_required:,} XP"
+            QMessageBox.information(self, "Scan Complete", f"{result.name}  LV{result.level}  {xp_str}")
+        except Exception as e:
+            QMessageBox.critical(self, "Scan Failed", str(e))
+
+    def _edit_hero(self, hero: Hero):
+        if not self._db:
+            return
+        dlg = ManualEntryDialog(self._db, self, initial_hero=hero.name)
+        if dlg.exec() == QDialog.DialogCode.Accepted:
+            self.load_heroes(HeroRepository(self._db).get_all())
 
     def _open_manual_entry(self):
         if not self._db:

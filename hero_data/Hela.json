@@ -1,0 +1,132 @@
+[
+  {
+    "section": "Normal Attack",
+    "name": "Nightsword Thorn",
+    "key": "Left Click",
+    "icon": "Nightsword_Thorn.png",
+    "description": "Throw Nightsword thorns.",
+    "stats": {
+      "CASTING": "Single-cast hitscan",
+      "DAMAGE": "70",
+      "AMMO": "10",
+      "FIRE RATE": "2/s",
+      "CRITICAL HIT": "Yes",
+      "DAMAGE FALLOFF": "Falloff begins at 18m, decreasing to 70% at 30m"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Goddess of Death",
+    "key": "Q",
+    "icon": "Goddess_of_Death.png",
+    "description": "Soar into the sky and unleash Nastrond Crows from each hand at will.",
+    "stats": {
+      "CASTING": "Straight-line projectile that generates a spell field upon impact",
+      "DAMAGE": "125",
+      "DURATION": "10s",
+      "FIRE RATE": "1.79/s",
+      "RANGE": "6m spherical radius",
+      "PROJECTILE SPEED": "80m/s",
+      "DAMAGE FALLOFF": "32% falloff at 4m",
+      "ABILITY HEALTH": "1000",
+      "ENERGY COST": "4000"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Piercing Night",
+    "key": "Right Click",
+    "icon": "Piercing_Night.png",
+    "description": "Fire multiple Nightsword thorns that detonate after a delay.",
+    "stats": {
+      "CASTING": "Straight-line projectile that generates a spell field upon impact",
+      "DAMAGE": "10 (per projectile) - 35 (spell field damage per round)",
+      "COOLDOWN": "8s",
+      "PROJECTILE SPEED": "80m/s",
+      "NUMBER OF PROJECTILES": "4",
+      "ABILITY DELAY": "3s"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Astral Flock",
+    "key": "SHIFT",
+    "icon": "Astral_Flock.png",
+    "description": "Transform into a Nastrond Crow to glide forth, press again to undo the transformation. Gain Bonus Health when the transformation ends.",
+    "stats": {
+      "CASTING": "Dash",
+      "COOLDOWN": "15s",
+      "DASH SPEED": "15m/s",
+      "DASH DISTANCE": "18m",
+      "BONUS HEALTH": "25"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Soul Drainer",
+    "key": "E",
+    "icon": "Soul_Drainer.png",
+    "description": "Project an explosive Hel sphere to Stun nearby enemies and pull them into the blast zone.",
+    "stats": {
+      "CASTING": "Arced projectile that generates a spell field upon impact",
+      "DAMAGE": "1 (projectile) - 40 (spell field damage)",
+      "STUN DURATION": "0.3s",
+      "COOLDOWN": "10s",
+      "RANGE": "3m spherical radius",
+      "PROJECTILE SPEED": "40m/s"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Hel's Descent",
+    "key": "SPACE",
+    "icon": "Hels_Descent.png",
+    "description": "Hold Space to fall slowly.",
+    "stats": {
+      "MOVEMENT SPEED": "6m/s (horizontal movement) - 3.5m/s (descent speed)"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Nastrond Crowstorm",
+    "key": "Passive",
+    "icon": "Nastrond_Crowstorm.png",
+    "description": "Defeating an enemy will generate a Nastrond Crow, exploding after a duration.",
+    "stats": {
+      "DAMAGE": "80",
+      "RANGE": "5m spherical radius",
+      "ABILITY DELAY": "1.8s"
+    }
+  },
+  {
+    "section": "Team-Up Abilities",
+    "name": "Hel Tendrils",
+    "key": "E",
+    "icon": "Hel_Tendrils.png",
+    "description": "Venom shares his symbiotes with Jeff the Land Shark and Hela. Jeff's Guardian of the Deep links with nearby allies for continuous healing, releasing a large healing burst that converts any excess into Bonus Health when it ends. Hela's Hel Tendrils unleash a symbiotic Hel Sphere that pulls in nearby enemies and links them, slowing those that try to escape.",
+    "stats": {
+      "DAMAGE": "40",
+      "COOLDOWN": "10s",
+      "SPELL FIELD RANGE": "3m spherical radius",
+      "PROJECTILE SPEED": "40 m/s",
+      "STUN DURATION": "0.3s",
+      "MAX LINKING DISTANCE": "5m",
+      "MAX LINKING DURATION": "2s",
+      "SLOW EFFECT": "Slow the enemies by 20% at the center, increasing to 40% at 2.5m from the center"
+    }
+  },
+  {
+    "section": "Team-Up Abilities",
+    "name": "Death Kneel",
+    "key": "Passive",
+    "icon": "Death_Kneel.png",
+    "description": "Hela channels energy of the undead to empower Namor. When Namor strikes with his trident, a spectral water column erupts at the target area, slowing enemies hit. Whenever Hela or Namor assist in a KO, an invulnerable Undead Monstro spawns at the fallen enemy's position, automatically attacking the nearest foe for a short time before vanishing.",
+    "stats": {
+      "TEAM-UP BONUS": "15% Damage Boost",
+      "UNDEAD MONSTRO DURATION": "3s",
+      "UNDEAD MONSTRO DAMAGE": "10",
+      "UNDEAD MONSTRO FIRE RATE": "0.5s per hit",
+      "DAMAGE FALLOFF": "Falloff begins at 20m, decreasing to 50% at 40m"
+    }
+  }
+]

@@ -18,7 +18,7 @@ _MAX_LEVEL = max(XP_PER_LEVEL.keys())  # 70
 
 
 class ManualEntryDialog(QDialog):
-    def __init__(self, db: Database, parent=None):
+    def __init__(self, db: Database, parent=None, initial_hero: str | None = None):
         super().__init__(parent)
         self._db = db
         self.setWindowTitle("Manual Hero Entry")
@@ -73,8 +73,10 @@ class ManualEntryDialog(QDialog):
             h.name: h for h in HeroRepository(db).get_all()
         }
 
-        # Trigger initial population (hero_changed handles level/xp init too)
-        self._on_hero_changed(self._hero_combo.currentText())
+        if initial_hero and self._hero_combo.findText(initial_hero) >= 0:
+            self._hero_combo.setCurrentText(initial_hero)
+        else:
+            self._on_hero_changed(self._hero_combo.currentText())
 
     def _on_hero_changed(self, name: str):
         self._role_lbl.setText(HERO_ROLES.get(name, "Unknown"))

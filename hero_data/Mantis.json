@@ -1,0 +1,114 @@
+[
+  {
+    "section": "Normal Attack",
+    "name": "Life Energy Blast",
+    "key": "Left Click",
+    "icon": "Life_Energy_Blast.png",
+    "description": "Fire an energy thorn and regain one Life Orb after a critical hit.",
+    "stats": {
+      "CASTING": "Single-cast projectile with delayed impact",
+      "DAMAGE": "55 per round",
+      "AMMO": "20",
+      "FIRE RATE": "2.5/s",
+      "CRITICAL HIT": "Yes",
+      "PROJECTILE SPEED": "150m/s"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Soul Resurgence",
+    "key": "Q",
+    "icon": "Soul_Resurgence.png",
+    "description": "Release energy around her while moving, providing Healing Over Time and {{ATC|G|Movement Boosts}} for surrounding allies. Excess healing converts to Bonus Health.",
+    "stats": {
+      "CASTING": "Persistent spell field that surrounds the caster",
+      "HEALING": "200 on cast - 150/s (Reduced to 105/s when overhealing)",
+      "DURATION": "8s",
+      "RANGE": "15m spherical radius",
+      "CONVERSION RATE": "150 maximum health on overheal",
+      "MOVEMENT BOOST": "3m/s",
+      "ENERGY COST": "4300"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Healing Flower",
+    "key": "Right Click",
+    "icon": "Healing_Flower.png",
+    "description": "Consume Life Orbs to grant allies Healing Over Time.",
+    "stats": {
+      "CASTING": "Targeted",
+      "HEALING": "55 on cast - 12.5/s",
+      "PERCENTAGE HEALING": "Heal allies equal to 2.5% of the target's Max Health/s",
+      "DURATION": "⚬ 1 Stack - 8s\n ⚬ 2 Stacks(s) - 16s",
+      "CHARGES": "4",
+      "COOLDOWN": "3s per Life Orb"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Spore Slumber",
+    "key": "SHIFT",
+    "icon": "Spore_Slumber.png",
+    "description": "Throw a spore to Sedate the nearest enemy.",
+    "stats": {
+      "CASTING": "Single-cast projectile with delayed impact that also generates a spell field",
+      "DAMAGE": "10",
+      "DURATION": "3.5s",
+      "COOLDOWN": "15s",
+      "RANGE": "3m spherical radius",
+      "ABILITY HEALTH": "100"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Allied Inspiration",
+    "key": "E",
+    "icon": "Allied_Inspiration.png",
+    "description": "Consume Life Orbs to grant allies a Damage Boost.",
+    "stats": {
+      "CASTING": "Targeted",
+      "DURATION": "1 Stack - 8s \n2 Stack(s) - 16s",
+      "CHARGES": "4",
+      "COOLDOWN": "3s per Life Orb",
+      "DAMAGE BOOST": "12%"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Natural Anger",
+    "key": "F",
+    "icon": "Natural_Anger.png",
+    "description": "Consume Life Orbs to grant herself a Damage Boost.",
+    "stats": {
+      "CASTING": "Instant Cast",
+      "DURATION": "8s",
+      "CHARGES": "4",
+      "COOLDOWN": "3s per Life Orb",
+      "DAMAGE BOOST": "12%"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Nature's Favor",
+    "key": "Passive",
+    "icon": "Natures_Favor.png",
+    "description": "Receive a Movement Boost when not injured and Healing Over Time when consuming Life Orbs.",
+    "stats": {
+      "HEALING": "12.5/s",
+      "DURATION": "8s",
+      "TRIGGER CONDITION": "Out of combat for over 3s",
+      "MOVEMENT BOOST": "1.5m/s"
+    }
+  },
+  {
+    "section": "Team-Up Abilities",
+    "name": "Heavenly Guardian",
+    "key": "Passive",
+    "icon": "Heavenly_Guardian.png",
+    "description": "Mantis enhances Groot's wooden walls and Loki's Rune Stones with life energy. Groot can additionally unleash a Wild Wall, which, when in Flora Colossus state, restores health to random nearby allies and grants them Damage Reduction. Loki's Rune Stones grant allies within Regeneration Domain a Damage Boost.",
+    "stats": {
+      "TEAM-UP BONUS": "10% Healing Boost"
+    }
+  }
+]

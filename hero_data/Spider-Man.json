@@ -1,0 +1,135 @@
+[
+  {
+    "section": "Normal Attack",
+    "name": "Spider-Power",
+    "key": "Left Click",
+    "icon": "Spider-Power.png",
+    "description": "Swing fists forward to strike, dealing extra damage to the enemy with a Spider-Tracer.",
+    "stats": {
+      "CASTING": "Melee",
+      "DAMAGE": "The first two strikes deal 25 damage, while the third strike deals 40 damage (damage increases for one strike when hitting with Spider-Tracer) Midair strikes are an overhead slam that deal 55 damage",
+      "INTERVAL": "The first two strikes have an interval of 0.37s between them, while the third strike has a 0.82s interval from the second strike",
+      "MAXIMUM DISTANCE": "The first two strikes can hit up to 3m, while the third strike can hit up to 4m"
+    }
+  },
+  {
+    "section": "Normal Attack",
+    "name": "Web Cluster",
+    "key": "Right Click",
+    "icon": "Web_Cluster.png",
+    "description": "Shoot a Web-Cluster that deals damage and attaches a Spider-Tracer to the hit enemy.",
+    "stats": {
+      "CASTING": "Projectile that fires in a straight trajectory",
+      "DAMAGE": "30 (consuming Spider-Tracer with another ability deals a further 45)",
+      "AMMO": "5",
+      "RECHARGE SPEED": "2s per shot",
+      "CRITICAL HIT": "No",
+      "PROJECTILE SPEED": "120 m/s",
+      "DAMAGE FALLOFF": "Falloff begins at 20m, decreasing to 50% at 40m",
+      "SPIDER-TRACER DURATION": "3s"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Spectacular Spin",
+    "key": "Q",
+    "icon": "Spectacular_Spin.png",
+    "description": "Launch Web-Clusters all around to damage and Stun enemies.",
+    "stats": {
+      "CASTING": "Spherical Spell Field",
+      "DAMAGE": "13.6 per hit",
+      "DURATION": "2.4s",
+      "FIRE RATE": "0.08s per shot",
+      "RANGE": "8m spherical radius",
+      "BONUS HEALTH (SELF)": "250",
+      "ENERGY COST": "2800"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Web-Swing",
+    "key": "SHIFT",
+    "icon": "Web-Swing.png",
+    "description": "Shoot a strand of webbing to swing.",
+    "stats": {
+      "CASTING": "Dash",
+      "CHARGES": "3",
+      "RECHARGE SPEED": "6s",
+      "RANGE": "30m"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Get Over Here!",
+    "key": "E",
+    "icon": "Get_Over_Here.png",
+    "description": "Shoot webbing to reel in the hit enemy. If the enemy is tagged with a Spider-Tracer, Spider-Man will get pulled to them instead.",
+    "stats": {
+      "CASTING": "Projectile that fires in a straight trajectory",
+      "DAMAGE": "Pull: 25  \nWeb Strike: 55",
+      "COOLDOWN": "8s",
+      "MAXIMUM DISTANCE": "Pull: 20m  \nWeb Strike: 24m",
+      "PROJECTILE SPEED": "80 m/s"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Amazing Combo",
+    "key": "F",
+    "icon": "Amazing_Combo.png",
+    "description": "Launch an enemy upward, dealing extra damage to the enemy with a Spider-Tracer.",
+    "stats": {
+      "CASTING": "Melee",
+      "DAMAGE": "70 (damage increases for one strike when hitting with Spider-Tracer)",
+      "CHARGES": "2",
+      "COOLDOWN": "2s",
+      "RECHARGE SPEED": "6s",
+      "RANGE": "4m spherical radius"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Thwip and Flip",
+    "key": "SPACE",
+    "icon": "Thwip_and_Flip.png",
+    "description": "Perform a double jump.",
+    "stats": {}
+  },
+  {
+    "section": "Abilities",
+    "name": "Wall Crawl",
+    "key": "SPACE",
+    "icon": "Wall_Crawl.png",
+    "description": "Press {{#switch: {{{p|}}} | PC = Space | PS5 = link=| | Xbox = link=|}} to wall crawl, and while crawling, press {{#switch: {{{p|}}} | PC = Left-Click | PS5 = link=| | Xbox =  link=|}} to sprint.",
+    "stats": {
+      "WALL-CRAWLING SPEED": "3 m/s",
+      "SPRINTING SPEED": "9 m/s"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Spider-Sense",
+    "key": "Passive",
+    "icon": "Spider-Sense.png",
+    "description": "Give a warning of enemies that have been around.",
+    "stats": {
+      "RANGE": "8m spherical radius",
+      "DISAPPEARANCE TIME TO TRIGGER DETECTION": "3s"
+    }
+  },
+  {
+    "section": "Team-Up Abilities",
+    "name": "Sticky Spider-Bomb",
+    "key": "C",
+    "icon": "Sticky_Spider-Bomb.png",
+    "description": "Cyber-Spiders Peni Parker whips up a Sticky Bomb for Spider-Man! Prime it, then toss it before the timer's up for a blast that damages nearby enemies and attaches a Spider-Tracer to them. If not thrown in time, it explodes on Spider-Man, recharging a Web-Cluster shot and granting Bonus Health.",
+    "stats": {
+      "COUNTDOWN DURATION": "3s",
+      "PROJECTILE DAMAGE": "10",
+      "SPELL FIELD DAMAGE": "30",
+      "SPELL FIELD RANGE": "5m spherical radius",
+      "BONUS HEALTH": "50",
+      "COOLDOWN": "20s"
+    }
+  }
+]

@@ -127,6 +127,27 @@ class SnapshotRepository:
         )
         self.db.conn.commit()
 
+    def get_xp_velocity(self, hero_name: str, days: int = 14) -> float | None:
+        """Average XP/day for a hero over the last N days; None if insufficient data."""
+        from data.xp_table import total_xp_earned
+        cutoff = (datetime.now(timezone.utc) - timedelta(days=days)).isoformat()
+        rows = self.db.conn.execute(
+            """SELECT recorded_at, level, xp FROM hero_snapshot
+               WHERE hero_name = ? AND recorded_at >= ?
+               ORDER BY recorded_at ASC""",
+            (hero_name, cutoff),
+        ).fetchall()
+        if len(rows) < 2:
+            return None
+        first, last = rows[0], rows[-1]
+        xp_gained = total_xp_earned(last["level"], last["xp"]) - total_xp_earned(first["level"], first["xp"])
+        first_dt = datetime.fromisoformat(first["recorded_at"])
+        last_dt  = datetime.fromisoformat(last["recorded_at"])
+        elapsed  = (last_dt - first_dt).total_seconds() / 86400
+        if elapsed < 0.01 or xp_gained <= 0:
+            return None
+        return xp_gained / elapsed
+
     def get_xp_history(self, days: int | None) -> dict[str, list[tuple[datetime, int]]]:
         from data.xp_table import total_xp_earned
         if days is not None:

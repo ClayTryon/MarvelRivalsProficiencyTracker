@@ -9,18 +9,22 @@ from PyQt6.QtGui import QFont
 
 from gui.scan_panel import ScanPanel
 from gui.hero_browser import HeroBrowser
+from gui.hero_info_panel import HeroInfoPanel
+from gui.sync_panel import SyncPanel
+from gui.teamups_panel import TeamUpsPanel
 from gui.update_checker import UpdateChecker
-from gui.xp_progress import XpProgressPage
 from storage.database import Database
 from storage.repository import HeroRepository
 from version import __version__
 
 # Tab indices — must match order added to QStackedWidget
-_TAB_SCAN     = 0
-_TAB_HEROES   = 1
-_TAB_PROGRESS = 2
+_TAB_SCAN    = 0
+_TAB_HEROES  = 1
+_TAB_WIKI    = 2
+_TAB_TEAMUPS = 3
+_TAB_SYNC    = 4
 
-_TAB_LABELS = ["SCAN", "HEROES", "XP PROGRESS"]
+_TAB_LABELS = ["SCAN", "HEROES", "HERO WIKI", "TEAM-UPS"]
 
 
 class _NavBar(QWidget):
@@ -81,8 +85,20 @@ class _NavBar(QWidget):
 
         row.addStretch()
 
+        sync_btn = QPushButton("⟳ SYNC")
+        sync_btn.setFixedHeight(28)
+        sync_btn.setCursor(Qt.CursorShape.PointingHandCursor)
+        sync_btn.setStyleSheet(
+            "QPushButton { background: transparent; color: #484860;"
+            " border: 1px solid #26263c; border-radius: 3px;"
+            " font-size: 11px; letter-spacing: 1px; padding: 0 10px; }"
+            " QPushButton:hover { color: #f4d641; border-color: #f4d641; }"
+        )
+        sync_btn.clicked.connect(lambda: self.tab_clicked.emit(_TAB_SYNC))
+        row.addWidget(sync_btn)
+
         ver = QLabel(f"v{__version__}")
-        ver.setStyleSheet("color: #303048; font-size: 11px;")
+        ver.setStyleSheet("color: #303048; font-size: 11px; padding-left: 10px;")
         row.addWidget(ver)
 
         self.set_active(1)
@@ -151,18 +167,25 @@ class MainWindow(QMainWindow):
 
         self._stack = QStackedWidget()
         self._stack.setStyleSheet("background: #0c0c14;")
-        self._scan_panel = ScanPanel(db)
-        self._hero_browser = HeroBrowser(db)
-        self._xp_progress = XpProgressPage(db)
 
-        self._stack.addWidget(self._scan_panel)    # 0 — SCAN
-        self._stack.addWidget(self._hero_browser)  # 1 — HEROES
-        self._stack.addWidget(self._xp_progress)   # 2 — XP PROGRESS
+        self._scan_panel   = ScanPanel(db)
+        self._hero_browser = HeroBrowser(db)
+        self._hero_info    = HeroInfoPanel()
+        self._teamups_panel = TeamUpsPanel()
+        self._sync_panel   = SyncPanel()
+
+        self._stack.addWidget(self._scan_panel)     # 0 — SCAN
+        self._stack.addWidget(self._hero_browser)   # 1 — HEROES
+        self._stack.addWidget(self._hero_info)      # 2 — HERO WIKI
+        self._stack.addWidget(self._teamups_panel)  # 3 — TEAM-UPS
+        self._stack.addWidget(self._sync_panel)     # 4 — SYNC
         root.addWidget(self._stack)
 
         self.setCentralWidget(central)
 
         self._scan_panel.scan_complete.connect(self._on_scan_complete)
+        self._sync_panel.sync_complete.connect(self._on_sync_complete)
+        self._hero_browser.wiki_hero_requested.connect(self._on_wiki_hero_requested)
 
         heroes = HeroRepository(db).get_all()
         if heroes:
@@ -176,8 +199,6 @@ class MainWindow(QMainWindow):
         self._checker.start()
 
     def _navigate(self, index: int):
-        if index == _TAB_PROGRESS:
-            self._xp_progress.refresh()
         self._stack.setCurrentIndex(index)
         self._nav.set_active(index)
 
@@ -185,3 +206,24 @@ class MainWindow(QMainWindow):
         heroes = HeroRepository(self._db).get_all()
         self._hero_browser.load_heroes(heroes)
         self._navigate(_TAB_HEROES)
+
+    def _on_wiki_hero_requested(self, hero_name: str):
+        self._navigate(_TAB_WIKI)
+        self._hero_info.set_query(f"Tell me about {hero_name}")
+
+    def _on_sync_complete(self):
+        import importlib
+        import data.heroes as _heroes_mod
+        _old_roster = _heroes_mod.HERO_ROSTER
+        _old_roles  = _heroes_mod.HERO_ROLES
+        importlib.reload(_heroes_mod)
+        _old_roster.clear()
+        _old_roster.extend(_heroes_mod.HERO_ROSTER)
+        _old_roles.clear()
+        _old_roles.update(_heroes_mod.HERO_ROLES)
+
+        self._teamups_panel.load()
+
+        heroes = HeroRepository(self._db).get_all()
+        if heroes:
+            self._hero_browser.load_heroes(heroes)

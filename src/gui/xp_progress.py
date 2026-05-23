@@ -10,10 +10,7 @@ import matplotlib.dates as mdates
 import matplotlib.ticker as mticker
 from PIL import Image, ImageDraw
 
-from PyQt6.QtWidgets import (
-    QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QComboBox, QLabel,
-    QDialog, QScrollArea, QCheckBox,
-)
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QComboBox, QLabel
 
 from storage.database import Database
 from storage.repository import SnapshotRepository
@@ -118,189 +115,96 @@ def _load_icon(hero_name: str, level: int) -> np.ndarray | None:
     return arr
 
 
-class _HeroPickerDialog(QDialog):
-    def __init__(self, all_heroes: list[str], hidden: set[str], parent=None):
-        super().__init__(parent)
-        self.setWindowTitle("Select Heroes")
-        self.setMinimumWidth(280)
-        self.setMinimumHeight(420)
+class HeroXpChart(QWidget):
+    """Single-hero XP history chart — embedded in HeroDetailPanel."""
 
-        layout = QVBoxLayout(self)
-
-        btn_row = QHBoxLayout()
-        all_btn = QPushButton("All")
-        none_btn = QPushButton("None")
-        all_btn.clicked.connect(self._select_all)
-        none_btn.clicked.connect(self._select_none)
-        btn_row.addWidget(all_btn)
-        btn_row.addWidget(none_btn)
-        layout.addLayout(btn_row)
-
-        scroll = QScrollArea()
-        scroll.setWidgetResizable(True)
-        container = QWidget()
-        check_layout = QVBoxLayout(container)
-        check_layout.setSpacing(2)
-        check_layout.setContentsMargins(8, 4, 8, 4)
-        scroll.setWidget(container)
-        layout.addWidget(scroll)
-
-        self._checkboxes: dict[str, QCheckBox] = {}
-        for name in sorted(all_heroes):
-            cb = QCheckBox(name)
-            cb.setChecked(name not in hidden)
-            check_layout.addWidget(cb)
-            self._checkboxes[name] = cb
-        check_layout.addStretch()
-
-        ok_btn = QPushButton("OK")
-        ok_btn.clicked.connect(self.accept)
-        layout.addWidget(ok_btn)
-
-    def _select_all(self):
-        for cb in self._checkboxes.values():
-            cb.setChecked(True)
-
-    def _select_none(self):
-        for cb in self._checkboxes.values():
-            cb.setChecked(False)
-
-    def hidden_heroes(self) -> set[str]:
-        return {name for name, cb in self._checkboxes.items() if not cb.isChecked()}
-
-
-class XpProgressPage(QWidget):
-    def __init__(self, db: Database, parent=None):
+    def __init__(self, db=None, parent=None):
         super().__init__(parent)
         self._db = db
-        self._hidden_heroes: set[str] = set()
-        self._all_hero_names: list[str] = []
+        self._hero_name: str | None = None
 
         layout = QVBoxLayout(self)
-        layout.setContentsMargins(0, 0, 0, 0)
-        layout.setSpacing(0)
+        layout.setContentsMargins(0, 8, 0, 0)
+        layout.setSpacing(8)
 
-        toolbar = QHBoxLayout()
-        toolbar.setContentsMargins(8, 6, 8, 6)
-        toolbar.setSpacing(8)
-
-        toolbar.addWidget(QLabel("Time range:"))
+        ctrl_row = QHBoxLayout()
+        range_lbl = QLabel("RANGE")
+        range_lbl.setStyleSheet("color: #484860; font-size: 10px; letter-spacing: 1px;")
+        ctrl_row.addWidget(range_lbl)
         self._range_combo = QComboBox()
         self._range_combo.addItems(_TIME_OPTIONS.keys())
         self._range_combo.setCurrentText(_DEFAULT_RANGE)
         self._range_combo.setFixedWidth(100)
         self._range_combo.currentIndexChanged.connect(self._refresh)
-        toolbar.addWidget(self._range_combo)
+        ctrl_row.addWidget(self._range_combo)
+        ctrl_row.addStretch()
+        layout.addLayout(ctrl_row)
 
-        self._heroes_btn = QPushButton("Heroes…")
-        self._heroes_btn.setFixedWidth(90)
-        self._heroes_btn.clicked.connect(self._pick_heroes)
-        toolbar.addWidget(self._heroes_btn)
-
-        toolbar.addStretch()
-        layout.addLayout(toolbar)
-
-        self._fig = Figure(figsize=(10, 6), facecolor=_C_BG)
+        self._fig = Figure(figsize=(6, 4), facecolor=_C_BG)
         self._canvas = FigureCanvasQTAgg(self._fig)
         self._canvas.setStyleSheet(f"background: {_C_BG}; border: none;")
         layout.addWidget(self._canvas)
 
-    def refresh(self):
-        _icon_cache.clear()
+    def load(self, hero_name: str):
+        self._hero_name = hero_name
         self._refresh()
 
-    def _pick_heroes(self):
-        dlg = _HeroPickerDialog(self._all_hero_names, self._hidden_heroes, self)
-        if dlg.exec() == QDialog.DialogCode.Accepted:
-            self._hidden_heroes = dlg.hidden_heroes()
-            self._update_heroes_btn_label()
-            self._refresh()
-
-    def _update_heroes_btn_label(self):
-        total = len(self._all_hero_names)
-        visible = total - len(self._hidden_heroes & set(self._all_hero_names))
-        if total == 0 or visible == total:
-            self._heroes_btn.setText("Heroes…")
-        else:
-            self._heroes_btn.setText(f"Heroes ({visible}/{total})")
-
     def _refresh(self):
-        days = _TIME_OPTIONS[self._range_combo.currentText()]
-        history = SnapshotRepository(self._db).get_xp_history(days)
-
-        if history:
-            new_names = sorted(history.keys())
-            if new_names != self._all_hero_names:
-                # Drop hidden entries that no longer exist in this time range
-                self._hidden_heroes &= set(new_names)
-                self._all_hero_names = new_names
-                self._update_heroes_btn_label()
-            history = {k: v for k, v in history.items() if k not in self._hidden_heroes}
-
         self._fig.clear()
         self._fig.patch.set_facecolor(_C_BG)
         ax = self._fig.add_subplot(111)
         ax.set_facecolor(_C_AX_BG)
-
         for spine in ax.spines.values():
             spine.set_edgecolor(_C_SPINE)
         ax.tick_params(colors=_C_SUBTEXT, which='both')
         ax.xaxis.label.set_color(_C_TEXT)
         ax.yaxis.label.set_color(_C_TEXT)
-        ax.title.set_color(_C_TEXT)
 
-        if not history:
-            if self._hidden_heroes and self._all_hero_names:
-                msg = "All heroes are hidden.\nClick \"Heroes…\" to show some."
-            else:
-                msg = "No scan history yet.\nRun a scan to start tracking XP over time."
-            ax.text(
-                0.5, 0.5, msg,
-                ha='center', va='center', transform=ax.transAxes,
-                fontsize=14, color=_C_SUBTEXT,
-            )
+        def _no_data(msg: str):
+            ax.text(0.5, 0.5, msg, ha='center', va='center',
+                    transform=ax.transAxes, fontsize=12, color=_C_SUBTEXT)
             ax.set_axis_off()
             self._canvas.draw()
-            return
 
-        n = len(history)
-        try:
-            cmap = matplotlib.colormaps['hsv'].resampled(n + 1)
-        except AttributeError:
-            import matplotlib.cm as cm
-            cmap = cm.get_cmap('hsv', n + 1)
+        if not self._db or not self._hero_name:
+            return _no_data("No data available.")
 
-        for i, (hero_name, points) in enumerate(sorted(history.items())):
-            dates     = [p[0] for p in points]
-            xp_values = [p[1] for p in points]
-            last_level = points[-1][2]
-            color = cmap(i / max(n - 1, 1))
+        days = _TIME_OPTIONS[self._range_combo.currentText()]
+        history = SnapshotRepository(self._db).get_xp_history(days)
+        points = history.get(self._hero_name, [])
 
-            ax.plot(dates, xp_values, color=color, linewidth=1.5, zorder=2)
+        if not points:
+            return _no_data("No scan history yet.\nRun a scan to start tracking XP.")
 
-            icon_arr = _load_icon(hero_name, last_level)
-            if icon_arr is not None:
-                imagebox = OffsetImage(icon_arr, zoom=0.35)
-                ab = AnnotationBbox(
-                    imagebox,
-                    (mdates.date2num(dates[-1]), xp_values[-1]),
-                    frameon=False,
-                    box_alignment=(0.5, 0.5),
-                    zorder=3,
-                )
-                ax.add_artist(ab)
-            else:
-                ax.plot(dates[-1:], xp_values[-1:], 'o', color=color, markersize=6, zorder=3)
+        dates = [p[0] for p in points]
+        xp_values = [p[1] for p in points]
+        last_level = points[-1][2]
 
-        unique_dates = sorted({p[0].date() for pts in history.values() for p in pts})
-        ax.xaxis.set_major_locator(mticker.FixedLocator([mdates.date2num(d) for d in unique_dates]))
+        ax.plot(dates, xp_values, color='#a0c8ff', linewidth=2, zorder=2)
+        ax.fill_between(dates, xp_values, alpha=0.12, color='#a0c8ff')
+
+        icon_arr = _load_icon(self._hero_name, last_level)
+        if icon_arr is not None:
+            imagebox = OffsetImage(icon_arr, zoom=0.38)
+            ab = AnnotationBbox(
+                imagebox,
+                (mdates.date2num(dates[-1]), xp_values[-1]),
+                frameon=False, box_alignment=(0.5, 0.5), zorder=3,
+            )
+            ax.add_artist(ab)
+        else:
+            ax.plot(dates[-1:], xp_values[-1:], 'o', color='#a0c8ff', markersize=8, zorder=3)
+
+        unique_dates = sorted({p[0].date() for p in points})
+        ax.xaxis.set_major_locator(
+            mticker.FixedLocator([mdates.date2num(d) for d in unique_dates])
+        )
         ax.xaxis.set_major_formatter(mdates.DateFormatter('%m/%d'))
         self._fig.autofmt_xdate()
-
         ax.set_xlabel("Date")
         ax.set_ylabel("Total XP Earned")
-        ax.set_title("Hero XP Progression")
         ax.grid(True, color=_C_GRID, linewidth=0.6, alpha=0.6)
-
         self._fig.tight_layout()
         self._canvas.draw()
+
+

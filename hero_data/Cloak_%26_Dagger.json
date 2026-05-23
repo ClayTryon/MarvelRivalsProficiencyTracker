@@ -1,0 +1,175 @@
+[
+  {
+    "section": "Normal Attack",
+    "name": "Lightforce Dagger",
+    "key": "Left Click",
+    "icon": "Lightforce_Dagger.png",
+    "description": "Unleash a bouncing Lightforce Dagger to damage enemies and heal nearby allies.",
+    "stats": {
+      "CASTING": "Single-cast projectile that generates a spell area upon impact",
+      "DAMAGE": "18 damage per round",
+      "HEALING": "16 per hit - 16 AoE per hit",
+      "AMMO": "12",
+      "FIRE RATE": "2.27 hits per second",
+      "RANGE": "8m spherical radius",
+      "CRITICAL HIT": "No"
+    },
+    "form": "Dagger"
+  },
+  {
+    "section": "Abilities",
+    "name": "Eternal Bond",
+    "key": "Q",
+    "icon": "Eternal_Bond.png",
+    "description": "Perform four rapid dashes, healing allies and damaging enemies along the path",
+    "stats": {
+      "CASTING": "Persistent Spell Field",
+      "DAMAGE": "30/s",
+      "HEALING": "250/s",
+      "DURATION": "Each dash lasts for 8s",
+      "RANGE": "A cylindrical spell field with a 4m radius and 15m in length",
+      "ENERGY COST": "4500"
+    },
+    "form": "Dagger"
+  },
+  {
+    "section": "Abilities",
+    "name": "Dagger Storm",
+    "key": "Right Click",
+    "icon": "Dagger_Storm.png",
+    "description": "Launch a volley of daggers, creating a Healing-Over-Time field in the impact area.",
+    "stats": {
+      "CASTING": "Single-cast projectile with delayed impact that also generates a spell field",
+      "HEALING": "55/s",
+      "DURATION": "6s",
+      "COOLDOWN": "12s",
+      "RANGE": "5m spherical radius"
+    },
+    "form": "Dagger"
+  },
+  {
+    "section": "Abilities",
+    "name": "Shadow's Embrace",
+    "key": "SHIFT",
+    "icon": "Shadows_Embrace.png",
+    "description": "Switch to Cloak",
+    "stats": {
+      "CASTING": "Instant Cast"
+    },
+    "form": "Dagger"
+  },
+  {
+    "section": "Abilities",
+    "name": "Light Explosion",
+    "key": "E",
+    "icon": "Light_Explosion.png",
+    "description": "Deploy a Veil of Lightforce to heal allies upon touch and grant them a Healing Boost.",
+    "stats": {
+      "CASTING": "Spell Field",
+      "HEALING": "45",
+      "HEALING BOOST": "15%",
+      "DURATION": "4s",
+      "COOLDOWN": "12s",
+      "RANGE": "Width: 6m, Height: 4.5m",
+      "MAXIMUM DISTANCE": "25m",
+      "MOVEMENT SPEED": "20m/s"
+    },
+    "form": "Dagger"
+  },
+  {
+    "section": "Team-Up Abilities",
+    "name": "From Shadow To Light",
+    "key": "Passive",
+    "icon": "From_Shadow_To_Light.png",
+    "description": "Cloak & Dagger share light and dark energy with Hawkeye and Psylocke. When Hawkeye uses Crescent Slash, he also releases a blade wave that heals and boosts healing for teammates, while inflicting damage and Vulnerability on enemies. Psylocke can launch a Light Boomerang Dart that heals allies, harms enemies, and provides her with temporary healing upon return. She can also unleash a ring of Dark Darts that slow enemies while she briefly enters a Phased state.",
+    "stats": {
+      "TEAM-UP BONUS": "15% Healing Boost"
+    },
+    "form": "Dagger"
+  },
+  {
+    "section": "Normal Attack",
+    "name": "Darkforce Cloak",
+    "key": "Left Click",
+    "icon": "Darkforce_Cloak.png",
+    "description": "Inflict continuous damage on an enemy.",
+    "stats": {
+      "CASTING": "Cylindrical Spell Field",
+      "DAMAGE": "80/s",
+      "AMMO": "∞",
+      "RANGE": "20m",
+      "CRITICAL HIT": "No"
+    },
+    "form": "Cloak"
+  },
+  {
+    "section": "Abilities",
+    "name": "Eternal Bond",
+    "key": "Q",
+    "icon": "Eternal_Bond.png",
+    "description": "Perform four rapid dashes, healing allies and damaging enemies along the path",
+    "stats": {
+      "CASTING": "Persistent Spell Field",
+      "DAMAGE": "30/s",
+      "HEALING": "250/s",
+      "DURATION": "Each dash lasts for 8s",
+      "RANGE": "A cylindrical spell field with a 4m radius and 15m in length",
+      "ENERGY COST": "4500"
+    },
+    "form": "Cloak"
+  },
+  {
+    "section": "Abilities",
+    "name": "Dark Teleportation",
+    "key": "Right Click",
+    "icon": "Dark_Teleportation.png",
+    "description": "Enshroud nearby allies in the Darkforce Dimension and grant them Phased, making them untargetable and invisible to enemies and granting them a Movement Boost.",
+    "stats": {
+      "CASTING": "Persistent Spell Field",
+      "DURATION": "2s",
+      "COOLDOWN": "12s",
+      "RANGE": "10m Spherical Radius"
+    },
+    "form": "Cloak"
+  },
+  {
+    "section": "Abilities",
+    "name": "Light's Embrace",
+    "key": "SHIFT",
+    "icon": "Lights_Embrace.png",
+    "description": "Switch to Dagger",
+    "stats": {
+      "CASTING": "Instant Cast"
+    },
+    "form": "Cloak"
+  },
+  {
+    "section": "Abilities",
+    "name": "Terror Cape",
+    "key": "E",
+    "icon": "Terror_Cape.png",
+    "description": "Deploy a Veil of Darkforce to damage enemies upon touch, applying Blind to narrow their sight and Vulnerability to amplify damage received.",
+    "stats": {
+      "CASTING": "Spell Field",
+      "DAMAGE": "55",
+      "DURATION": "1.5s (Blinding) - 3s (Vulnerability)",
+      "COOLDOWN": "12s",
+      "RANGE": "Width: 6m, Height: 4.5m - Visibility is obstructed beyond 10m",
+      "MAXIMUM DISTANCE": "25m",
+      "VULNERABILITY": "28%",
+      "MOVEMENT SPEED": "20m/s"
+    },
+    "form": "Cloak"
+  },
+  {
+    "section": "Team-Up Abilities",
+    "name": "From Shadow To Light",
+    "key": "Passive",
+    "icon": "From_Shadow_To_Light.png",
+    "description": "Cloak & Dagger share light and dark energy with Hawkeye and Psylocke. When Hawkeye uses Crescent Slash, he also releases a blade wave that heals and boosts healing for teammates, while inflicting damage and Vulnerability on enemies. Psylocke can launch a Light Boomerang Dart that heals allies, harms enemies, and provides her with temporary healing upon return. She can also unleash a ring of Dark Darts that slow enemies while she briefly enters a Phased state.",
+    "stats": {
+      "TEAM-UP BONUS": "15% Healing Boost"
+    },
+    "form": "Cloak"
+  }
+]

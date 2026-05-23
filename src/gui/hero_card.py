@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QFrame, QVBoxLayout, QLabel
+from PyQt6.QtWidgets import QFrame, QVBoxLayout, QLabel, QMenu, QProgressBar
 from PyQt6.QtCore import Qt, pyqtSignal
 from PyQt6.QtGui import QMovie, QPixmap, QCursor
 from models.hero import Hero
@@ -6,7 +6,10 @@ from gui.hero_detail import _ICONS_DIR, _icon_path
 
 
 class HeroCard(QFrame):
-    clicked = pyqtSignal(object)
+    clicked                  = pyqtSignal(object)
+    edit_requested           = pyqtSignal(object)
+    wiki_requested           = pyqtSignal(object)
+    clipboard_scan_requested = pyqtSignal(object)
 
     W = 155
     H = 210
@@ -45,6 +48,18 @@ class HeroCard(QFrame):
         level_lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
         level_lbl.setStyleSheet(f"font-size: 11px; color: {level_color}; font-weight: bold;")
         lay.addWidget(level_lbl)
+
+        if not hero.is_max_level:
+            bar = QProgressBar()
+            bar.setRange(0, 100)
+            bar.setValue(int(hero.progress_pct))
+            bar.setFixedHeight(4)
+            bar.setTextVisible(False)
+            bar.setStyleSheet(
+                "QProgressBar { background: #2a2a2a; border: none; border-radius: 2px; }"
+                "QProgressBar::chunk { background: #f4d641; border-radius: 2px; }"
+            )
+            lay.addWidget(bar)
 
         self._load_icon(hero.name, hero.level)
 
@@ -88,3 +103,12 @@ class HeroCard(QFrame):
         if event.button() == Qt.MouseButton.LeftButton:
             self.clicked.emit(self._hero)
         super().mousePressEvent(event)
+
+    def contextMenuEvent(self, event):
+        menu = QMenu(self)
+        menu.addAction("Edit manually", lambda: self.edit_requested.emit(self._hero))
+        menu.addSeparator()
+        menu.addAction("Scan from Clipboard", lambda: self.clipboard_scan_requested.emit(self._hero))
+        menu.addSeparator()
+        menu.addAction("View Wiki", lambda: self.wiki_requested.emit(self._hero))
+        menu.exec(event.globalPos())

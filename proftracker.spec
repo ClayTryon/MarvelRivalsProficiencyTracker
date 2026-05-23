@@ -4,22 +4,34 @@ from PyInstaller.utils.hooks import collect_all, collect_submodules, collect_dat
 block_cipher = None
 
 # EasyOCR bundles model-loading code and its dependencies (torch, etc.)
-easyocr_datas, easyocr_binaries, easyocr_hiddenimports     = collect_all('easyocr')
-torch_datas,   torch_binaries,   torch_hiddenimports       = collect_all('torch')
-ic_datas,      ic_binaries,      ic_hiddenimports           = collect_all('interception')
+easyocr_datas, easyocr_binaries, easyocr_hiddenimports = collect_all('easyocr')
+torch_datas,   torch_binaries,   torch_hiddenimports   = collect_all('torch')
+ic_datas,      ic_binaries,      ic_hiddenimports       = collect_all('interception')
 mpl_datas = collect_data_files('matplotlib')
+
+# RAG / Hero Wiki dependencies
+llamacore_datas, llamacore_binaries, llamacore_hiddenimports = collect_all('llama_index')
+st_datas, st_binaries, st_hiddenimports = collect_all('sentence_transformers')
+groq_datas, groq_binaries, groq_hiddenimports = collect_all('groq')
 
 a = Analysis(
     ['src/main.py'],
     pathex=['src'],
-    binaries=easyocr_binaries + torch_binaries + ic_binaries,
+    binaries=(
+        easyocr_binaries + torch_binaries + ic_binaries
+        + llamacore_binaries + st_binaries + groq_binaries
+    ),
     datas=[
-        ('Icons', 'Icons'),
-        ('Icons/app_icon.ico', 'Icons'),
+        ('Icons',     'Icons'),
+        ('hero_data', 'hero_data'),
+        ('rag_index', 'rag_index'),
         *easyocr_datas,
         *torch_datas,
         *ic_datas,
         *mpl_datas,
+        *llamacore_datas,
+        *st_datas,
+        *groq_datas,
     ],
     hiddenimports=[
         # pywin32
@@ -46,6 +58,15 @@ a = Analysis(
         'matplotlib.pyplot',
         # openpyxl (pure Python but has lazy-loaded sub-packages)
         *collect_submodules('openpyxl'),
+        # RAG / Hero Wiki
+        *llamacore_hiddenimports,
+        *st_hiddenimports,
+        *groq_hiddenimports,
+        'huggingface_hub',
+        'tokenizers',
+        'transformers',
+        'dotenv',
+        'bs4',
     ],
     hookspath=[],
     hooksconfig={},

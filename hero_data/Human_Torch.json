@@ -1,0 +1,115 @@
+[
+  {
+    "section": "Normal Attack",
+    "name": "Fire Cluster",
+    "key": "Left Click",
+    "icon": "Fire_Cluster.png",
+    "description": "Launch forward a splittable fireball",
+    "stats": {
+      "CASTING": "Burst Projectile",
+      "CHARGES": "6",
+      "CHARGE SPEED": "0.33s per use, has a 0.5s delay before ammo begins to replenish",
+      "FIRE RATE": "0.5s per round",
+      "PROJECTILE SPEED": "150m/s",
+      "SHOT DAMAGE": "5.5 per round",
+      "DAMAGE FALLOFF": "Falloff begins at 15m, decreasing to 60% at 20m.",
+      "CROSSHAIR SPREAD RADIUS (AT 10M)": "0.33m",
+      "CRITICAL HIT": "Yes"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Supernova",
+    "key": "Q",
+    "icon": "Supernova.png",
+    "description": "Explode with cosmic fire to deal damage to enemies within range and enter Supernova state. While in Supernova state, Blazing Blast will transform into Flame Tornado, and Plasma Body can be activated without any cost.",
+    "stats": {
+      "ENERGY COST": "3400",
+      "DURATION": "8s",
+      "ACTIVATION SHOCK WAVE RANGE": "20m spherical radius",
+      "ACTIVATION WAVE DAMAGE": "75",
+      "FLAME TORNADO UNLEASH SPEED": "0.7s per use",
+      "FLAME TORNADO RANGE": "3m spherical radius; 8m high capsule-shaped spell field.",
+      "FLAME TORNADO CONTINUOUS DAMAGE": "110/s",
+      "SUPERNOVA DAMAGE REDUCTION": "30%"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Blazing Blast",
+    "key": "Right Click",
+    "icon": "Blazing_Blast.png",
+    "description": "Launch a fireball to deal damage or create a Flame Field at the targeted area, dealing damage to enemies within.",
+    "stats": {
+      "CASTING": "Straight-line projectile that generates a spherical spell field upon impact.",
+      "CHARGES": "3",
+      "CHARGE SPEED": "2.5s",
+      "BLAZING BLAST PROJECTILE SPEED": "80m/s",
+      "BLAZING BLAST DAMAGE": "45",
+      "FLAME FIELD RANGE": "3m spherical radius",
+      "FLAME FIELD DURATION": "6s",
+      "FLAME FIELD CONTINUOUS DAMAGE": "20/s"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Plasma Body",
+    "key": "SHIFT",
+    "icon": "Plasma_Body.png",
+    "description": "Hold Shift to enter a state of accelerated ascent.",
+    "stats": {
+      "MOVEMENT BOOST": "2.5m/s",
+      "MAXIMUM ENERGY": "120",
+      "ENERGY COST": "15/s",
+      "ENERGY RECOVERY SPEED": "20/s"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Pyro-Prison",
+    "key": "E",
+    "icon": "Pyro-Prison.png",
+    "description": "When 2 or more Flame Fields exist, connect them to form a fire wall that deals one-off high damage to enemies that pass through the wall, or continuous burning damage if the wall exists in an enclosed area.",
+    "stats": {
+      "MAX LINK DISTANCE": "40m",
+      "MAX LINK HEIGHT": "2m",
+      "FIRE WALL DURATION": "5s",
+      "FIRE WALL DAMAGE": "65",
+      "PYRO-PRISON CONTINUOUS DAMAGE": "40/s",
+      "COOLDOWN": "15s"
+    }
+  },
+  {
+    "section": "Abilities",
+    "name": "Flaming Meteor",
+    "key": "F",
+    "icon": "Flaming_Meteor.png",
+    "description": "Dive towards the ground, dealing damage to enemies. This will also detonate any Flame Fields hit and grant you Bonus Health.",
+    "stats": {
+      "MAX DASH SPEED": "80m/s",
+      "RANGE": "5m spherical radius",
+      "DAMAGE": "40",
+      "FLAME FIELD DETONATION RANGE": "3m spherical radius",
+      "FLAME FIELD DETONATION DAMAGE": "55",
+      "BONUS HEALTH": "50",
+      "COOLDOWN": "20s"
+    }
+  },
+  {
+    "section": "Team-Up Abilities",
+    "name": "Two In One",
+    "key": "X",
+    "icon": "Two_In_One.png",
+    "description": "Human Torch can lift The Thing into the air and slam him down, dealing damage, launching enemies, and creating a zone that disables mobility abilities.",
+    "stats": {
+      "COOLDOWN": "Successfully interacted: 30s; fail to interact: 3s",
+      "MAXIMUM DISTANCE": "20m",
+      "FLIGHT SPEED": "15m/s",
+      "SLAM DOWN INITIAL HORIZONTAL VELOCITY": "15m/s",
+      "MAXIMUM FLIGHT DURATION": "8s",
+      "DAMAGE": "Launch-up spell field causes 30 damage; mobility abilities disabling spell field causes 15 damage per second",
+      "LAUNCH UP RANGE": "A cylindrical spell field with a radius of 8m and a height of 1m",
+      "MOBILITY ABILITIES DISABLING RANGE": "A cylindrical spell field with a radius of 8m and a height of 8m"
+    }
+  }
+]
