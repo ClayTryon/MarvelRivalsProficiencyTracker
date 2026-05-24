@@ -9,7 +9,7 @@ Separating navigation from OCR means the game window is held for the minimum pos
 The caller is responsible for calling navigator.enable() / navigator.disable() around run_scan().
 """
 import time
-import random
+import threading
 from datetime import datetime, timezone
 
 from capture import clipboard_capture, ocr, navigator
@@ -22,20 +22,58 @@ from models.capture_run import CaptureStatus
 from exceptions import CaptureError, ParseError, ValidationError
 from data.heroes import HERO_ROSTER, HERO_ROLES
 
-# Relative positions measured from a 1936×1119 window
-_HEROES_BTN_X = 0.346
-_HEROES_BTN_Y = 0.054
-
 _GRID_COLS = 7
 _GRID_ROWS = 2
 
-# Hero card centres as fractions of window width/height
+# Hero card centres as fractions of client area width/height
 _COL_CENTERS = [0.155, 0.274, 0.387, 0.506, 0.620, 0.733, 0.847]
-_ROW_CENTERS = [0.375, 0.715]
+_ROW_CENTERS = [0.358, 0.707]
 
-# Proficiency tab position
+# Proficiency tab and sub-tabs
 _PROFICIENCY_TAB_X = 0.434
-_PROFICIENCY_TAB_Y = 0.067
+_PROFICIENCY_TAB_Y = 0.041
+_MISSIONS_TAB_X = 0.435
+_MISSIONS_TAB_Y = 0.085
+
+
+def _start_backspace_listener() -> tuple[threading.Event, threading.Event]:
+    """Start a background thread that sets cancel_event when backspace is pressed.
+
+    Uses a second Interception context so the keypress is visible even while the
+    driver is actively capturing keyboard input for the scan. All strokes are
+    passed through so the game still receives them.
+
+    Returns (cancel_event, stop_event). Caller must set stop_event when done.
+    """
+    cancel_event = threading.Event()
+    stop_event = threading.Event()
+
+    _BACKSPACE_SCAN_CODE = 14  # PS/2 scan code for backspace
+
+    def _poll():
+        try:
+            from interception.inputs import Interception, FilterKeyFlag, KeyStroke
+            ctx = Interception()
+            ctx.set_filter(ctx.is_keyboard, FilterKeyFlag.FILTER_KEY_DOWN)
+            try:
+                while not stop_event.is_set():
+                    device = ctx.await_input(timeout_milliseconds=50)
+                    if device is None:
+                        continue
+                    stroke = ctx.devices[device].receive()
+                    if stroke is None:
+                        continue
+                    if isinstance(stroke, KeyStroke) and stroke.code == _BACKSPACE_SCAN_CODE:
+                        cancel_event.set()
+                    ctx.send(device, stroke)
+            finally:
+                ctx.destroy()
+        except Exception:
+            pass
+
+    threading.Thread(target=_poll, daemon=True).start()
+    return cancel_event, stop_event
+
 
 
 def _build_and_save_hero(hero_name: str, capture_run_id: int, level: int,
@@ -57,28 +95,11 @@ def _build_and_save_hero(hero_name: str, capture_run_id: int, level: int,
     return hero
 
 
-def capture_one_hero(hwnd: int, db: Database, capture_run_id: int, hero_name: str) -> Hero:
-    """Capture and OCR the currently visible proficiency screen for a single hero.
-
-    Used by the manual session — the user navigates to the hero themselves and
-    triggers this via hotkey or button.
-    """
-    if not is_window_alive(hwnd):
-        raise CaptureError("Target window is no longer alive")
-
-    image = clipboard_capture.capture_window(hwnd)
-    save_debug_image(image, "proficiency_raw")
-    save_debug_image(ocr.preprocess(image.crop(ocr.XP_REGION)), "proficiency_xp_crop")
-
-    _name, level, xp, xp_req, is_max = ocr.parse_proficiency_bar(image)
-    return _build_and_save_hero(hero_name, capture_run_id, level, xp, xp_req, is_max,
-                                HeroRepository(db), SnapshotRepository(db))
-
 
 def capture_one_hero_from_image(image, db: Database, capture_run_id: int, hero_name: str) -> Hero:
     """OCR a pre-captured PIL Image (e.g. from clipboard) for a single hero."""
     save_debug_image(image, "proficiency_raw_clipboard")
-    save_debug_image(ocr.preprocess(image.crop(ocr.XP_REGION)), "proficiency_xp_crop")
+    save_debug_image(ocr.preprocess(image.crop(ocr._scale_region(ocr._XP_FRACS, image.width, image.height))), "proficiency_xp_crop")
     _name, level, xp, xp_req, is_max = ocr.parse_proficiency_bar(image)
     return _build_and_save_hero(hero_name, capture_run_id, level, xp, xp_req, is_max,
                                 HeroRepository(db), SnapshotRepository(db))
@@ -105,6 +126,11 @@ def run_scan(hwnd: int, db: Database, on_log, on_hero, check_cancelled) -> int:
     capture_run = run_repo.create()
     hero_count = 0
 
+    backspace_event, stop_listener = _start_backspace_listener()
+
+    def _cancelled():
+        return check_cancelled() or backspace_event.is_set()
+
     try:
         clipboard_capture.focus_window(hwnd)
         on_log("Starting scan from heroes grid...")
@@ -123,7 +149,7 @@ def run_scan(hwnd: int, db: Database, on_log, on_hero, check_cancelled) -> int:
                 if roster_idx >= len(HERO_ROSTER):
                     break
 
-                if check_cancelled():
+                if _cancelled():
                     on_log("Scan cancelled.")
                     run_repo.update_status(capture_run.id, CaptureStatus.CANCELLED)
                     return hero_count
@@ -132,36 +158,31 @@ def run_scan(hwnd: int, db: Database, on_log, on_hero, check_cancelled) -> int:
                 col, row = idx % _GRID_COLS, idx // _GRID_COLS
                 cx, cy = _COL_CENTERS[col], _ROW_CENTERS[row]
 
-                clipboard_capture.focus_window(hwnd)
-                navigator.click_at(hwnd, cx, cy, delay=0.35 + random.uniform(0, 0.08))
-
-                clipboard_capture.focus_window(hwnd)
+                navigator.click_at(hwnd, cx, cy, delay=0.1)
                 navigator.press_space()
-                time.sleep(0.35 + random.uniform(0, 0.08))
+                time.sleep(0.5)
+                navigator.click_at(hwnd, _PROFICIENCY_TAB_X, _PROFICIENCY_TAB_Y, delay=0.1)
+                navigator.click_at(hwnd, _MISSIONS_TAB_X, _MISSIONS_TAB_Y, delay=0.1)
 
                 clipboard_capture.focus_window(hwnd)
-                navigator.click_at(hwnd, _PROFICIENCY_TAB_X, _PROFICIENCY_TAB_Y,
-                                   delay=0.35 + random.uniform(0, 0.08))
-
-                prof_image = clipboard_capture.capture_window(hwnd)
+                prof_image = navigator.capture_active_window(hwnd)
                 save_debug_image(prof_image, f"prof_{hero_name.replace(' ', '_')}")
                 captures.append((hero_name, prof_image))
                 on_log(f"  captured {hero_name}")
 
-                clipboard_capture.focus_window(hwnd)
                 navigator.press_escape()
-                time.sleep(0.35 + random.uniform(0, 0.08))
+                time.sleep(0.2)
 
             roster_offset += page_size
             if roster_offset < len(HERO_ROSTER):
                 navigator.scroll_down(amount=3)
-                time.sleep(0.6 + random.uniform(0, 0.1))
+                time.sleep(1)
 
         on_log(f"All {len(captures)} screenshots captured. Processing...")
 
         # --- Phase 2: OCR and persist ---
         for hero_name, prof_image in captures:
-            if check_cancelled():
+            if _cancelled():
                 on_log("Scan cancelled.")
                 run_repo.update_status(capture_run.id, CaptureStatus.CANCELLED)
                 return hero_count
@@ -186,3 +207,5 @@ def run_scan(hwnd: int, db: Database, on_log, on_hero, check_cancelled) -> int:
     except Exception as e:
         run_repo.update_status(capture_run.id, CaptureStatus.FAILED, error_message=str(e))
         raise
+    finally:
+        stop_listener.set()

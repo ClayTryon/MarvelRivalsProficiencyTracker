@@ -21,7 +21,7 @@ except Exception:
 from PyQt6.QtWidgets import QApplication
 from PyQt6.QtGui import QIcon
 from storage.database import Database
-from storage.repository import SnapshotRepository
+from storage.repository import HeroRepository, SnapshotRepository, seed_default_heroes
 from gui.main_window import MainWindow
 from gui.style import APP_STYLESHEET
 
@@ -42,6 +42,14 @@ def main():
     app.setStyleSheet(APP_STYLESHEET)
     if os.path.exists(_ICON_PATH):
         app.setWindowIcon(QIcon(_ICON_PATH))
+
+    if not HeroRepository(db).get_all():
+        from gui.first_run_dialog import FirstRunDialog
+        import data.heroes as _heroes_mod
+        FirstRunDialog().exec()
+        _heroes_mod._reload()
+        seed_default_heroes(db)
+
     window = MainWindow(db)
     window.show()
     sys.exit(app.exec())

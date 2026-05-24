@@ -172,3 +172,40 @@ class SnapshotRepository:
             total_xp = total_xp_earned(row["level"], row["xp"])
             result.setdefault(row["hero_name"], []).append((dt, total_xp, row["level"]))
         return result
+
+
+def seed_default_heroes(db: Database) -> int:
+    """Populate the hero table with every roster entry at level 1, xp 0.
+
+    Creates a dedicated seed capture_run to satisfy the FK constraint.
+    Skips any hero that already has a row (safe to call multiple times).
+    Returns the number of heroes inserted.
+    """
+    from data.heroes import HERO_ROSTER, HERO_ROLES
+    from data.xp_table import XP_PER_LEVEL
+    now = datetime.now(timezone.utc).isoformat()
+    cursor = db.conn.execute(
+        "INSERT INTO capture_run (started_at, status, hero_count) VALUES (?, 'completed', ?)",
+        (now, len(HERO_ROSTER)),
+    )
+    db.conn.commit()
+    run_id = cursor.lastrowid
+
+    repo = HeroRepository(db)
+    count = 0
+    for name in HERO_ROSTER:
+        if repo.get_by_name(name) is None:
+            hero = Hero(
+                name=name,
+                role=HERO_ROLES.get(name, "Unknown"),
+                level=1,
+                xp=0,
+                xp_required=XP_PER_LEVEL[1],
+                is_max_level=False,
+                capture_run_id=run_id,
+                updated_at=now,
+            )
+            hero.validate()
+            repo.upsert(hero)
+            count += 1
+    return count

@@ -111,6 +111,7 @@ class HeroBrowser(QWidget):
     def __init__(self, db: Database = None, parent=None):
         super().__init__(parent)
         self._db = db
+        self._hwnd: int | None = None
         self._settings = QSettings("ProfTracker", "HeroBrowser")
 
         layout = QVBoxLayout(self)
@@ -303,6 +304,9 @@ class HeroBrowser(QWidget):
         else:
             QMessageBox.information(self, "Import Complete", msg)
 
+    def set_hwnd(self, hwnd: int):
+        self._hwnd = hwnd
+
     def _clipboard_scan(self, hero: Hero):
         if not self._db:
             return
@@ -321,6 +325,10 @@ class HeroBrowser(QWidget):
         ptr = qimg.bits()
         ptr.setsize(qimg.height() * qimg.width() * 4)
         pil_image = Image.frombytes('RGBA', (qimg.width(), qimg.height()), bytes(ptr))
+
+        if self._hwnd:
+            from capture.navigator import crop_to_client
+            pil_image = crop_to_client(pil_image, self._hwnd)
 
         try:
             from capture.pipeline import capture_one_hero_from_image

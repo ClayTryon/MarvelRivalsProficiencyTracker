@@ -184,6 +184,7 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(central)
 
         self._scan_panel.scan_complete.connect(self._on_scan_complete)
+        self._scan_panel.hwnd_selected.connect(self._hero_browser.set_hwnd)
         self._sync_panel.sync_complete.connect(self._on_sync_complete)
         self._hero_browser.wiki_hero_requested.connect(self._on_wiki_hero_requested)
 

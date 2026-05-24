@@ -9,7 +9,7 @@ interception is imported lazily so the app starts normally even if the
 driver is not installed — it only fails when Auto Scan is actually used.
 """
 import time
-from capture.window import get_window_rect
+from capture.window import get_client_bbox, get_window_rect
 
 _devices_ready = False
 _ic = None
@@ -46,7 +46,7 @@ def disable():
 
 def click_at(hwnd: int, rel_x_pct: float, rel_y_pct: float, delay: float = 1.5):
     ic = _get_ic()
-    left, top, right, bottom = get_window_rect(hwnd)
+    left, top, right, bottom = get_client_bbox(hwnd)
     w, h = right - left, bottom - top
     x = left + int(w * rel_x_pct)
     y = top + int(h * rel_y_pct)
@@ -69,3 +69,31 @@ def press_escape():
 
 def press_space():
     _get_ic().press('space')
+
+
+def crop_to_client(image, hwnd: int):
+    """Crop a window screenshot down to the client area, stripping the title bar.
+
+    If the window is fullscreen (window rect == client rect) the image is returned
+    unchanged. Otherwise only the top (title bar height) is removed.
+    """
+    wx, wy, wr, wb = get_window_rect(hwnd)
+    cx, cy, cr, cb = get_client_bbox(hwnd)
+    if (wx, wy, wr, wb) == (cx, cy, cr, cb):
+        return image
+    top = cy - wy
+    return image.crop((0, top, image.width, image.height))
+
+
+def capture_active_window(hwnd: int):
+    """Send Alt+PrtScn via interception, then crop the result to the game client area."""
+    from PIL import ImageGrab
+    from exceptions import CaptureError
+    ic = _get_ic()
+    with ic.hold_key('alt'):
+        ic.press('printscreen')
+    time.sleep(0.3)
+    image = ImageGrab.grabclipboard()
+    if image is None:
+        raise CaptureError("Alt+PrtScn clipboard capture returned no image")
+    return crop_to_client(image, hwnd)

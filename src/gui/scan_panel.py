@@ -14,7 +14,8 @@ from storage.repository import HeroRepository
 
 
 class ScanPanel(QWidget):
-    scan_complete = pyqtSignal(list)
+    scan_complete  = pyqtSignal(list)
+    hwnd_selected  = pyqtSignal(int)
 
     _log_sig          = pyqtSignal(str)
     _hero_sig         = pyqtSignal(object)
@@ -83,6 +84,7 @@ class ScanPanel(QWidget):
             self._hwnd = hwnd
             self._status_label.setText(f"Window: {title}")
             self._auto_scan_btn.setEnabled(True)
+            self.hwnd_selected.emit(hwnd)
 
     # ------------------------------------------------------------------
     # Pre/post scan XP delta
