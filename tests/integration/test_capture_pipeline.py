@@ -38,7 +38,7 @@ def _base_patches(blank):
         patch(f"{_BASE}.HERO_ROSTER", _SMALL_ROSTER),
         patch(f"{_BASE}.clear_temp"),
         patch("capture.clipboard_capture.focus_window"),
-        patch("capture.clipboard_capture.capture_window", return_value=blank),
+        patch(f"{_BASE}.navigator.capture_active_window", return_value=blank),
         patch(f"{_BASE}.navigator.click_at"),
         patch(f"{_BASE}.navigator.press_space"),
         patch(f"{_BASE}.navigator.press_escape"),
@@ -52,17 +52,14 @@ def test_run_scan_returns_heroes_and_stores_them(db, hero_repo):
     from capture.pipeline import run_scan
 
     blank = make_blank_image()
-    prof_side_effects = [
-        ("", 11, 44, 400, False),
-        ("", 20, 100, 500, False),
-    ]
-
     log_messages = []
     captured_heroes = []
 
+    # parse_proficiency_bar is called twice per hero: once for Phase 1 validation,
+    # once for Phase 2 OCR. Use return_value so all calls succeed.
     patches = _base_patches(blank)
     patches += [
-        patch(f"{_BASE}.ocr.parse_proficiency_bar", side_effect=prof_side_effects),
+        patch(f"{_BASE}.ocr.parse_proficiency_bar", return_value=("", 11, 44, 400, False)),
     ]
 
     with _apply(*patches):
@@ -99,11 +96,16 @@ def test_run_scan_skips_hero_on_parse_error(db, hero_repo):
     blank = make_blank_image()
     log_messages = []
 
+    # Phase 1 captures all heroes first, then Phase 2 runs OCR on all captures.
+    # Call order: [CA Phase1, IM Phase1], then [CA Phase2, IM Phase2].
+    # CA Phase 2 fails → skipped. Iron Man succeeds → stored.
     patches = _base_patches(blank)
     patches += [
         patch(f"{_BASE}.ocr.parse_proficiency_bar", side_effect=[
-            ParseError("bad read"),
-            ("", 20, 100, 500, False),
+            ("", 11, 44, 400, False),   # CA Phase 1 validation
+            ("", 20, 100, 500, False),   # Iron Man Phase 1 validation
+            ParseError("bad read"),      # CA Phase 2 → skip
+            ("", 20, 100, 500, False),   # Iron Man Phase 2
         ]),
     ]
 

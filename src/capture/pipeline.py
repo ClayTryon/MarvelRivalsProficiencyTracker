@@ -95,11 +95,9 @@ def _build_and_save_hero(hero_name: str, capture_run_id: int, level: int,
     return hero
 
 
-
 def capture_one_hero_from_image(image, db: Database, capture_run_id: int, hero_name: str) -> Hero:
     """OCR a pre-captured PIL Image (e.g. from clipboard) for a single hero."""
     save_debug_image(image, "proficiency_raw_clipboard")
-    save_debug_image(ocr.preprocess(image.crop(ocr._scale_region(ocr._XP_FRACS, image.width, image.height))), "proficiency_xp_crop")
     _name, level, xp, xp_req, is_max = ocr.parse_proficiency_bar(image)
     return _build_and_save_hero(hero_name, capture_run_id, level, xp, xp_req, is_max,
                                 HeroRepository(db), SnapshotRepository(db))
@@ -164,8 +162,23 @@ def run_scan(hwnd: int, db: Database, on_log, on_hero, check_cancelled) -> int:
                 navigator.click_at(hwnd, _PROFICIENCY_TAB_X, _PROFICIENCY_TAB_Y, delay=0.1)
                 navigator.click_at(hwnd, _MISSIONS_TAB_X, _MISSIONS_TAB_Y, delay=0.1)
 
-                clipboard_capture.focus_window(hwnd)
-                prof_image = navigator.capture_active_window(hwnd)
+                prof_image = None
+                for attempt in range(3):
+                    if attempt > 0:
+                        time.sleep(0.4)
+                        navigator.click_at(hwnd, _PROFICIENCY_TAB_X, _PROFICIENCY_TAB_Y, delay=0.1)
+                        navigator.click_at(hwnd, _MISSIONS_TAB_X, _MISSIONS_TAB_Y, delay=0.1)
+                    clipboard_capture.focus_window(hwnd)
+                    candidate = navigator.capture_active_window(hwnd)
+                    try:
+                        ocr.parse_proficiency_bar(candidate, save_debug=False)
+                        prof_image = candidate
+                        break
+                    except ParseError:
+                        prof_image = candidate
+                        if attempt < 2:
+                            on_log(f"  retrying {hero_name}...")
+
                 save_debug_image(prof_image, f"prof_{hero_name.replace(' ', '_')}")
                 captures.append((hero_name, prof_image))
                 on_log(f"  captured {hero_name}")

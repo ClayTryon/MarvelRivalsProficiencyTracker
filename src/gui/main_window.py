@@ -12,19 +12,21 @@ from gui.hero_browser import HeroBrowser
 from gui.hero_info_panel import HeroInfoPanel
 from gui.sync_panel import SyncPanel
 from gui.teamups_panel import TeamUpsPanel
+from gui.training_panel import TrainingPanel
 from gui.update_checker import UpdateChecker
 from storage.database import Database
 from storage.repository import HeroRepository
 from version import __version__
 
 # Tab indices — must match order added to QStackedWidget
-_TAB_SCAN    = 0
-_TAB_HEROES  = 1
-_TAB_WIKI    = 2
-_TAB_TEAMUPS = 3
-_TAB_SYNC    = 4
+_TAB_SCAN      = 0
+_TAB_HEROES    = 1
+_TAB_WIKI      = 2
+_TAB_TEAMUPS   = 3
+_TAB_TRAINING  = 4
+_TAB_SYNC      = 5
 
-_TAB_LABELS = ["SCAN", "HEROES", "HERO WIKI", "TEAM-UPS"]
+_TAB_LABELS = ["SCAN", "HEROES", "HERO WIKI", "TEAM-UPS", "TRAINING"]
 
 
 class _NavBar(QWidget):
@@ -168,17 +170,19 @@ class MainWindow(QMainWindow):
         self._stack = QStackedWidget()
         self._stack.setStyleSheet("background: #0c0c14;")
 
-        self._scan_panel   = ScanPanel(db)
-        self._hero_browser = HeroBrowser(db)
-        self._hero_info    = HeroInfoPanel()
-        self._teamups_panel = TeamUpsPanel()
-        self._sync_panel   = SyncPanel()
+        self._scan_panel     = ScanPanel(db)
+        self._hero_browser   = HeroBrowser(db)
+        self._hero_info      = HeroInfoPanel()
+        self._teamups_panel  = TeamUpsPanel()
+        self._training_panel = TrainingPanel()
+        self._sync_panel     = SyncPanel()
 
-        self._stack.addWidget(self._scan_panel)     # 0 — SCAN
-        self._stack.addWidget(self._hero_browser)   # 1 — HEROES
-        self._stack.addWidget(self._hero_info)      # 2 — HERO WIKI
-        self._stack.addWidget(self._teamups_panel)  # 3 — TEAM-UPS
-        self._stack.addWidget(self._sync_panel)     # 4 — SYNC
+        self._stack.addWidget(self._scan_panel)      # 0 — SCAN
+        self._stack.addWidget(self._hero_browser)    # 1 — HEROES
+        self._stack.addWidget(self._hero_info)       # 2 — HERO WIKI
+        self._stack.addWidget(self._teamups_panel)   # 3 — TEAM-UPS
+        self._stack.addWidget(self._training_panel)  # 4 — TRAINING
+        self._stack.addWidget(self._sync_panel)      # 5 — SYNC
         root.addWidget(self._stack)
 
         self.setCentralWidget(central)
@@ -191,6 +195,7 @@ class MainWindow(QMainWindow):
         heroes = HeroRepository(db).get_all()
         if heroes:
             self._hero_browser.load_heroes(heroes)
+            self._training_panel.load_heroes(heroes)
             self._navigate(_TAB_HEROES)
         else:
             self._navigate(_TAB_SCAN)
@@ -206,6 +211,7 @@ class MainWindow(QMainWindow):
     def _on_scan_complete(self, _heroes: list = None):
         heroes = HeroRepository(self._db).get_all()
         self._hero_browser.load_heroes(heroes)
+        self._training_panel.load_heroes(heroes)
         self._navigate(_TAB_HEROES)
 
     def _on_wiki_hero_requested(self, hero_name: str):

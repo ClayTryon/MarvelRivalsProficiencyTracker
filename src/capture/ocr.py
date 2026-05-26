@@ -54,17 +54,14 @@ def _scale_region(fracs, w, h):
     return (int(x1 * w), int(y1 * h), int(x2 * w), int(y2 * h))
 
 
-def preprocess(image: Image.Image) -> Image.Image:
-    return image.convert("L")
-
-
-def _easyocr_level(image: Image.Image) -> int:
+def _easyocr_level(image: Image.Image, save_debug: bool = True) -> int:
     """Read the level number using EasyOCR. Raises ParseError if no digits found."""
     region = _scale_region(_LEVEL_FRACS, image.width, image.height)
     crop = image.crop(region)
     lc = crop.convert("L")
     lc = lc.resize((lc.width * 2, lc.height * 2), Image.LANCZOS)
-    save_debug_image(lc, "level_ocr_input")
+    if save_debug:
+        save_debug_image(lc, "level_ocr_input")
 
     results = _get_reader().readtext(np.array(lc), detail=0, allowlist='LV0123456789')
     raw = " ".join(results)
@@ -80,7 +77,7 @@ def _easyocr_level(image: Image.Image) -> int:
     return int(digits)
 
 
-def parse_proficiency_bar(image: Image.Image) -> tuple[str, int, int, int, bool]:
+def parse_proficiency_bar(image: Image.Image, save_debug: bool = True) -> tuple[str, int, int, int, bool]:
     """Extract (name, level, xp, xp_required, is_max) from a proficiency screen screenshot.
 
     name is always an empty string — caller tracks hero identity via HERO_ROSTER index.
@@ -91,13 +88,14 @@ def parse_proficiency_bar(image: Image.Image) -> tuple[str, int, int, int, bool]
     xp_region = _scale_region(_XP_FRACS, image.width, image.height)
     xp_crop = image.crop(xp_region).convert("L")
     xp_crop = xp_crop.resize((xp_crop.width * 2, xp_crop.height * 2), Image.LANCZOS)
-    save_debug_image(xp_crop, "xp_ocr_input")
+    if save_debug:
+        save_debug_image(xp_crop, "xp_ocr_input")
 
     xp_results = _get_reader().readtext(np.array(xp_crop), detail=0, allowlist='MAX0123456789 /')
     xp_text = " ".join(xp_results)
 
     if re.search(r"max", xp_text, re.IGNORECASE):
-        level = _easyocr_level(image)
+        level = _easyocr_level(image, save_debug=save_debug)
         return "", level, 0, 0, True
 
     xp_text_clean = _ocr_digits_str(xp_text)
@@ -111,7 +109,7 @@ def parse_proficiency_bar(image: Image.Image) -> tuple[str, int, int, int, bool]
     level_range = level_range_for_xp(xp_required)
 
     try:
-        level = _easyocr_level(image)
+        level = _easyocr_level(image, save_debug=save_debug)
     except ParseError:
         if level_range:
             level = level_range[0]
