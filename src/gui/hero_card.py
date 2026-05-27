@@ -61,7 +61,7 @@ class HeroCard(QFrame):
             )
             lay.addWidget(bar)
 
-            xp_lbl = QLabel(f"{hero.xp} / {hero.xp_required}")
+            xp_lbl = QLabel(f"{hero.xp:,} / {hero.xp_required:,}")
             xp_lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
             xp_lbl.setStyleSheet("font-size: 9px; color: #888888;")
             lay.addWidget(xp_lbl)

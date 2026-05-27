@@ -37,7 +37,7 @@ class ScanPanel(QWidget):
         title = QLabel("PROFICIENCY SCANNER")
         title.setStyleSheet(
             "font-family: Impact, 'Arial Narrow', Arial;"
-            " font-size: 20px; letter-spacing: 4px; color: #a0c8ff;"
+            " font-size: 20px; letter-spacing: 4px; color: #f4d641;"
         )
         layout.addWidget(title)
 

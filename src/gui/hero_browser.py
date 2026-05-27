@@ -25,7 +25,25 @@ _ROLE_FILTERS = {
     "Vanguard":   "Vanguard",
     "Duelist":    "Duelist",
     "Strategist": "Strategist",
+    "Multi-Role": "Multi-Role",
 }
+
+_TIER_LABELS = ["Lord", "Champion", "Normal Hero"]
+
+_ROLE_SECTIONS = [
+    ("Tanks — Vanguard",      "Vanguard"),
+    ("DPS — Duelist",         "Duelist"),
+    ("Supports — Strategist", "Strategist"),
+    ("Multi-Role",            "Multi-Role"),
+]
+
+
+def _hero_tier(h: Hero) -> str:
+    if h.is_max_level:
+        return "Champion"
+    if h.level >= 20:
+        return "Lord"
+    return "Normal Hero"
 
 
 class _HeroDetailDialog(QDialog):
@@ -105,6 +123,65 @@ class _HeroGrid(QWidget):
         super().resizeEvent(event)
 
 
+class _ShowAllDialog(QDialog):
+    _HEADER_STYLE = (
+        "color: #c8a84b; font-size: 13px; font-weight: bold;"
+        " padding: 6px 0 4px; border-bottom: 1px solid #2a2a40;"
+    )
+    _EMPTY_STYLE = "color: #484860; font-size: 11px; padding: 4px 12px;"
+
+    def __init__(self, tier: str, heroes: list[Hero], db=None, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle(f"All {tier} Heroes")
+        self.setMinimumSize(860, 560)
+        self._db = db
+
+        tier_heroes = [h for h in heroes if _hero_tier(h) == tier]
+
+        outer = QVBoxLayout(self)
+        outer.setContentsMargins(0, 0, 0, 0)
+
+        if not tier_heroes:
+            lbl = QLabel(f"No {tier} heroes found.")
+            lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            lbl.setStyleSheet("color: #484860; font-size: 13px; padding: 40px;")
+            outer.addWidget(lbl)
+            return
+
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
+        scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+
+        content = QWidget()
+        lay = QVBoxLayout(content)
+        lay.setContentsMargins(14, 14, 14, 14)
+        lay.setSpacing(14)
+
+        for section_label, role_key in _ROLE_SECTIONS:
+            role_heroes = [h for h in tier_heroes if h.role == role_key]
+            header = QLabel(f"{section_label}  ({len(role_heroes)})")
+            header.setStyleSheet(self._HEADER_STYLE)
+            lay.addWidget(header)
+
+            if role_heroes:
+                grid = _HeroGrid()
+                grid.set_heroes(role_heroes)
+                grid.card_clicked.connect(self._on_card_clicked)
+                lay.addWidget(grid)
+            else:
+                no_lbl = QLabel("None")
+                no_lbl.setStyleSheet(self._EMPTY_STYLE)
+                lay.addWidget(no_lbl)
+
+        lay.addStretch()
+        scroll.setWidget(content)
+        outer.addWidget(scroll)
+
+    def _on_card_clicked(self, hero: Hero):
+        dlg = _HeroDetailDialog(hero, self._db, self)
+        dlg.exec()
+
+
 class HeroBrowser(QWidget):
     wiki_hero_requested = pyqtSignal(str)
 
@@ -143,12 +220,28 @@ class HeroBrowser(QWidget):
 
         self._search = QLineEdit()
         self._search.setPlaceholderText("Search heroes...")
-        self._search.setFixedWidth(150)
+        self._search.setFixedWidth(180)
         self._search.setClearButtonEnabled(True)
         self._search.textChanged.connect(self._apply_sort)
         toolbar.addWidget(self._search)
 
         toolbar.addStretch()
+
+        tier_lbl = QLabel("TIER")
+        tier_lbl.setStyleSheet("color: #484860; font-size: 10px; letter-spacing: 1px;")
+        toolbar.addWidget(tier_lbl)
+        self._tier_combo = QComboBox()
+        self._tier_combo.addItems(_TIER_LABELS)
+        self._tier_combo.setFixedWidth(110)
+        toolbar.addWidget(self._tier_combo)
+
+        show_all_btn = QPushButton("Show All")
+        show_all_btn.clicked.connect(self._open_show_all)
+        toolbar.addWidget(show_all_btn)
+
+        _sep = QLabel("|")
+        _sep.setStyleSheet("color: #26263c; padding: 0 2px;")
+        toolbar.addWidget(_sep)
 
         role_lbl = QLabel("ROLE")
         role_lbl.setStyleSheet("color: #484860; font-size: 10px; letter-spacing: 1px;")
@@ -262,6 +355,11 @@ class HeroBrowser(QWidget):
         self._descending = self._dir_btn.isChecked()
         self._dir_btn.setText("↓" if self._descending else "↑")
         self._apply_sort()
+
+    def _open_show_all(self):
+        tier = self._tier_combo.currentText()
+        dlg = _ShowAllDialog(tier, self._all_heroes, self._db, self)
+        dlg.exec()
 
     def _show_detail(self, hero: Hero):
         dlg = _HeroDetailDialog(hero, self._db, self)

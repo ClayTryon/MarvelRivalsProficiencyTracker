@@ -13,7 +13,7 @@ from gui.hero_detail import _icon_path
 _LORD_LEVEL   = 20
 _ICON_SIZE    = 160
 
-_ROLE_OPTIONS = ["All Roles", "Vanguard", "Duelist", "Strategist"]
+_ROLE_OPTIONS = ["All Roles", "Vanguard", "Duelist", "Strategist", "Multi-Role"]
 
 _ROLE_COLORS = {
     "Vanguard":   "#4a90d9",
@@ -21,8 +21,6 @@ _ROLE_COLORS = {
     "Strategist": "#4ad98a",
     "Multi-Role": "#d9a44a",
 }
-
-_MULTI_ROLE_HERO = "Deadpool"
 
 _FAST_TICKS        = 25
 _SLOW_TICKS        = 7
@@ -184,7 +182,7 @@ class TrainingPanel(QWidget):
         self._filtered = [
             h for h in self._all_heroes
             if h.level < _LORD_LEVEL
-            and (role == "All Roles" or h.role == role or h.name == _MULTI_ROLE_HERO)
+            and (role == "All Roles" or h.role == role)
         ]
         n = len(self._filtered)
         if n == 0:
