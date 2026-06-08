@@ -24,7 +24,6 @@ a = Analysis(
     datas=[
         ('Icons',     'Icons'),
         ('hero_data', 'hero_data'),
-        ('rag_index', 'rag_index'),
         *easyocr_datas,
         *torch_datas,
         *ic_datas,
