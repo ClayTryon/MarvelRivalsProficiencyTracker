@@ -128,6 +128,11 @@ def _load() -> tuple[list, dict]:
     return list(_DEFAULT_ROSTER), dict(_DEFAULT_ROLES)
 
 
+def is_synced() -> bool:
+    """Return True if heroes.json has been written by wiki sync."""
+    return os.path.exists(_json_path())
+
+
 def _reload():
     """Re-read heroes.json and update the module-level lists in-place."""
     roster, roles = _load()

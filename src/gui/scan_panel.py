@@ -120,6 +120,14 @@ class ScanPanel(QWidget):
     # ------------------------------------------------------------------
 
     def _start_auto_scan(self):
+        from data.heroes import is_synced
+        if not is_synced():
+            self._append_log(
+                "ERROR: Hero roster not found.\n"
+                "Please go to the Sync tab and run Wiki Sync before scanning."
+            )
+            return
+
         self._snapshot_pre_scan()
         self._heroes = []
         self._scan_cancelled = False

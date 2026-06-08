@@ -20,7 +20,7 @@ from storage.repository import HeroRepository, CaptureRunRepository, SnapshotRep
 from models.hero import Hero
 from models.capture_run import CaptureStatus
 from exceptions import CaptureError, ParseError, ValidationError
-from data.heroes import HERO_ROSTER, HERO_ROLES
+from data.heroes import HERO_ROSTER, HERO_ROLES, is_synced
 
 _GRID_COLS = 7
 _GRID_ROWS = 2
@@ -114,6 +114,10 @@ def run_scan(hwnd: int, db: Database, on_log, on_hero, check_cancelled) -> int:
 
     Returns the number of heroes successfully captured.
     """
+    if not is_synced():
+        raise CaptureError(
+            "Hero roster not found. Please run Wiki Sync before scanning."
+        )
     if not is_window_alive(hwnd):
         raise CaptureError("Target window is no longer alive")
 
