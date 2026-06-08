@@ -20,7 +20,10 @@ CREATE TABLE IF NOT EXISTS hero (
     xp_required    INTEGER NOT NULL CHECK(xp_required >= 0),
     is_max_level   INTEGER NOT NULL DEFAULT 0 CHECK(is_max_level IN (0, 1)),
     capture_run_id INTEGER NOT NULL REFERENCES capture_run(id) ON DELETE CASCADE,
-    updated_at     TEXT    NOT NULL
+    updated_at     TEXT    NOT NULL,
+    ch1_progress   REAL    NOT NULL DEFAULT 0,
+    ch2_progress   REAL    NOT NULL DEFAULT 0,
+    ch3_progress   REAL    NOT NULL DEFAULT 0
 );
 
 CREATE TABLE IF NOT EXISTS hero_snapshot (
