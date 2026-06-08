@@ -13,6 +13,9 @@ class Hero:
     capture_run_id: int
     updated_at: str
     id: int = None
+    ch1_progress: float = 0.0
+    ch2_progress: float = 0.0
+    ch3_progress: float = 0.0
 
     def validate(self):
         if not self.name or not self.name.strip():

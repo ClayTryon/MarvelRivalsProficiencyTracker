@@ -4,8 +4,6 @@ from PyQt6.QtWidgets import (
     QDialog, QVBoxLayout, QHBoxLayout, QFormLayout,
     QPushButton, QComboBox, QLabel, QSpinBox, QCheckBox, QMessageBox,
 )
-from PyQt6.QtCore import Qt
-
 from data.heroes import HERO_ROSTER, HERO_ROLES
 from data.xp_table import XP_PER_LEVEL
 from exceptions import ValidationError

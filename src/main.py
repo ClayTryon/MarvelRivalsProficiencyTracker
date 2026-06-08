@@ -36,6 +36,7 @@ def main():
     db = Database(os.path.join(app_data, "proficiency_tracker.db"))
     db.connect()
     db.init_schema()
+    db.migrate_schema()
     SnapshotRepository(db).backfill_from_heroes()
 
     app = QApplication(sys.argv)

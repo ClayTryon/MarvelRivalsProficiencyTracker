@@ -5,7 +5,6 @@ from PyQt6.QtWidgets import (
     QHBoxLayout, QVBoxLayout, QLabel, QPushButton,
 )
 from PyQt6.QtCore import Qt, pyqtSignal
-from PyQt6.QtGui import QFont
 
 from gui.scan_panel import ScanPanel
 from gui.hero_browser import HeroBrowser
@@ -18,15 +17,14 @@ from storage.database import Database
 from storage.repository import HeroRepository
 from version import __version__
 
-# Tab indices — must match order added to QStackedWidget
-_TAB_SCAN      = 0
-_TAB_HEROES    = 1
-_TAB_WIKI      = 2
-_TAB_TEAMUPS   = 3
-_TAB_TRAINING  = 4
-_TAB_SYNC      = 5
+_TAB_SCAN     = 0
+_TAB_HEROES   = 1
+_TAB_WIKI     = 2
+_TAB_TEAMUPS  = 3
+_TAB_TRAINING = 4
+_TAB_SYNC     = 5
 
-_TAB_LABELS = ["SCAN", "HEROES", "HERO WIKI", "TEAM-UPS", "TRAINING"]
+_TAB_LABELS = ["SCAN", "HEROES", "HERO WIKI", "TEAM-UPS", "TRAINING", "SYNC"]
 
 
 class _NavBar(QWidget):

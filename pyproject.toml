@@ -1,0 +1,43 @@
+[project]
+name = "proftracker"
+version = "1.2.2"
+description = "Marvel Rivals hero proficiency tracker with OCR capture and wiki RAG"
+requires-python = ">=3.11"
+dependencies = [
+    "PyQt6>=6.6",
+    "Pillow>=10.0",
+    "pytesseract>=0.3.10",
+    "easyocr>=1.6",
+    "numpy>=1.24",
+    "pywin32>=306",
+    "interception-python>=1.13",
+    "pyautogui>=0.9.54",
+    "matplotlib>=3.8",
+    "openpyxl>=3.1",
+    # RAG / Hero Wiki
+    "llama-index-core>=0.12.0",
+    "llama-index-llms-groq>=0.3.0",
+    "llama-index-embeddings-huggingface>=0.4.0",
+    "llama-index-readers-web>=0.3.0",
+    "beautifulsoup4>=4.12.0",
+    "python-dotenv>=1.0.0",
+    "torch>=2.2.0",
+    "sentence-transformers>=3.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-qt>=4.4",
+    "pyinstaller",
+]
+
+[tool.uv]
+dev-dependencies = [
+    "pytest>=8.0",
+    "pytest-qt>=4.4",
+    "pyinstaller",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

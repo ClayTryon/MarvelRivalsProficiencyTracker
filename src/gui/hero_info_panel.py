@@ -7,8 +7,6 @@ from PyQt6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QLabel,
     QLineEdit, QPushButton, QTextBrowser, QSizePolicy,
 )
-from PyQt6.QtCore import Qt
-
 from rag.worker import QueryWorker
 
 _GOLD = "#f4d641"

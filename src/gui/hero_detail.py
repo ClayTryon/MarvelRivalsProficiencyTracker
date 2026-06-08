@@ -266,6 +266,34 @@ class HeroDetailPanel(QWidget):
         h_lay.addLayout(info, stretch=1)
         root.addWidget(header)
 
+        # ── Tracker stats row ─────────────────────────────────────────────
+        self._tracker_row = QWidget()
+        self._tracker_row.setStyleSheet(f"QWidget {{ background: {_CARD_BG}; border-radius: 6px; }}")
+        tracker_lay = QHBoxLayout(self._tracker_row)
+        tracker_lay.setContentsMargins(16, 8, 16, 8)
+        tracker_lay.setSpacing(0)
+
+        self._stat_chips: list[tuple[QLabel, QLabel]] = []
+        for label_text in ("WIN %", "KDA", "MATCHES", "TIME"):
+            if self._stat_chips:
+                sep = QLabel("·")
+                sep.setStyleSheet(f"color: #26263c; font-size: 14px; padding: 0 10px; background: transparent;")
+                tracker_lay.addWidget(sep)
+            lbl = QLabel(label_text)
+            lbl.setStyleSheet(f"font-size: 9px; color: {_DIM}; letter-spacing: 1px; background: transparent;")
+            val = QLabel("—")
+            val.setStyleSheet(f"font-size: 13px; color: {_TEXT}; font-weight: bold; padding-left: 5px; background: transparent;")
+            chip = QHBoxLayout()
+            chip.setSpacing(0)
+            chip.addWidget(lbl)
+            chip.addWidget(val)
+            tracker_lay.addLayout(chip)
+            self._stat_chips.append((lbl, val))
+
+        tracker_lay.addStretch()
+        self._tracker_row.hide()
+        root.addWidget(self._tracker_row)
+
         # ── XP card ───────────────────────────────────────────────────────
         self._xp_card = _card()
         xp_lay = QVBoxLayout(self._xp_card)
@@ -365,10 +393,36 @@ class HeroDetailPanel(QWidget):
         for i, btn in enumerate(btns):
             btn.setStyleSheet(_TAB_ACTIVE if i == index else _TAB_INACTIVE)
 
+    def set_tracker_stats(self, stats: dict | None):
+        if not stats:
+            self._tracker_row.hide()
+            return
+
+        def _fmt_time(secs) -> str:
+            if not secs:
+                return "—"
+            h, rem = divmod(int(secs), 3600)
+            m = rem // 60
+            return f"{h}h {m}m" if h else f"{m}m"
+
+        mp   = stats.get("matches") or stats.get("matches_played")
+        secs = stats.get("time_played_secs")
+        time_str = _fmt_time(secs) if secs else (stats.get("time_played") or "—")
+        labels = [
+            f"{stats['win_pct']:.1f}%"   if stats.get("win_pct")   is not None else "—",
+            f"{stats['kda_ratio']:.2f}"  if stats.get("kda_ratio") is not None else "—",
+            str(int(mp)) if mp is not None else "—",
+            time_str,
+        ]
+        for (_, val_lbl), text in zip(self._stat_chips, labels):
+            val_lbl.setText(text)
+        self._tracker_row.show()
+
     def set_hero(self, hero: Hero):
         self._load_icon(hero.name, hero.level)
         self._name_label.setText(hero.name.upper())
         self._role_label.setText(hero.role or "Unknown Role")
+        self._tracker_row.hide()
 
         earned = total_xp_earned(hero.level, hero.xp)
 

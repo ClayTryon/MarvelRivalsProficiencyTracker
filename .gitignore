@@ -11,6 +11,8 @@ debug/
 .vs/
 .claude/
 CLAUDE.md
+chat_history.json
+rag_index/
 generate_user_guide.py
 specs/
 artfxt9npjoe1.jpeg

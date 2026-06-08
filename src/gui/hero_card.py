@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import QFrame, QVBoxLayout, QLabel, QMenu, QProgressBar
 from PyQt6.QtCore import Qt, pyqtSignal
 from PyQt6.QtGui import QMovie, QPixmap, QCursor
 from models.hero import Hero
-from gui.hero_detail import _ICONS_DIR, _icon_path
+from gui.hero_detail import _icon_path
 
 
 class HeroCard(QFrame):

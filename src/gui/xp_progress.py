@@ -12,7 +12,6 @@ from PIL import Image, ImageDraw
 
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QComboBox, QLabel
 
-from storage.database import Database
 from storage.repository import SnapshotRepository
 
 if getattr(sys, 'frozen', False):

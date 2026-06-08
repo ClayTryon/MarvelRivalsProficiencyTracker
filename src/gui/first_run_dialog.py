@@ -1,5 +1,7 @@
-from PyQt6.QtWidgets import QDialog, QVBoxLayout, QLabel, QPushButton, QProgressBar
-from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import (
+    QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QProgressBar, QLineEdit,
+)
+from PyQt6.QtCore import Qt, QSettings
 from wiki_sync.worker import SyncWorker
 
 
@@ -9,7 +11,7 @@ class FirstRunDialog(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setWindowTitle("ProfTracker — First Run Setup")
-        self.setFixedSize(480, 220)
+        self.setFixedSize(480, 270)
         # Window flag gives it a taskbar button so it's findable
         self.setWindowFlags(Qt.WindowType.Window | Qt.WindowType.CustomizeWindowHint | Qt.WindowType.WindowTitleHint)
         self.setStyleSheet("background: #0c0c14; color: #e0e0e0;")
@@ -31,6 +33,27 @@ class FirstRunDialog(QDialog):
         self._status.setStyleSheet("color: #aaa; font-size: 12px;")
         self._status.setWordWrap(True)
         lay.addWidget(self._status)
+
+        # Optional rivalsmeta UID — saved to QSettings for auto-refresh
+        uid_row = QHBoxLayout()
+        uid_lbl = QLabel("rivalsmeta player UID")
+        uid_lbl.setStyleSheet("color: #666; font-size: 11px;")
+        uid_row.addWidget(uid_lbl)
+        self._ign_input = QLineEdit()
+        self._ign_input.setPlaceholderText("optional — numeric ID from rivalsmeta.com")
+        self._ign_input.setStyleSheet(
+            "QLineEdit { background: #12121e; color: #dcdce8; border: 1px solid #2a2a4a;"
+            " border-radius: 3px; padding: 3px 8px; font-size: 11px; }"
+            " QLineEdit:focus { border-color: #f4d641; }"
+        )
+        saved_uid = QSettings("ProfTracker", "HeroBrowser").value("tracker_uid", "")
+        self._ign_input.setText(saved_uid)
+        uid_row.addWidget(self._ign_input, stretch=1)
+        lay.addLayout(uid_row)
+
+        sub_lbl = QLabel("Your stats will auto-sync every launch via the STATS tab.")
+        sub_lbl.setStyleSheet("color: #484860; font-size: 10px;")
+        lay.addWidget(sub_lbl)
 
         self._bar = QProgressBar()
         self._bar.setMinimum(0)
@@ -65,7 +88,13 @@ class FirstRunDialog(QDialog):
             self._bar.setValue(current)
         self._status.setText(msg)
 
+    def _save_ign(self):
+        uid = self._ign_input.text().strip()
+        if uid:
+            QSettings("ProfTracker", "HeroBrowser").setValue("tracker_uid", uid)
+
     def _on_finished(self, _result: dict):
+        self._save_ign()
         self.accept()
 
     def _on_error(self, msg: str):
@@ -75,5 +104,6 @@ class FirstRunDialog(QDialog):
         self._skip_btn.setText("Continue")
 
     def _skip(self):
+        self._save_ign()
         self._worker.terminate()
         self.reject()

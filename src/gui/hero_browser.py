@@ -56,9 +56,9 @@ class _HeroDetailDialog(QDialog):
         lay = QVBoxLayout(self)
         lay.setContentsMargins(0, 0, 0, 0)
 
-        panel = HeroDetailPanel(db)
-        panel.set_hero(hero)
-        lay.addWidget(panel)
+        self.panel = HeroDetailPanel(db)
+        self.panel.set_hero(hero)
+        lay.addWidget(self.panel)
 
 
 class _HeroGrid(QWidget):
@@ -363,6 +363,12 @@ class HeroBrowser(QWidget):
 
     def _show_detail(self, hero: Hero):
         dlg = _HeroDetailDialog(hero, self._db, self)
+        if self._db:
+            uid    = self._settings.value("tracker_uid", "").strip() or None
+            season = int(self._settings.value("tracker_season", "0") or "0")
+            from storage.repository import TrackerRepository
+            summary = TrackerRepository(self._db).get_stats_for_mode(uid, season, "all")
+            dlg.panel.set_tracker_stats(summary.get(hero.name))
         dlg.exec()
 
     def _save_template(self):
