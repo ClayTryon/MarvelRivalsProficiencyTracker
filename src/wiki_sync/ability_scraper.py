@@ -557,7 +557,7 @@ def is_future_release(date_str: str) -> bool:
     if not date_str:
         return False
     upper = date_str.upper()
-    if any(kw in upper for kw in ("TBA", "UPCOMING", "COMING SOON", "TO BE ANNOUNCED")):
+    if any(kw in upper for kw in ("TBA", "UPCOMING", "COMING SOON", "TO BE ANNOUNCED", "SEASON")):
         return True
     today = datetime.date.today()
     for fmt in _DATE_FMTS:
