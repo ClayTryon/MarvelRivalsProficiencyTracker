@@ -34,9 +34,6 @@ jobs:
       - name: Build with PyInstaller
         run: uv run pyinstaller proftracker.spec
 
-      - name: Write .env for distribution
-        run: '"GROQ_API_KEY=${{ secrets.GROQ_API_KEY }}" | Out-File -FilePath "dist\ProfTracker\.env" -Encoding utf8NoBOM'
-
       - name: Bundle runtime data
         run: |
           Copy-Item heroes.json "dist\ProfTracker\heroes.json"
