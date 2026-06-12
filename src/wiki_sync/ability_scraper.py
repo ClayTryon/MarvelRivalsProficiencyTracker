@@ -601,7 +601,8 @@ def fetch_release_dates(icon_sets: list[dict], progress_cb=None) -> dict[str, st
                     if date_str:
                         dates[hero_name] = date_str
                     elif re.search(r'\{\{(UpcomingContent|NextCharacter)\}\}', wt, re.IGNORECASE):
-                        dates[hero_name] = "TBA"
+                        season_m = re.search(r'Season\s+(\d+\.\d+)', wt) or re.search(r'Season\s+(\d+)', wt)
+                        dates[hero_name] = f"Season {season_m.group(1)}" if season_m else "TBA"
             time.sleep(_REQUEST_DELAY)
         except Exception:
             pass  # best-effort; don't fail the sync
