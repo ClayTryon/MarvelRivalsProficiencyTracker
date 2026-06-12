@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 """
 Scrape hero costume (skin) data from rivalskins.com.
 

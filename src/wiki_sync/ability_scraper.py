@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 """
 Scrape hero ability data from Template:Abilities/{WikiPage} on the Fandom wiki.
 
