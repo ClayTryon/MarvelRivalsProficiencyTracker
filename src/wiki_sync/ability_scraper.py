@@ -13,6 +13,8 @@ import time
 
 import requests
 
+import datetime
+
 WIKI_API = "https://marvelrivals.fandom.com/api.php"
 
 if getattr(sys, 'frozen', False):
@@ -524,6 +526,85 @@ def sync_abilities(icon_sets: list[dict], progress_cb=None) -> dict:
         progress_cb(len(primary), len(primary), "Abilities sync complete")
 
     return {"fetched": fetched, "skipped": skipped, "errors": errors}
+
+
+# ---------------------------------------------------------------------------
+# Release date scraping
+# ---------------------------------------------------------------------------
+
+_RELEASE_DATE_PATTERNS = [
+    r'\|\s*game_release\s*=\s*([^\n|{}]+)',
+    r'\|\s*release_date\s*=\s*([^\n|{}]+)',
+    r'\|\s*release\s*=\s*([^\n|{}]+)',
+    r'\|\s*released\s*=\s*([^\n|{}]+)',
+]
+
+_DATE_FMTS = ["%B %d, %Y", "%B %Y", "%Y-%m-%d"]
+
+
+def _parse_release_date_str(wikitext: str) -> str | None:
+    for pattern in _RELEASE_DATE_PATTERNS:
+        m = re.search(pattern, wikitext, re.IGNORECASE)
+        if m:
+            raw = _clean_text(m.group(1).strip())
+            if raw:
+                return raw
+    return None
+
+
+def is_future_release(date_str: str) -> bool:
+    """Return True if date_str represents a future or unannounced release."""
+    if not date_str:
+        return False
+    upper = date_str.upper()
+    if any(kw in upper for kw in ("TBA", "UPCOMING", "COMING SOON", "TO BE ANNOUNCED")):
+        return True
+    today = datetime.date.today()
+    for fmt in _DATE_FMTS:
+        try:
+            return datetime.datetime.strptime(date_str.strip(), fmt).date() > today
+        except ValueError:
+            continue
+    # Fall back to year-only check
+    m = re.search(r'\b(20\d{2})\b', date_str)
+    if m:
+        return int(m.group(1)) > today.year
+    return False
+
+
+def fetch_release_dates(icon_sets: list[dict], progress_cb=None) -> dict[str, str]:
+    """
+    Fetch release dates for all primary heroes from their wiki pages.
+    Always re-fetches (not cached) so upcoming heroes update when released.
+    Returns {hero_name: date_string} — only heroes with a parseable date included.
+    """
+    primary = [s for s in icon_sets if s.get("is_primary") and s.get("wiki_page")]
+    dates: dict[str, str] = {}
+
+    for i, s in enumerate(primary):
+        wiki_page = s["wiki_page"]
+        hero_name = s["slug"].replace("_", " ").replace("%26", "&")
+        if progress_cb:
+            progress_cb(i, len(primary), f"Release date: {wiki_page}")
+        try:
+            resp = _SESSION.get(WIKI_API, params={
+                "action": "query", "titles": wiki_page,
+                "prop": "revisions", "rvprop": "content", "format": "json",
+            }, timeout=20)
+            resp.raise_for_status()
+            pages = resp.json().get("query", {}).get("pages", {})
+            for page in pages.values():
+                revs = page.get("revisions", [])
+                if revs:
+                    wt = revs[0].get("*") or revs[0].get("slots", {}).get("main", {}).get("*", "")
+                    date_str = _parse_release_date_str(wt)
+                    if date_str:
+                        dates[hero_name] = date_str
+            time.sleep(_REQUEST_DELAY)
+        except Exception:
+            pass  # best-effort; don't fail the sync
+
+    return dates
 
 
 def sync_abilities_from_cdn(slugs: list[str], progress_cb=None) -> dict:

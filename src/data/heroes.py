@@ -116,16 +116,25 @@ _DEFAULT_ROLES: dict[str, str] = {
 }
 
 
-def _load() -> tuple[list, dict]:
+def _load() -> tuple[list, dict, dict]:
     path = _json_path()
     if os.path.exists(path):
         try:
             with open(path, encoding='utf-8') as f:
                 data = json.load(f)
-            return data['roster'], data['roles']
+            return data['roster'], data['roles'], data.get('release_dates', {})
         except Exception:
             pass
-    return list(_DEFAULT_ROSTER), dict(_DEFAULT_ROLES)
+    return list(_DEFAULT_ROSTER), dict(_DEFAULT_ROLES), {}
+
+
+def get_scan_roster() -> list[str]:
+    """Return HERO_ROSTER minus any hero whose release date is in the future."""
+    from wiki_sync.ability_scraper import is_future_release
+    return [
+        name for name in HERO_ROSTER
+        if not is_future_release(HERO_RELEASE_DATES.get(name, ""))
+    ]
 
 
 def is_synced() -> bool:
@@ -140,11 +149,13 @@ def is_synced() -> bool:
 
 def _reload():
     """Re-read heroes.json and update the module-level lists in-place."""
-    roster, roles = _load()
+    roster, roles, release_dates = _load()
     HERO_ROSTER.clear()
     HERO_ROSTER.extend(roster)
     HERO_ROLES.clear()
     HERO_ROLES.update(roles)
+    HERO_RELEASE_DATES.clear()
+    HERO_RELEASE_DATES.update(release_dates)
 
 
-HERO_ROSTER, HERO_ROLES = _load()
+HERO_ROSTER, HERO_ROLES, HERO_RELEASE_DATES = _load()

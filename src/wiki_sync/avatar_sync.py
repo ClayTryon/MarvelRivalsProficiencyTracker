@@ -241,6 +241,18 @@ def sync_icons(
     return {"downloaded": downloaded, "skipped": skipped, "errors": errors}
 
 
+def update_release_dates(release_dates: dict[str, str]) -> None:
+    """Add or overwrite the release_dates field in the existing heroes.json."""
+    path = _heroes_json_path()
+    if not os.path.exists(path):
+        return
+    with open(path, encoding="utf-8") as f:
+        data = json.load(f)
+    data["release_dates"] = release_dates
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(data, f, indent=2, ensure_ascii=False)
+
+
 def sync_from_cdn(progress_cb=None) -> dict:
     """
     Download heroes.json and icon files from PROFTRACKER_CDN_BASE instead of

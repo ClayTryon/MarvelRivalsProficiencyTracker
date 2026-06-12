@@ -218,7 +218,9 @@ class MainWindow(QMainWindow):
 
     def _on_sync_complete(self):
         import data.heroes as _heroes_mod
+        from storage.repository import seed_default_heroes
         _heroes_mod._reload()
+        seed_default_heroes(self._db)
 
         self._teamups_panel.load()
 

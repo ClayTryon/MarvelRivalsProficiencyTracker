@@ -6,6 +6,7 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt, pyqtSignal, QSettings
 
 from gui.excel_import import generate_template, import_from_excel
+from data.heroes import HERO_RELEASE_DATES
 from gui.hero_card import HeroCard
 from gui.hero_detail import HeroDetailPanel
 from gui.manual_entry_dialog import ManualEntryDialog
@@ -86,7 +87,7 @@ class _HeroGrid(QWidget):
         self._cards = []
 
         for hero in heroes:
-            card = HeroCard(hero)
+            card = HeroCard(hero, release_date=HERO_RELEASE_DATES.get(hero.name))
             card.clicked.connect(self.card_clicked)
             card.edit_requested.connect(self.card_edit_requested)
             card.wiki_requested.connect(self.card_wiki_requested)

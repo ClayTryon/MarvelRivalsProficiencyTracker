@@ -3,10 +3,20 @@ import os
 import ctypes
 import logging
 from logging.handlers import RotatingFileHandler
-
+from pathlib import Path
 
 # Ensure src/ is on the path when running directly
 sys.path.insert(0, os.path.dirname(__file__))
+
+# Load .env early so PROFTRACKER_CDN_BASE and GROQ_API_KEY are set
+# before any module reads os.environ at import time.
+try:
+    from dotenv import load_dotenv
+    _env_path = Path(sys.executable).parent / ".env" if getattr(sys, 'frozen', False) \
+        else Path(__file__).parent.parent / ".env"
+    load_dotenv(dotenv_path=_env_path)
+except Exception:
+    pass
 
 # Declare per-monitor DPI awareness so win32gui and pyautogui
 # both operate in physical pixels — prevents misaligned clicks on scaled displays.

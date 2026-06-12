@@ -20,7 +20,7 @@ from storage.repository import HeroRepository, CaptureRunRepository, SnapshotRep
 from models.hero import Hero
 from models.capture_run import CaptureStatus
 from exceptions import CaptureError, ParseError, ValidationError
-from data.heroes import HERO_ROSTER, HERO_ROLES, is_synced
+from data.heroes import HERO_ROSTER, HERO_ROLES, is_synced, get_scan_roster
 
 _GRID_COLS = 7
 _GRID_ROWS = 2
@@ -122,6 +122,7 @@ def run_scan(hwnd: int, db: Database, on_log, on_hero, check_cancelled) -> int:
         raise CaptureError("Target window is no longer alive")
 
     clear_temp()
+    scan_roster = get_scan_roster()
     run_repo = CaptureRunRepository(db)
     hero_repo = HeroRepository(db)
     snapshot_repo = SnapshotRepository(db)
@@ -142,13 +143,13 @@ def run_scan(hwnd: int, db: Database, on_log, on_hero, check_cancelled) -> int:
         page_size = _GRID_COLS * _GRID_ROWS
         roster_offset = 0
 
-        while roster_offset < len(HERO_ROSTER):
+        while roster_offset < len(scan_roster):
             page = roster_offset // page_size + 1
             on_log(f"Capturing page {page}...")
 
             for idx in range(page_size):
                 roster_idx = roster_offset + idx
-                if roster_idx >= len(HERO_ROSTER):
+                if roster_idx >= len(scan_roster):
                     break
 
                 if _cancelled():
@@ -156,7 +157,7 @@ def run_scan(hwnd: int, db: Database, on_log, on_hero, check_cancelled) -> int:
                     run_repo.update_status(capture_run.id, CaptureStatus.CANCELLED)
                     return hero_count
 
-                hero_name = HERO_ROSTER[roster_idx]
+                hero_name = scan_roster[roster_idx]
                 col, row = idx % _GRID_COLS, idx // _GRID_COLS
                 cx, cy = _COL_CENTERS[col], _ROW_CENTERS[row]
 
@@ -191,7 +192,7 @@ def run_scan(hwnd: int, db: Database, on_log, on_hero, check_cancelled) -> int:
                 time.sleep(0.2)
 
             roster_offset += page_size
-            if roster_offset < len(HERO_ROSTER):
+            if roster_offset < len(scan_roster):
                 navigator.scroll_down(amount=3)
                 time.sleep(1)
 

@@ -9,9 +9,15 @@ from wiki_sync.avatar_sync import (
     parse_avatars_page,
     sync_from_cdn,
     sync_icons,
+    update_release_dates,
     write_heroes_py,
 )
-from wiki_sync.ability_scraper import sync_abilities, sync_abilities_from_cdn, scrape_teamups
+from wiki_sync.ability_scraper import (
+    fetch_release_dates,
+    scrape_teamups,
+    sync_abilities,
+    sync_abilities_from_cdn,
+)
 
 _WIKI_BASE = "https://marvelrivals.fandom.com/wiki/"
 
@@ -64,6 +70,10 @@ class SyncWorker(QThread):
         if tu_result["errors"]:
             result["errors"].extend(tu_result["errors"])
 
+        self.progress.emit(0, 1, "Fetching hero release dates...")
+        release_dates = fetch_release_dates(icon_sets, progress_cb=self._relay_progress)
+        update_release_dates(release_dates)
+
         self._rebuild_rag(icon_sets, result)
         self.finished.emit(result)
 
@@ -73,6 +83,7 @@ class SyncWorker(QThread):
 
         icon_result = sync_from_cdn(progress_cb=self._relay_progress)
         result["downloaded"] = icon_result["downloaded"]
+        result["skipped"] = icon_result["skipped"]
         result["heroes_written"] = icon_result["heroes_written"]
         result["errors"].extend(icon_result["errors"])
 

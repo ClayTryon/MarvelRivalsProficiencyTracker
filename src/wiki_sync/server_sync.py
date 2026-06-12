@@ -23,11 +23,13 @@ from wiki_sync.avatar_sync import (
     heroes_json_path,
     parse_avatars_page,
     sync_icons,
+    update_release_dates,
     write_heroes_py,
 )
 from wiki_sync.ability_scraper import (
     _DATA_DIR,
     _ICONS_DIR as _ABILITY_ICONS_DIR,
+    fetch_release_dates,
     scrape_teamups,
     sync_abilities,
 )
@@ -74,7 +76,12 @@ def run_server_sync() -> None:
     log.info("=== Phase 3: scraping team-ups ===")
     scrape_teamups(progress_cb=_progress)
 
-    # ── Phase 3: upload to S3 ─────────────────────────────────────────────────
+    log.info("=== Phase 3b: fetching hero release dates ===")
+    release_dates = fetch_release_dates(icon_sets, progress_cb=_progress)
+    update_release_dates(release_dates)
+    log.info("Release dates updated for %d heroes", len(release_dates))
+
+    # ── Phase 4: upload to S3 ─────────────────────────────────────────────────
     log.info("=== Phase 4: uploading to S3 ===")
 
     # heroes.json

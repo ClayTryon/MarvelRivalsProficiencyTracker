@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QFrame, QVBoxLayout, QLabel, QMenu, QProgressBar
-from PyQt6.QtCore import Qt, pyqtSignal
-from PyQt6.QtGui import QMovie, QPixmap, QCursor
+from PyQt6.QtCore import Qt, pyqtSignal, QRect
+from PyQt6.QtGui import QMovie, QPixmap, QCursor, QPainter, QColor, QFont
 from models.hero import Hero
 from gui.hero_detail import _icon_path
 
@@ -18,6 +18,29 @@ def _get_pixmap(path: str, size: int) -> QPixmap:
     return _PIXMAP_CACHE[key]
 
 
+def _apply_upcoming_overlay(pixmap: QPixmap, date_str: str) -> QPixmap:
+    result = QPixmap(pixmap.size())
+    result.fill(Qt.GlobalColor.transparent)
+    p = QPainter(result)
+    p.setRenderHint(QPainter.RenderHint.Antialiasing)
+    p.drawPixmap(0, 0, pixmap)
+    p.fillRect(result.rect(), QColor(0, 0, 0, 155))
+    w, h = pixmap.width(), pixmap.height()
+    mid = h // 2
+    font_up = QFont("Impact", 12)
+    font_up.setLetterSpacing(QFont.SpacingType.AbsoluteSpacing, 1)
+    p.setFont(font_up)
+    p.setPen(QColor("#f4d641"))
+    p.drawText(QRect(2, mid - 22, w - 4, 22), Qt.AlignmentFlag.AlignCenter, "UPCOMING")
+    font_dt = QFont("Arial", 8)
+    font_dt.setBold(True)
+    p.setFont(font_dt)
+    p.setPen(QColor("#e0e0e0"))
+    p.drawText(QRect(2, mid + 2, w - 4, 20), Qt.AlignmentFlag.AlignCenter, date_str)
+    p.end()
+    return result
+
+
 class HeroCard(QFrame):
     clicked                  = pyqtSignal(object)
     edit_requested           = pyqtSignal(object)
@@ -28,10 +51,11 @@ class HeroCard(QFrame):
     H = 210
     ICON = 140
 
-    def __init__(self, hero: Hero, parent=None):
+    def __init__(self, hero: Hero, release_date: str | None = None, parent=None):
         super().__init__(parent)
         self._hero = hero
         self._movie: QMovie | None = None
+        self._release_date = release_date
 
         self.setFixedSize(self.W, self.H)
         self.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
@@ -79,7 +103,7 @@ class HeroCard(QFrame):
             xp_lbl.setStyleSheet("font-size: 9px; color: #888888;")
             lay.addWidget(xp_lbl)
 
-        self._load_icon(hero.name, hero.level)
+        self._load_icon(hero.name, hero.level, release_date)
 
     def _set_border(self, hovered: bool):
         border = "#f4d641" if hovered else "#2a2a2a"
@@ -91,18 +115,23 @@ class HeroCard(QFrame):
             }}
         """)
 
-    def _load_icon(self, name: str, level: int):
+    def _load_icon(self, name: str, level: int, release_date: str | None = None):
+        from wiki_sync.ability_scraper import is_future_release
         path = _icon_path(name, level)
         if path is None:
             return
-        if level >= 50:
+        upcoming = bool(release_date and is_future_release(release_date))
+        if level >= 50 and not upcoming:
             movie = QMovie(path)
             movie.setScaledSize(self._icon_lbl.size())
             self._icon_lbl.setMovie(movie)
             movie.start()
             self._movie = movie
         else:
-            self._icon_lbl.setPixmap(_get_pixmap(path, self.ICON))
+            px = _get_pixmap(path, self.ICON)
+            if upcoming:
+                px = _apply_upcoming_overlay(px, release_date)
+            self._icon_lbl.setPixmap(px)
 
     def enterEvent(self, event):
         self._set_border(True)

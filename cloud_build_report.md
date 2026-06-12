@@ -98,7 +98,7 @@ This exceeds the minimum 3-service requirement (EC2, S3, EventBridge, IAM).
 #### EC2 Instance
 
 - **AMI:** Amazon Linux 2023 (free tier eligible)
-- **Instance type:** t3.micro (1 vCPU, 1 GB RAM) — sufficient for sequential HTTP scraping
+- **Instance type:** t3.micro (2 vCPU, 1 GB RAM) — sufficient for sequential HTTP scraping
 - **Storage:** 8 GB gp3 root volume (default)
 - **IAM Role:** `ProfTrackerScraper` — grants `s3:PutObject` and `s3:DeleteObject` on the target bucket only (least-privilege)
 - **Installed packages:** Python 3.11, `requests`, `beautifulsoup4`, project source (wiki_sync module only — no PyQt6, EasyOCR, or torch required on the server)
@@ -198,7 +198,7 @@ The alternative to AWS is continuing to run scraping client-side. The "cost" is:
 ### 4.1 Step 1 — Create S3 Bucket
 
 1. Log in to AWS Console → S3 → **Create bucket**
-2. Bucket name: `proftracker-wiki-data-[yourname]` (must be globally unique)
+2. Bucket name: `proftracker-wiki-data-claytryon` (must be globally unique)
 3. Region: `us-east-1`
 4. **Uncheck** "Block all public access" → acknowledge the warning
 5. Enable **Versioning**
@@ -217,7 +217,7 @@ The alternative to AWS is continuing to run scraping client-side. The "cost" is:
       "Effect": "Allow",
       "Principal": "*",
       "Action": "s3:GetObject",
-      "Resource": "arn:aws:s3:::proftracker-wiki-data-[yourname]/*"
+      "Resource": "arn:aws:s3:::proftracker-wiki-data-claytryon/*"
     }
   ]
 }
@@ -241,8 +241,8 @@ The alternative to AWS is continuing to run scraping client-side. The "cost" is:
       "Effect": "Allow",
       "Action": ["s3:PutObject", "s3:DeleteObject", "s3:ListBucket"],
       "Resource": [
-        "arn:aws:s3:::proftracker-wiki-data-[yourname]",
-        "arn:aws:s3:::proftracker-wiki-data-[yourname]/*"
+        "arn:aws:s3:::proftracker-wiki-data-claytryon",
+        "arn:aws:s3:::proftracker-wiki-data-claytryon/*"
       ]
     }
   ]
@@ -274,73 +274,76 @@ The alternative to AWS is continuing to run scraping client-side. The "cost" is:
 
 ### 4.4 Step 4 — Configure the EC2 Instance
 
-**Prepare the .pem key file on Windows**
+---
 
-The `.pem` file you downloaded is your private SSH key — it stays on your local machine and is used to authenticate to EC2. Windows OpenSSH will refuse to use it unless only your account can read it.
+#### Part A — Run on your Windows machine (PowerShell)
 
-1. Move `proftracker-key.pem` to a permanent location (e.g. `C:\Users\<you>\.ssh\proftracker-key.pem`)
-2. Fix the permissions in PowerShell (run as your normal user, not Administrator):
-
-```powershell
-$keyPath = "$env:USERPROFILE\.ssh\proftracker-key.pem"
-
-# Remove inherited permissions and restrict to current user only
-icacls $keyPath /inheritance:r /grant:r "${env:USERNAME}:(R)"
-```
-
-*[Screenshot: PowerShell — icacls command output confirming permissions set]*
-
-**Connect to the instance**
-
-Find the public IP or DNS name: AWS Console → EC2 → Instances → select `proftracker-scraper` → **Public IPv4 address**.
+Fix the .pem file permissions so OpenSSH will accept it:
 
 ```powershell
-ssh -i "$env:USERPROFILE\.ssh\proftracker-key.pem" ec2-user@<instance-public-ip>
+icacls "D:\Downloads\proftracker-key.pem" /inheritance:r /grant:r "${env:USERNAME}:(R)"
 ```
 
-Type `yes` when prompted to confirm the host fingerprint. You are now inside the EC2 instance.
+Then connect to the EC2 instance:
 
-*[Screenshot: SSH terminal — successful login showing Amazon Linux banner]*
+```powershell
+ssh -i "D:\Downloads\proftracker-key.pem" ec2-user@54.237.220.145
+```
 
-Install dependencies:
+Type `yes` when prompted. You will see a `[ec2-user@ip-...]` prompt — you are now inside the EC2 instance.
+
+*[Screenshot: PowerShell — successful SSH login showing Amazon Linux banner]*
+
+---
+
+#### Part B — Run inside the EC2 instance (after SSH)
+
+Everything below is typed into the SSH session, not PowerShell.
+
+Update packages and install Python, pip, and git:
 
 ```bash
 sudo dnf update -y
 sudo dnf install -y python3.11 python3.11-pip git
+```
 
-# Clone the repo (or copy just the wiki_sync module)
-git clone https://github.com/ClayTryon/ProficiencyTracker.git
-cd ProficiencyTracker
+Clone the repo and install dependencies:
 
-# Install only the server-side deps (no PyQt6, torch, easyocr)
+```bash
+git clone https://github.com/ClayTryon/MarvelRivalsProficiencyTracker.git
+cd MarvelRivalsProficiencyTracker
 pip3.11 install requests beautifulsoup4 boto3
 ```
 
-Create the server sync script at `/home/ec2-user/run_sync.sh`:
+*[Screenshot: EC2 terminal — pip install output showing boto3 installed]*
+
+Create the daily sync script:
 
 ```bash
+cat > /home/ec2-user/run_sync.sh << 'EOF'
 #!/bin/bash
 set -e
-cd /home/ec2-user/ProficiencyTracker
+cd /home/ec2-user/MarvelRivalsProficiencyTracker
 export AWS_DEFAULT_REGION=us-east-1
-export S3_BUCKET=proftracker-wiki-data-[yourname]
+export S3_BUCKET=proftracker-wiki-data-claytryon
 
 python3.11 src/wiki_sync/server_sync.py
-```
+EOF
 
-```bash
 chmod +x /home/ec2-user/run_sync.sh
 ```
 
-*[Screenshot: SSH terminal session — dependency installation output]*
-
-*[Screenshot: SSH terminal — run_sync.sh contents after creation with cat command]*
+*[Screenshot: EC2 terminal — run_sync.sh created with cat command]*
 
 Test the script runs manually:
 
 ```bash
-./run_sync.sh
+/home/ec2-user/run_sync.sh
 ```
+
+*[Screenshot: EC2 terminal — run_sync.sh output showing files uploaded to S3]*
+
+*[Screenshot: S3 bucket console — icons/ prefix with uploaded files visible]*
 
 *[Screenshot: SSH terminal — successful run_sync.sh output showing files uploaded to S3]*
 
@@ -372,7 +375,7 @@ Test the script runs manually:
 In the user's environment or a release `.env` file, set:
 
 ```
-PROFTRACKER_CDN_BASE=https://proftracker-wiki-data-[yourname].s3.amazonaws.com
+PROFTRACKER_CDN_BASE=https://proftracker-wiki-data-claytryon.s3.amazonaws.com
 ```
 
 On next application launch, ProfTracker will download `heroes.json` and icons from S3 instead of scraping the wiki directly.
@@ -385,7 +388,7 @@ On next application launch, ProfTracker will download `heroes.json` and icons fr
 
 | Test | Method | Expected Result |
 |------|--------|----------------|
-| S3 bucket public read | `curl https://[bucket].s3.amazonaws.com/heroes.json` | Returns valid JSON |
+| S3 bucket public read | `curl https://proftracker-wiki-data-claytryon.s3.amazonaws.com/heroes.json` | Returns valid JSON |
 | S3 bucket write-blocked | Attempt PUT without credentials from browser | HTTP 403 Forbidden |
 | EC2 scraper manual run | SSH → `./run_sync.sh` | Exits 0; S3 object count increases |
 | EventBridge trigger | Console → **Test rule** (or wait 24 hrs) | CloudWatch log shows SSM command executed |
@@ -398,7 +401,7 @@ On next application launch, ProfTracker will download `heroes.json` and icons fr
 
 Command run from local Windows terminal:
 ```
-curl https://proftracker-wiki-data-[yourname].s3.amazonaws.com/heroes.json
+curl https://proftracker-wiki-data-claytryon.s3.amazonaws.com/heroes.json
 ```
 
 *[Screenshot: curl command output — first 10 lines of heroes.json JSON response]*
@@ -461,7 +464,7 @@ Result: **PASS** — Role scoped to single bucket; no excess permissions granted
 
 **Performance note:** The scraper takes ~2.5 minutes to complete, driven by the mandatory 0.5-second inter-request delay (implemented to respect the wiki's rate limits). This is acceptable for a background daily job. Clients, by contrast, now sync in ~8 seconds by downloading pre-built files from S3.
 
-**Cost observation:** During the test period (one week), AWS Cost Explorer showed $0.00 (all within free tier limits). Projected monthly cost after free tier: ~$8.50 for EC2 alone.
+**Cost observation:** During the test period (one week), AWS Cost Explorer showed $0.00 (all within free tier limits). Projected monthly cost after free tier: ~$7.74 for EC2 alone.
 
 ---
 
