@@ -600,6 +600,8 @@ def fetch_release_dates(icon_sets: list[dict], progress_cb=None) -> dict[str, st
                     date_str = _parse_release_date_str(wt)
                     if date_str:
                         dates[hero_name] = date_str
+                    elif re.search(r'\{\{(UpcomingContent|NextCharacter)\}\}', wt, re.IGNORECASE):
+                        dates[hero_name] = "TBA"
             time.sleep(_REQUEST_DELAY)
         except Exception:
             pass  # best-effort; don't fail the sync
