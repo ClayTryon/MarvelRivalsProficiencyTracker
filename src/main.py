@@ -18,6 +18,13 @@ try:
 except Exception:
     pass
 
+if not os.environ.get("GROQ_API_KEY"):
+    try:
+        from api_keys import get_groq_key
+        os.environ["GROQ_API_KEY"] = get_groq_key()
+    except Exception:
+        pass
+
 # Declare per-monitor DPI awareness so win32gui and pyautogui
 # both operate in physical pixels — prevents misaligned clicks on scaled displays.
 try:
