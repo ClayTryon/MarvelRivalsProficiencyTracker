@@ -33,6 +33,11 @@ from wiki_sync.ability_scraper import (
     scrape_teamups,
     sync_abilities,
 )
+from wiki_sync.cosmetics_scraper import (
+    _SKIN_ICONS_DIR,
+    _SKIN_COSTUMES_DIR,
+    scrape_skins,
+)
 
 logging.basicConfig(
     level=logging.INFO,
@@ -81,6 +86,15 @@ def run_server_sync() -> None:
     update_release_dates(release_dates)
     log.info("Release dates updated for %d heroes", len(release_dates))
 
+    log.info("=== Phase 3c: scraping hero skins from rivalskins.com ===")
+    skins_result = scrape_skins(icon_sets, progress_cb=_progress)
+    log.info(
+        "Skins: %d fetched, %d skipped, %d errors",
+        skins_result["fetched"], skins_result["skipped"], len(skins_result["errors"]),
+    )
+    for err in skins_result["errors"]:
+        log.warning("  skin error: %s", err)
+
     # ── Phase 4: upload to S3 ─────────────────────────────────────────────────
     log.info("=== Phase 4: uploading to S3 ===")
 
@@ -115,9 +129,31 @@ def run_server_sync() -> None:
             uploaded_ability_icons += 1
     log.info("Uploaded %d ability icons", uploaded_ability_icons)
 
+    # hero_data/skin_icons/ → hero_data/skin_icons/ prefix
+    uploaded_skin_icons = 0
+    if os.path.isdir(_SKIN_ICONS_DIR):
+        for filename in sorted(os.listdir(_SKIN_ICONS_DIR)):
+            if filename.endswith(".png"):
+                _upload(s3, os.path.join(_SKIN_ICONS_DIR, filename),
+                        f"hero_data/skin_icons/{filename}")
+                uploaded_skin_icons += 1
+    log.info("Uploaded %d skin icons", uploaded_skin_icons)
+
+    # hero_data/skin_costumes/ → hero_data/skin_costumes/ prefix
+    uploaded_skin_costumes = 0
+    if os.path.isdir(_SKIN_COSTUMES_DIR):
+        for filename in sorted(os.listdir(_SKIN_COSTUMES_DIR)):
+            if filename.endswith(".png"):
+                _upload(s3, os.path.join(_SKIN_COSTUMES_DIR, filename),
+                        f"hero_data/skin_costumes/{filename}")
+                uploaded_skin_costumes += 1
+    log.info("Uploaded %d skin costume images", uploaded_skin_costumes)
+
     log.info(
-        "=== Done: %d heroes, %d hero icons, %d data files, %d ability icons ===",
+        "=== Done: %d heroes, %d hero icons, %d data files, %d ability icons,"
+        " %d skin icons, %d skin costumes ===",
         hero_count, uploaded_icons, uploaded_data, uploaded_ability_icons,
+        uploaded_skin_icons, uploaded_skin_costumes,
     )
 
 

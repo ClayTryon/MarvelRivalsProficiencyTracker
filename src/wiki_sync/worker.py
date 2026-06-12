@@ -18,6 +18,7 @@ from wiki_sync.ability_scraper import (
     sync_abilities,
     sync_abilities_from_cdn,
 )
+from wiki_sync.cosmetics_scraper import scrape_skins, sync_skins_from_cdn
 
 _WIKI_BASE = "https://marvelrivals.fandom.com/wiki/"
 
@@ -74,6 +75,13 @@ class SyncWorker(QThread):
         release_dates = fetch_release_dates(icon_sets, progress_cb=self._relay_progress)
         update_release_dates(release_dates)
 
+        self.progress.emit(0, 1, "Fetching hero skins from rivalskins.com...")
+        skins_result = scrape_skins(icon_sets, progress_cb=self._relay_progress)
+        result["skins_fetched"] = skins_result["fetched"]
+        result["skins_skipped"] = skins_result["skipped"]
+        if skins_result["errors"]:
+            result["errors"].extend(skins_result["errors"])
+
         self._rebuild_rag(icon_sets, result)
         self.finished.emit(result)
 
@@ -108,6 +116,13 @@ class SyncWorker(QThread):
             }
             for n, s in zip(roster, slugs)
         ]
+        self.progress.emit(0, 1, "Downloading hero skins from CDN...")
+        skins_result = sync_skins_from_cdn(slugs, progress_cb=self._relay_progress)
+        result["skins_fetched"] = skins_result["fetched"]
+        result["skins_skipped"] = skins_result["skipped"]
+        if skins_result["errors"]:
+            result["errors"].extend(skins_result["errors"])
+
         self.progress.emit(0, 1, "Rebuilding RAG index...")
         self._rebuild_rag(icon_sets_stub, result)
         self.finished.emit(result)
