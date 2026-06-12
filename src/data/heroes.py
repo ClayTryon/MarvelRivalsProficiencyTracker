@@ -129,11 +129,18 @@ def _load() -> tuple[list, dict, dict]:
 
 
 def get_scan_roster() -> list[str]:
-    """Return HERO_ROSTER minus any hero whose release date is in the future."""
-    from wiki_sync.ability_scraper import is_future_release
+    """Return HERO_ROSTER filtered to heroes with synced ability data."""
+    if getattr(sys, 'frozen', False):
+        data_dir = os.path.join(sys._MEIPASS, 'hero_data')
+    else:
+        data_dir = os.path.normpath(
+            os.path.join(os.path.dirname(__file__), '..', '..', 'hero_data')
+        )
     return [
         name for name in HERO_ROSTER
-        if not is_future_release(HERO_RELEASE_DATES.get(name, ""))
+        if os.path.exists(os.path.join(
+            data_dir, name.replace(' ', '_').replace('&', '%26') + '.json'
+        ))
     ]
 
 
