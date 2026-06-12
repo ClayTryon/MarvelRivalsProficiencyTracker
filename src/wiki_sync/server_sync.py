@@ -31,7 +31,7 @@ from wiki_sync.ability_scraper import (
     _ICONS_DIR as _ABILITY_ICONS_DIR,
     fetch_release_dates,
     scrape_teamups,
-    sync_abilities,
+    sync_abilities_official,
 )
 from wiki_sync.cosmetics_scraper import (
     _SKIN_ICONS_DIR,
@@ -75,8 +75,8 @@ def run_server_sync() -> None:
     log.info("heroes.json written — %d heroes", hero_count)
 
     # ── Phase 2: abilities + team-ups ─────────────────────────────────────────
-    log.info("=== Phase 2: scraping hero abilities ===")
-    sync_abilities(icon_sets, progress_cb=_progress)
+    log.info("=== Phase 2: scraping hero abilities from marvelrivals.com ===")
+    sync_abilities_official(icon_sets, progress_cb=_progress)
 
     log.info("=== Phase 3: scraping team-ups ===")
     scrape_teamups(progress_cb=_progress)

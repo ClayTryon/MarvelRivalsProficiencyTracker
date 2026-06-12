@@ -612,6 +612,184 @@ def fetch_release_dates(icon_sets: list[dict], progress_cb=None) -> dict[str, st
     return dates
 
 
+# ---------------------------------------------------------------------------
+# Official site scraper (marvelrivals.com) — replaces wiki ability scraper
+# ---------------------------------------------------------------------------
+
+_OFFICIAL_HEROES_URL = "https://www.marvelrivals.com/heroes/index.html"
+_OFFICIAL_UA = {"User-Agent": "Mozilla/5.0"}
+
+# Internal hero names that differ from the official site's display names.
+_OFFICIAL_NAME_ALIASES: dict[str, str] = {
+    "bruce banner": "HULK",
+}
+
+_OFFICIAL_TYPE_SECTION: dict[int, str] = {
+    1: "Normal Attack",
+    2: "Abilities",
+    3: "Team-Up Abilities",
+}
+
+
+def _fetch_official_index() -> dict[str, str]:
+    """
+    Fetch marvelrivals.com/heroes and return {UPPERCASE_NAME: page_url}
+    for every hero listed.
+    """
+    import html as _html_mod
+    resp = _SESSION.get(_OFFICIAL_HEROES_URL, headers=_OFFICIAL_UA, timeout=30)
+    resp.raise_for_status()
+    page = resp.text
+    pairs: list[tuple[str, str]] = re.findall(
+        r'title="([^"]+)"[^>]*data-url="([^"]+)"', page
+    )
+    if not pairs:
+        rev = re.findall(r'data-url="([^"]+)"[^>]*title="([^"]+)"', page)
+        pairs = [(b, a) for a, b in rev]
+    return {_html_mod.unescape(name).upper().strip(): url for name, url in pairs}
+
+
+def _parse_official_hero_page(html: str) -> list[dict]:
+    """
+    Parse ability rows from an official hero page (the dated HTML behind data-url).
+    Returns ability dicts; each has a temporary '_icon_url' key to strip before saving.
+    """
+    from bs4 import BeautifulSoup
+    soup = BeautifulSoup(html, "html.parser")
+    inner = soup.find(class_="art-inner-content")
+    if not inner:
+        return []
+    table = inner.find("table", class_="table-imgs")
+    if not table:
+        return []
+
+    abilities: list[dict] = []
+    for row in table.find_all("tr"):
+        cols = row.find_all("td", recursive=False)
+        if len(cols) < 5:
+            continue
+        try:
+            row_type = int(cols[0].get_text(strip=True))
+        except ValueError:
+            continue
+        if row_type == 0:
+            continue
+
+        section = _OFFICIAL_TYPE_SECTION.get(row_type, "Abilities")
+        name = cols[1].get_text(strip=True)
+        if not name:
+            continue
+
+        icon_url = ""
+        img = cols[2].find("img")
+        if img:
+            icon_url = img.get("src", "")
+
+        description = cols[3].get_text(strip=True)
+
+        stats: dict[str, str] = {}
+        stats_table = cols[4].find("table")
+        if stats_table:
+            for stat_row in stats_table.find_all("tr"):
+                stat_cols = stat_row.find_all("td")
+                if len(stat_cols) >= 2:
+                    k = stat_cols[0].get_text(strip=True)
+                    v = stat_cols[1].get_text(strip=True)
+                    if k:
+                        stats[k] = v
+
+        key = stats.pop("Key", "")
+        local_icon = ""
+        if icon_url:
+            icon_slug = re.sub(r"[^\w\s-]", "", name).strip()
+            icon_slug = re.sub(r"\s+", "_", icon_slug)
+            local_icon = f"{icon_slug}.png"
+
+        abilities.append({
+            "section": section,
+            "name": name,
+            "key": key,
+            "icon": local_icon,
+            "_icon_url": icon_url,
+            "description": description,
+            "stats": stats,
+        })
+    return abilities
+
+
+def sync_abilities_official(icon_sets: list[dict], progress_cb=None) -> dict:
+    """
+    Fetch and store abilities for all primary heroes from the official marvelrivals.com.
+    Drop-in replacement for sync_abilities().
+    Returns {"fetched": int, "skipped": int, "errors": list[str]}.
+    """
+    if progress_cb:
+        progress_cb(0, 1, "Fetching hero index from marvelrivals.com...")
+    try:
+        index = _fetch_official_index()
+    except Exception as exc:
+        return {"fetched": 0, "skipped": 0, "errors": [f"Official hero index: {exc}"]}
+
+    primary = [s for s in icon_sets if s.get("is_primary") and s.get("wiki_page")]
+    fetched = skipped = 0
+    errors: list[str] = []
+    os.makedirs(_DATA_DIR, exist_ok=True)
+    os.makedirs(_ICONS_DIR, exist_ok=True)
+
+    for i, s in enumerate(primary):
+        slug = s["slug"]
+        hero_name = s["wiki_page"]
+        path = _ability_path(slug)
+
+        if progress_cb:
+            progress_cb(i, len(primary), f"Abilities: {hero_name}")
+
+        if os.path.exists(path):
+            skipped += 1
+            continue
+
+        official_name = _OFFICIAL_NAME_ALIASES.get(hero_name.lower(), hero_name.upper())
+        page_url = index.get(official_name)
+        if not page_url:
+            errors.append(f"Not in official index: {hero_name}")
+            skipped += 1
+            continue
+
+        try:
+            resp = _SESSION.get(page_url, headers=_OFFICIAL_UA, timeout=20)
+            resp.raise_for_status()
+            abilities = _parse_official_hero_page(resp.text)
+            if not abilities:
+                errors.append(f"No abilities parsed: {hero_name}")
+                continue
+
+            for ability in abilities:
+                icon_url = ability.pop("_icon_url", "")
+                local_name = ability.get("icon", "")
+                if icon_url and local_name:
+                    dest = ability_icon_path(local_name)
+                    if not os.path.exists(dest):
+                        try:
+                            ir = _SESSION.get(icon_url, headers=_OFFICIAL_UA,
+                                              timeout=20, stream=True)
+                            ir.raise_for_status()
+                            with open(dest, "wb") as f:
+                                for chunk in ir.iter_content(8192):
+                                    f.write(chunk)
+                        except Exception as exc:
+                            errors.append(f"icon {local_name}: {exc}")
+
+            save_abilities(slug, abilities)
+            fetched += 1
+            time.sleep(_REQUEST_DELAY)
+        except Exception as exc:
+            errors.append(f"{hero_name}: {exc}")
+
+    if progress_cb:
+        progress_cb(len(primary), len(primary), "Abilities sync complete")
+    return {"fetched": fetched, "skipped": skipped, "errors": errors}
+
+
 def sync_abilities_from_cdn(slugs: list[str], progress_cb=None) -> dict:
     """
     Download per-hero ability JSON files, team_ups.json, and ability icons

@@ -15,7 +15,7 @@ from wiki_sync.avatar_sync import (
 from wiki_sync.ability_scraper import (
     fetch_release_dates,
     scrape_teamups,
-    sync_abilities,
+    sync_abilities_official,
     sync_abilities_from_cdn,
 )
 from wiki_sync.cosmetics_scraper import scrape_skins, sync_skins_from_cdn
@@ -60,8 +60,8 @@ class SyncWorker(QThread):
         result["heroes_written"] = hero_count
         result["heroes_added"] = max(0, hero_count - prev_count)
 
-        self.progress.emit(0, 1, "Fetching hero abilities from wiki...")
-        ab_result = sync_abilities(icon_sets, progress_cb=self._relay_progress)
+        self.progress.emit(0, 1, "Fetching hero abilities from marvelrivals.com...")
+        ab_result = sync_abilities_official(icon_sets, progress_cb=self._relay_progress)
         result["abilities_fetched"] = ab_result["fetched"]
         result["abilities_skipped"] = ab_result["skipped"]
         if ab_result["errors"]:
@@ -106,6 +106,11 @@ class SyncWorker(QThread):
         result["abilities_fetched"] = ab_result["fetched"]
         result["abilities_skipped"] = ab_result["skipped"]
         result["errors"].extend(ab_result["errors"])
+
+        self.progress.emit(0, 1, "Fetching team-ups from wiki...")
+        tu_result = scrape_teamups(progress_cb=self._relay_progress)
+        if tu_result["errors"]:
+            result["errors"].extend(tu_result["errors"])
 
         # RAG index is always rebuilt locally (wiki URLs are still used for content)
         icon_sets_stub = [
