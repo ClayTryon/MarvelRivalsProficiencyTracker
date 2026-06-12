@@ -129,8 +129,13 @@ def _load() -> tuple[list, dict]:
 
 
 def is_synced() -> bool:
-    """Return True if heroes.json has been written by wiki sync."""
-    return os.path.exists(_json_path())
+    """Return True if heroes.json exists and contains a valid roster."""
+    try:
+        with open(_json_path(), encoding="utf-8") as f:
+            data = json.load(f)
+        return bool(data.get("roster"))
+    except Exception:
+        return False
 
 
 def _reload():

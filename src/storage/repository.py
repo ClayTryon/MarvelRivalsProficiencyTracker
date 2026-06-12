@@ -88,7 +88,6 @@ class HeroRepository:
         return self._row_to_hero(row) if row else None
 
     def _row_to_hero(self, row) -> Hero:
-        keys = row.keys()
         return Hero(
             id=row["id"],
             name=row["name"],
@@ -99,9 +98,9 @@ class HeroRepository:
             is_max_level=bool(row["is_max_level"]),
             capture_run_id=row["capture_run_id"],
             updated_at=row["updated_at"],
-            ch1_progress=float(row["ch1_progress"]) if "ch1_progress" in keys else 0.0,
-            ch2_progress=float(row["ch2_progress"]) if "ch2_progress" in keys else 0.0,
-            ch3_progress=float(row["ch3_progress"]) if "ch3_progress" in keys else 0.0,
+            ch1_progress=float(row["ch1_progress"]),
+            ch2_progress=float(row["ch2_progress"]),
+            ch3_progress=float(row["ch3_progress"]),
         )
 
 
@@ -181,6 +180,30 @@ class SnapshotRepository:
             total_xp = total_xp_earned(row["level"], row["xp"])
             result.setdefault(row["hero_name"], []).append((dt, total_xp, row["level"]))
         return result
+
+    def get_xp_history_for_hero(self, hero_name: str, days: int | None) -> list[tuple[datetime, int, int]]:
+        """XP history for a single hero — avoids loading all heroes' snapshots."""
+        from data.xp_table import total_xp_earned
+        if days is not None:
+            cutoff = (datetime.now(timezone.utc) - timedelta(days=days)).isoformat()
+            rows = self.db.conn.execute(
+                """SELECT recorded_at, level, xp FROM hero_snapshot
+                   WHERE hero_name = ? AND recorded_at >= ?
+                   ORDER BY recorded_at""",
+                (hero_name, cutoff),
+            ).fetchall()
+        else:
+            rows = self.db.conn.execute(
+                """SELECT recorded_at, level, xp FROM hero_snapshot
+                   WHERE hero_name = ? ORDER BY recorded_at""",
+                (hero_name,),
+            ).fetchall()
+        return [
+            (datetime.fromisoformat(row["recorded_at"]).replace(tzinfo=None),
+             total_xp_earned(row["level"], row["xp"]),
+             row["level"])
+            for row in rows
+        ]
 
 
 class TrackerRepository:
@@ -364,9 +387,10 @@ def seed_default_heroes(db: Database) -> int:
     run_id = cursor.lastrowid
 
     repo = HeroRepository(db)
+    existing = {h.name for h in repo.get_all()}
     count = 0
     for name in HERO_ROSTER:
-        if repo.get_by_name(name) is None:
+        if name not in existing:
             hero = Hero(
                 name=name,
                 role=HERO_ROLES.get(name, "Unknown"),

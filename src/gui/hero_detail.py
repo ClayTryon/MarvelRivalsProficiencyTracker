@@ -24,6 +24,8 @@ else:
         os.path.join(os.path.dirname(__file__), "..", "..", "hero_data")
     )
 
+_ICON_PIXMAP_CACHE: dict[str, "QPixmap"] = {}
+
 _CARD_BG = "#0d1628"
 _DIM     = "#484860"
 _GOLD    = "#f4d641"
@@ -497,11 +499,13 @@ class HeroDetailPanel(QWidget):
             movie.start()
             self._movie = movie
         else:
-            pixmap = QPixmap(path).scaled(
-                self._ICON_SIZE, self._ICON_SIZE,
-                Qt.AspectRatioMode.KeepAspectRatio,
-                Qt.TransformationMode.SmoothTransformation,
-            )
-            self._icon_label.setPixmap(pixmap)
+            key = f"{path}:{self._ICON_SIZE}"
+            if key not in _ICON_PIXMAP_CACHE:
+                _ICON_PIXMAP_CACHE[key] = QPixmap(path).scaled(
+                    self._ICON_SIZE, self._ICON_SIZE,
+                    Qt.AspectRatioMode.KeepAspectRatio,
+                    Qt.TransformationMode.SmoothTransformation,
+                )
+            self._icon_label.setPixmap(_ICON_PIXMAP_CACHE[key])
 
         self._icon_label.show()

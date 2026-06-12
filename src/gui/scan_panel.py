@@ -45,6 +45,18 @@ class ScanPanel(QWidget):
         self._status_label.setStyleSheet("color: #484860; font-size: 12px;")
         layout.addWidget(self._status_label)
 
+        checklist = QLabel(
+            "Before scanning:  Marvel Rivals must be open on the "
+            "Heroes grid, scrolled to the top  ·  "
+            "Display Mode: Windowed  ·  Resolution: 1920 × 1080"
+        )
+        checklist.setWordWrap(True)
+        checklist.setStyleSheet(
+            "color: #b0903a; background: #1a1400; border: 1px solid #3a2e00;"
+            " border-radius: 4px; padding: 6px 10px; font-size: 11px;"
+        )
+        layout.addWidget(checklist)
+
         btn_row = QHBoxLayout()
         self._select_btn = QPushButton("Select Window")
         self._auto_scan_btn = QPushButton("Auto Scan")

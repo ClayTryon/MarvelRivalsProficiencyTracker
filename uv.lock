@@ -2660,7 +2660,7 @@ wheels = [
 
 [[package]]
 name = "proftracker"
-version = "1.2.2"
+version = "1.2.3"
 source = { virtual = "." }
 dependencies = [
     { name = "beautifulsoup4" },

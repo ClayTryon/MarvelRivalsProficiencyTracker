@@ -27,6 +27,8 @@ _ICONS_DIR = os.path.join(_DATA_DIR, "ability_icons")
 _SESSION = requests.Session()
 _SESSION.headers["User-Agent"] = "ProfTracker/4.0 (educational project)"
 
+_REQUEST_DELAY = float(os.environ.get("PROFTRACKER_REQUEST_DELAY", "0.5"))
+
 
 # ---------------------------------------------------------------------------
 # Fetch
@@ -99,7 +101,7 @@ def fetch_hero_abilities(wiki_page: str) -> list[dict]:
         all_abilities.extend(form_abilities)
         if form_label not in seen_forms:
             seen_forms.add(form_label)
-        time.sleep(0.15)
+        time.sleep(_REQUEST_DELAY)
 
     return all_abilities
 
@@ -442,7 +444,7 @@ def _resolve_and_download_icons(icon_pairs: list[tuple[str, str]]) -> list[str]:
                 title = page["title"].removeprefix("File:")
                 cdn_map[title] = ii[0]["url"]
         if i + chunk_size < len(wiki_names):
-            time.sleep(0.2)
+            time.sleep(_REQUEST_DELAY)
 
     for wiki_name, local_name in missing:
         url = cdn_map.get(wiki_name)
@@ -508,7 +510,7 @@ def sync_abilities(icon_sets: list[dict], progress_cb=None) -> dict:
                         all_icon_pairs.append((wiki_name, local_name))
             save_abilities(slug, abilities)
             fetched += 1
-            time.sleep(0.2)
+            time.sleep(_REQUEST_DELAY)
         except Exception as exc:
             errors.append(f"{wiki_page}: {exc}")
 
@@ -520,5 +522,83 @@ def sync_abilities(icon_sets: list[dict], progress_cb=None) -> dict:
 
     if progress_cb:
         progress_cb(len(primary), len(primary), "Abilities sync complete")
+
+    return {"fetched": fetched, "skipped": skipped, "errors": errors}
+
+
+def sync_abilities_from_cdn(slugs: list[str], progress_cb=None) -> dict:
+    """
+    Download per-hero ability JSON files, team_ups.json, and ability icons
+    from PROFTRACKER_CDN_BASE instead of scraping the wiki.
+
+    Returns {"fetched": int, "skipped": int, "errors": list[str]}.
+    """
+    cdn_base = os.environ.get("PROFTRACKER_CDN_BASE", "").rstrip("/")
+    if not cdn_base:
+        raise RuntimeError("PROFTRACKER_CDN_BASE is not set")
+
+    os.makedirs(_DATA_DIR, exist_ok=True)
+    os.makedirs(_ICONS_DIR, exist_ok=True)
+    fetched = skipped = 0
+    errors: list[str] = []
+
+    total = len(slugs) + 1  # +1 for team_ups.json
+
+    # Download team_ups.json
+    if progress_cb:
+        progress_cb(0, total, "Downloading team_ups.json from CDN...")
+    try:
+        r = _SESSION.get(f"{cdn_base}/hero_data/team_ups.json", timeout=15)
+        r.raise_for_status()
+        with open(_TEAMUPS_PATH, "w", encoding="utf-8") as f:
+            f.write(r.text)
+    except Exception as exc:
+        errors.append(f"team_ups.json: {exc}")
+
+    # Download per-hero ability JSONs + their ability icons
+    for i, slug in enumerate(slugs):
+        if progress_cb:
+            progress_cb(i + 1, total, f"Abilities: {slug.replace('_', ' ')}...")
+        path = _ability_path(slug)
+        if os.path.exists(path):
+            skipped += 1
+            continue
+        try:
+            r = _SESSION.get(f"{cdn_base}/hero_data/{slug}.json", timeout=15)
+            if r.status_code == 404:
+                skipped += 1
+                continue
+            r.raise_for_status()
+            abilities: list[dict] = r.json()
+            with open(path, "w", encoding="utf-8") as f:
+                json.dump(abilities, f, indent=2, ensure_ascii=False)
+            fetched += 1
+
+            for ability in abilities:
+                icon_name = ability.get("icon", "")
+                if not icon_name:
+                    continue
+                icon_dest = ability_icon_path(icon_name)
+                if os.path.exists(icon_dest):
+                    continue
+                try:
+                    ir = _SESSION.get(
+                        f"{cdn_base}/hero_data/ability_icons/{icon_name}",
+                        timeout=30, stream=True,
+                    )
+                    if ir.status_code == 404:
+                        continue
+                    ir.raise_for_status()
+                    with open(icon_dest, "wb") as f:
+                        for chunk in ir.iter_content(8192):
+                            f.write(chunk)
+                except Exception as exc:
+                    errors.append(f"icon {icon_name}: {exc}")
+
+        except Exception as exc:
+            errors.append(f"{slug}: {exc}")
+
+    if progress_cb:
+        progress_cb(total, total, "Abilities CDN sync complete")
 
     return {"fetched": fetched, "skipped": skipped, "errors": errors}

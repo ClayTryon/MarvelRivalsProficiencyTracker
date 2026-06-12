@@ -4,6 +4,19 @@ from PyQt6.QtGui import QMovie, QPixmap, QCursor
 from models.hero import Hero
 from gui.hero_detail import _icon_path
 
+_PIXMAP_CACHE: dict[str, QPixmap] = {}
+
+
+def _get_pixmap(path: str, size: int) -> QPixmap:
+    key = f"{path}:{size}"
+    if key not in _PIXMAP_CACHE:
+        _PIXMAP_CACHE[key] = QPixmap(path).scaled(
+            size, size,
+            Qt.AspectRatioMode.KeepAspectRatio,
+            Qt.TransformationMode.SmoothTransformation,
+        )
+    return _PIXMAP_CACHE[key]
+
 
 class HeroCard(QFrame):
     clicked                  = pyqtSignal(object)
@@ -89,12 +102,7 @@ class HeroCard(QFrame):
             movie.start()
             self._movie = movie
         else:
-            px = QPixmap(path).scaled(
-                self.ICON, self.ICON,
-                Qt.AspectRatioMode.KeepAspectRatio,
-                Qt.TransformationMode.SmoothTransformation,
-            )
-            self._icon_lbl.setPixmap(px)
+            self._icon_lbl.setPixmap(_get_pixmap(path, self.ICON))
 
     def enterEvent(self, event):
         self._set_border(True)

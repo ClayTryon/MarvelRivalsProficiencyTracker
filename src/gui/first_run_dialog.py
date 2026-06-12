@@ -105,5 +105,6 @@ class FirstRunDialog(QDialog):
 
     def _skip(self):
         self._save_ign()
-        self._worker.terminate()
+        self._worker.stop()
+        self._worker.wait(3000)
         self.reject()

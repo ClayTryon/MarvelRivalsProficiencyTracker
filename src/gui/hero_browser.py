@@ -249,7 +249,7 @@ class HeroBrowser(QWidget):
         self._role_combo = QComboBox()
         self._role_combo.addItems(_ROLE_FILTERS.keys())
         self._role_combo.setFixedWidth(110)
-        self._role_combo.currentIndexChanged.connect(self._apply_sort)
+        self._role_combo.currentIndexChanged.connect(self._on_filter_changed)
         toolbar.addWidget(self._role_combo)
 
         sort_lbl = QLabel("SORT")
@@ -258,7 +258,7 @@ class HeroBrowser(QWidget):
         self._sort_combo = QComboBox()
         self._sort_combo.addItems(_SORT_OPTIONS.keys())
         self._sort_combo.setFixedWidth(160)
-        self._sort_combo.currentIndexChanged.connect(self._apply_sort)
+        self._sort_combo.currentIndexChanged.connect(self._on_filter_changed)
         toolbar.addWidget(self._sort_combo)
 
         self._dir_btn = QPushButton("↑")
@@ -347,6 +347,8 @@ class HeroBrowser(QWidget):
             f"{count_str} heroes  ·  {lord} Lord  ·  {champ} Champion"
         )
 
+    def _on_filter_changed(self):
+        self._apply_sort()
         self._settings.setValue("sort_key", self._sort_combo.currentText())
         self._settings.setValue("role_filter", self._role_combo.currentText())
         self._settings.setValue("descending", self._descending)
@@ -355,6 +357,7 @@ class HeroBrowser(QWidget):
         self._descending = self._dir_btn.isChecked()
         self._dir_btn.setText("↓" if self._descending else "↑")
         self._apply_sort()
+        self._settings.setValue("descending", self._descending)
 
     def _open_show_all(self):
         tier = self._tier_combo.currentText()

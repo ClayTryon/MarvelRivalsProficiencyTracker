@@ -162,16 +162,16 @@ def run_scan(hwnd: int, db: Database, on_log, on_hero, check_cancelled) -> int:
 
                 navigator.click_at(hwnd, cx, cy, delay=0.1)
                 navigator.press_space()
-                time.sleep(0.5)
-                navigator.click_at(hwnd, _PROFICIENCY_TAB_X, _PROFICIENCY_TAB_Y, delay=0.1)
-                navigator.click_at(hwnd, _MISSIONS_TAB_X, _MISSIONS_TAB_Y, delay=0.1)
+                time.sleep(0.8)
+                navigator.click_at(hwnd, _PROFICIENCY_TAB_X, _PROFICIENCY_TAB_Y, delay=0.15)
+                navigator.click_at(hwnd, _MISSIONS_TAB_X, _MISSIONS_TAB_Y, delay=0.15)
 
                 prof_image = None
                 for attempt in range(3):
                     if attempt > 0:
-                        time.sleep(0.4)
-                        navigator.click_at(hwnd, _PROFICIENCY_TAB_X, _PROFICIENCY_TAB_Y, delay=0.1)
-                        navigator.click_at(hwnd, _MISSIONS_TAB_X, _MISSIONS_TAB_Y, delay=0.1)
+                        time.sleep(0.5 * attempt)  # 0.5s, then 1.0s
+                        navigator.click_at(hwnd, _PROFICIENCY_TAB_X, _PROFICIENCY_TAB_Y, delay=0.15)
+                        navigator.click_at(hwnd, _MISSIONS_TAB_X, _MISSIONS_TAB_Y, delay=0.15)
                     clipboard_capture.focus_window(hwnd)
                     candidate = navigator.capture_active_window(hwnd)
                     try:

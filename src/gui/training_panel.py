@@ -4,11 +4,11 @@ from PyQt6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QComboBox,
 )
 from PyQt6.QtCore import Qt, QTimer
-from PyQt6.QtGui import QPixmap
 
 from models.hero import Hero
 from data.xp_table import TOTAL_XP_FOR_LORD, total_xp_earned
 from gui.hero_detail import _icon_path
+from gui.hero_card import _get_pixmap
 
 _LORD_LEVEL   = 20
 _ICON_SIZE    = 160
@@ -34,10 +34,10 @@ class TrainingPanel(QWidget):
         self._filtered:   list[Hero] = []
         self._spin_tick   = 0
         self._spin_target: Hero | None = None
-        self._pixmaps:    dict[str, QPixmap] = {}
 
         self._spin_timer = QTimer(self)
         self._spin_timer.timeout.connect(self._on_spin_tick)
+        self._hero_paths: dict[str, str | None] = {}
 
         self._build_ui()
 
@@ -161,22 +161,10 @@ class TrainingPanel(QWidget):
 
     def load_heroes(self, heroes: list[Hero]):
         self._all_heroes = heroes
-        self._cache_pixmaps(heroes)
+        self._hero_paths = {h.name: _icon_path(h.name, h.level) for h in heroes}
         self._on_role_changed(self._role_combo.currentText())
 
     # ── Internals ────────────────────────────────────────────────────────────
-
-    def _cache_pixmaps(self, heroes: list[Hero]):
-        self._pixmaps.clear()
-        for h in heroes:
-            path = _icon_path(h.name, h.level)
-            if path:
-                px = QPixmap(path).scaled(
-                    _ICON_SIZE, _ICON_SIZE,
-                    Qt.AspectRatioMode.KeepAspectRatio,
-                    Qt.TransformationMode.SmoothTransformation,
-                )
-                self._pixmaps[h.name] = px
 
     def _on_role_changed(self, role: str):
         self._filtered = [
@@ -225,9 +213,9 @@ class TrainingPanel(QWidget):
             self._show_result(self._spin_target)
 
     def _set_icon(self, hero_name: str):
-        px = self._pixmaps.get(hero_name)
-        if px:
-            self._icon_lbl.setPixmap(px)
+        path = self._hero_paths.get(hero_name)
+        if path:
+            self._icon_lbl.setPixmap(_get_pixmap(path, _ICON_SIZE))
         else:
             self._icon_lbl.clear()
 

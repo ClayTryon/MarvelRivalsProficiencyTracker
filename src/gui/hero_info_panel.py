@@ -104,6 +104,15 @@ class HeroInfoPanel(QWidget):
         self._refresh_status()
         self._load_history()
 
+        try:
+            from rag.ingest import rag_enabled
+            if not rag_enabled():
+                self._status_label.setText("RAG disabled (PROFTRACKER_DISABLE_RAG is set).")
+                self._ask_btn.setEnabled(False)
+                self._query_input.setEnabled(False)
+        except Exception:
+            pass
+
     # ── style helpers ─────────────────────────────────────────────────────────
 
     @staticmethod
@@ -217,6 +226,9 @@ class HeroInfoPanel(QWidget):
     def _send_query(self):
         query = self._query_input.text().strip()
         if not query:
+            return
+        if len(query) > 500:
+            self._append("ERROR", "Query too long (500 character limit).", color=_ERR)
             return
         self._query_input.clear()
         self._set_busy(True)

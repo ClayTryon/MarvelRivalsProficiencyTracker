@@ -10,12 +10,16 @@ where slug = hero_name.replace(" ", "_").replace("&", "%26"), derived from the
 Lord icon filename (most consistent naming in the wikitext).
 """
 
+import json
+import logging
 import os
 import re
 import sys
 import time
 
 import requests
+
+log = logging.getLogger(__name__)
 
 WIKI_API = "https://marvelrivals.fandom.com/api.php"
 
@@ -28,6 +32,10 @@ else:
 
 _SESSION = requests.Session()
 _SESSION.headers["User-Agent"] = "ProfTracker/4.0 (educational project)"
+
+_REQUEST_DELAY = float(os.environ.get("PROFTRACKER_REQUEST_DELAY", "0.5"))
+
+CDN_BASE = os.environ.get("PROFTRACKER_CDN_BASE", "").rstrip("/")
 
 
 def parse_avatars_page() -> list[dict]:
@@ -113,6 +121,11 @@ def _heroes_json_path() -> str:
     )
 
 
+def heroes_json_path() -> str:
+    """Public accessor for the heroes.json path used by server_sync and worker."""
+    return _heroes_json_path()
+
+
 def write_heroes_py(icon_sets: list[dict]) -> int:
     """Write hero roster to heroes.json next to the exe (or project root in dev)."""
     import json
@@ -150,7 +163,7 @@ def resolve_cdn_urls(wiki_filenames: list[str]) -> dict[str, str]:
                 result[title] = ii[0]["url"]
 
         if i + chunk_size < len(wiki_filenames):
-            time.sleep(0.3)
+            time.sleep(_REQUEST_DELAY)
 
     return result
 
@@ -208,12 +221,16 @@ def sync_icons(
 
             try:
                 r = _SESSION.get(cdn_url, timeout=30, stream=True)
+                if r.status_code == 429:
+                    log.warning("HTTP 429 rate-limited fetching %s — skipping", local_name)
+                    errors.append(f"{local_name}: HTTP 429 rate limited")
+                    continue
                 r.raise_for_status()
                 with open(local_path, "wb") as f:
                     for chunk in r.iter_content(8192):
                         f.write(chunk)
                 downloaded += 1
-                time.sleep(0.05)
+                time.sleep(_REQUEST_DELAY)
             except Exception as exc:
                 errors.append(f"{local_name}: {exc}")
 
@@ -222,3 +239,72 @@ def sync_icons(
             progress_cb(i + 1, len(icon_sets), hero_display)
 
     return {"downloaded": downloaded, "skipped": skipped, "errors": errors}
+
+
+def sync_from_cdn(progress_cb=None) -> dict:
+    """
+    Download heroes.json and icon files from PROFTRACKER_CDN_BASE instead of
+    scraping the Fandom wiki. Called by SyncWorker when the env var is set.
+
+    Returns {"downloaded": int, "skipped": int, "errors": list[str],
+             "heroes_written": int}.
+    """
+    if not CDN_BASE:
+        raise RuntimeError("PROFTRACKER_CDN_BASE is not set")
+
+    os.makedirs(ICONS_DIR, exist_ok=True)
+    errors: list[str] = []
+    downloaded = skipped = 0
+
+    # 1. Fetch heroes.json
+    if progress_cb:
+        progress_cb(0, 1, "Downloading heroes.json from CDN...")
+    try:
+        r = _SESSION.get(f"{CDN_BASE}/heroes.json", timeout=15)
+        r.raise_for_status()
+        heroes_data = r.json()
+        with open(_heroes_json_path(), "w", encoding="utf-8") as f:
+            json.dump(heroes_data, f, indent=2, ensure_ascii=False)
+    except Exception as exc:
+        raise RuntimeError(f"Failed to download heroes.json from CDN: {exc}") from exc
+
+    # 2. Build icon filename list from roster
+    roster: list[str] = heroes_data.get("roster", [])
+    slugs = [n.replace(" ", "_").replace("&", "%26") for n in roster]
+    icon_files: list[str] = []
+    for slug in slugs:
+        icon_files.append(f"Hero_Icon_{slug}.png")
+        icon_files.append(f"Lord_Icon_{slug}.png")
+        icon_files.append(f"Champion_Icon_{slug}_Animated.gif")
+
+    # 3. Download icons
+    total = len(icon_files)
+    for i, filename in enumerate(icon_files):
+        local_path = os.path.join(ICONS_DIR, filename)
+        if os.path.exists(local_path):
+            skipped += 1
+            continue
+        if progress_cb:
+            progress_cb(i, total, f"Downloading {filename}...")
+        try:
+            r = _SESSION.get(f"{CDN_BASE}/icons/{filename}", timeout=30, stream=True)
+            if r.status_code == 404:
+                skipped += 1
+                continue
+            r.raise_for_status()
+            with open(local_path, "wb") as f:
+                for chunk in r.iter_content(8192):
+                    f.write(chunk)
+            downloaded += 1
+        except Exception as exc:
+            errors.append(f"{filename}: {exc}")
+
+    if progress_cb:
+        progress_cb(total, total, f"CDN icon sync complete: {downloaded} downloaded")
+
+    return {
+        "downloaded": downloaded,
+        "skipped": skipped,
+        "errors": errors,
+        "heroes_written": len(roster),
+    }

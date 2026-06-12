@@ -25,6 +25,11 @@ _index = None  # cached VectorStoreIndex
 _stats_collector: list[dict] = []  # populated by _extract_infobox during add_urls
 
 
+def rag_enabled() -> bool:
+    """Return False when PROFTRACKER_DISABLE_RAG is set (any non-empty value)."""
+    return not os.environ.get("PROFTRACKER_DISABLE_RAG")
+
+
 def _setup_settings() -> None:
     from llama_index.core import Settings
     from llama_index.llms.groq import Groq

@@ -92,7 +92,7 @@ def capture_active_window(hwnd: int):
     ic = _get_ic()
     with ic.hold_key('alt'):
         ic.press('printscreen')
-    time.sleep(0.3)
+    time.sleep(0.5)
     image = ImageGrab.grabclipboard()
     if image is None:
         raise CaptureError("Alt+PrtScn clipboard capture returned no image")

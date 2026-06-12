@@ -10,7 +10,13 @@ Automatically scans and tracks hero proficiency levels across sessions, with XP 
 - **Marvel Rivals** installed and running
 - **Interception driver** — required for Auto Scan only
   - Download: https://github.com/oblitum/Interception
-  - Run the installer as Administrator, then reboot
+  - Extract the zip to your **C: drive** (e.g. `C:\Interception`) — the installer will not work from other drives
+  - Open an **Administrator Command Prompt** and run:
+    ```
+    cd "C:\Interception\command line installer"
+    install-interception.exe /install
+    ```
+  - Reboot your PC after installation
 
 OCR is built into the app — no separate install needed.
 
@@ -82,4 +88,101 @@ ProfTracker does not connect to the internet (except for update checks and Hero 
 
 ```
 %APPDATA%\ProficiencyTracker\proficiency_tracker.db
+```
+
+---
+
+## Known Limitations
+
+- **Windows only.** The Interception kernel driver and `ctypes` DPI/focus APIs are Windows-specific. Auto Scan will not run on macOS or Linux.
+- **1920×1080 required for Auto Scan.** OCR reads from fixed fractional pixel regions calibrated to 1080p. Other resolutions produce incorrect crops.
+- **Interception driver required for Auto Scan.** Clipboard Scan works without it for single-hero updates.
+- **RAG requires a GROQ_API_KEY.** Without it the Hero Wiki tab loads but returns an error on every query. The rest of the app is unaffected.
+- **Hero roster is locked to heroes.json.** If a new hero is released before a wiki sync, the scanner will not recognize them. Run a sync after each game patch.
+- **Tracker stats require a rivalsmeta.com UID.** Proficiency mission estimation is unavailable without it.
+- **OCR accuracy degrades on non-standard fonts or UI mods.** ProfTracker is calibrated against the default Marvel Rivals UI theme.
+
+---
+
+## Architecture Overview
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  ProfTracker Desktop (PyQt6)                                │
+│                                                             │
+│  ┌──────────┐ ┌─────────┐ ┌──────────┐ ┌───────────────┐  │
+│  │ ScanPanel│ │HeroBrows│ │ HeroWiki │ │  SyncPanel    │  │
+│  │          │ │   er    │ │ (RAG)    │ │               │  │
+│  └────┬─────┘ └────┬────┘ └────┬─────┘ └──────┬────────┘  │
+│       │             │           │               │           │
+│  ┌────▼─────────────▼──┐  ┌────▼─────┐  ┌──────▼────────┐  │
+│  │  OCR Pipeline       │  │ RAG      │  │ Wiki Sync     │  │
+│  │  EasyOCR + Intercept│  │ LlamaIdx │  │ Fandom API    │  │
+│  │  ion driver         │  │ + Groq   │  │ + avatar/abil │  │
+│  └────────────┬────────┘  └────┬─────┘  └──────┬────────┘  │
+│               │                │                │           │
+│  ┌────────────▼────────────────▼────────────────▼────────┐  │
+│  │  SQLite  (WAL mode)  +  heroes.json  +  rag_index/    │  │
+│  │  %APPDATA%\ProficiencyTracker\                        │  │
+│  └────────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**Data flow — OCR scan:** Game window (Interception driver) → screenshots → EasyOCR → level/XP → SQLite hero + hero_snapshot tables.
+
+**Data flow — RAG query:** User question → LlamaIndex VectorStoreIndex (BAAI/bge-small-en-v1.5 embeddings) → top-k chunks → Groq llama-3.3-70b → answer.
+
+**Data flow — wiki sync:** Fandom MediaWiki API → hero roster + icon URLs + ability wikitext → heroes.json + icons/ + abilities.json on disk → SQLite seeded.
+
+---
+
+## Developer Setup
+
+**Prerequisites:** [uv](https://github.com/astral-sh/uv) (Python package manager), Python 3.11+, Windows 10/11.
+
+```powershell
+# Install dependencies (including dev extras)
+uv sync --extra dev
+
+# Run the app from source
+uv run python src/main.py
+
+# Run unit tests
+uv run pytest tests/unit/ -v
+
+# Run a specific test file
+uv run pytest tests/unit/test_ocr_parser.py -v
+```
+
+**Environment variables** (create a `.env` file in the project root):
+
+```
+GROQ_API_KEY=your_groq_api_key_here
+# Optional: fetch hero data from S3 instead of scraping the wiki
+# PROFTRACKER_CDN_BASE=https://your-bucket.s3.amazonaws.com
+```
+
+**Build a standalone executable:**
+
+```powershell
+uv run pyinstaller ProfTracker.spec
+# Output: dist/ProfTracker/ProfTracker.exe
+```
+
+**Project structure:**
+
+```
+src/
+  main.py              — entry point; DPI setup, DB init, first-run dialog
+  capture/             — OCR pipeline (EasyOCR, Interception driver)
+  gui/                 — PyQt6 panels; QThread workers in rag/ and wiki_sync/
+  rag/                 — LlamaIndex RAG: ingest, query engine, QueryWorker
+  wiki_sync/           — Fandom scraper: avatars, abilities, SyncWorker
+  storage/             — SQLite database.py + repository.py
+  data/                — heroes.py roster, xp_table.py, proficiency_missions.py
+  tracker/             — rivalsmeta.com API client + TrackerWorker
+  models/              — Hero dataclass, CaptureRun dataclass
+tests/
+  unit/                — pytest unit tests (mocked OCR, storage, scraper)
+SubmissionArtifacts/   — Sprint 4 deliverables (SPEC, architecture, risk register)
 ```

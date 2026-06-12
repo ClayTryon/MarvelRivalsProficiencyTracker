@@ -110,6 +110,7 @@ class SyncPanel(QWidget):
         af = result.get("abilities_fetched", 0)
         ask = result.get("abilities_skipped", 0)
         rag = result.get("rag_chunks", 0)
+        added = result.get("heroes_added", 0)
         summary = (
             f"Done — {d} icons downloaded, {s} skipped | "
             f"{h} heroes in roster | "
@@ -120,6 +121,12 @@ class SyncPanel(QWidget):
             summary += f", {len(e)} error(s)"
             for err in e:
                 self._log.appendPlainText(f"  ERROR: {err}")
+
+        if added > 0:
+            self._log.appendPlainText(
+                f"\n⚡ {added} new hero(es) added to the roster since last sync. "
+                "Run a scan to capture their proficiency data."
+            )
 
         self._status.setText(summary)
         self._log.appendPlainText(f"\n{summary}")

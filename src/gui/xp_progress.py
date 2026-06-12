@@ -169,8 +169,7 @@ class HeroXpChart(QWidget):
             return _no_data("No data available.")
 
         days = _TIME_OPTIONS[self._range_combo.currentText()]
-        history = SnapshotRepository(self._db).get_xp_history(days)
-        points = history.get(self._hero_name, [])
+        points = SnapshotRepository(self._db).get_xp_history_for_hero(self._hero_name, days)
 
         if not points:
             return _no_data("No scan history yet.\nRun a scan to start tracking XP.")

@@ -1,6 +1,8 @@
 import sys
 import os
 import ctypes
+import logging
+from logging.handlers import RotatingFileHandler
 
 
 # Ensure src/ is on the path when running directly
@@ -30,9 +32,17 @@ _ICON_PATH = os.path.normpath(
 )
 
 
+def _setup_logging(app_data: str):
+    log_path = os.path.join(app_data, "proftracker.log")
+    handler = RotatingFileHandler(log_path, maxBytes=1_000_000, backupCount=3, encoding="utf-8")
+    handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)s %(name)s: %(message)s"))
+    logging.basicConfig(level=logging.INFO, handlers=[handler])
+
+
 def main():
     app_data = os.path.join(os.environ.get("APPDATA", os.path.expanduser("~")), "ProficiencyTracker")
     os.makedirs(app_data, exist_ok=True)
+    _setup_logging(app_data)
     db = Database(os.path.join(app_data, "proficiency_tracker.db"))
     db.connect()
     db.init_schema()
