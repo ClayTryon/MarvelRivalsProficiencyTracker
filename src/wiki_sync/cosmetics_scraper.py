@@ -41,6 +41,7 @@ _QUALITY_LABELS = {
 # Heroes where the internal name differs from the rivalskins.com slug.
 _SLUG_ALIASES: dict[str, str] = {
     "Bruce Banner": "hulk",
+    "Elsa Bloodstone": "elsa_bloodstone",
 }
 
 
