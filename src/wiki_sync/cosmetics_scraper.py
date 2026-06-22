@@ -212,7 +212,8 @@ def _download_skin_images(costumes: list[dict]) -> list[str]:
 
 
 def _skin_path(slug: str) -> str:
-    return os.path.join(_DATA_DIR, f"{slug}_skins.json")
+    safe = slug.replace("%26", "and")
+    return os.path.join(_DATA_DIR, f"{safe}_skins.json")
 
 
 def save_skins(slug: str, skins: list[dict]) -> None:
@@ -222,7 +223,7 @@ def save_skins(slug: str, skins: list[dict]) -> None:
 
 
 def load_skins(hero_name: str) -> list[dict]:
-    slug = hero_name.replace(" ", "_").replace("&", "%26")
+    slug = hero_name.replace(" ", "_").replace("&", "and")
     path = _skin_path(slug)
     if not os.path.exists(path):
         return []
@@ -254,9 +255,10 @@ def sync_skins_from_cdn(slugs: list[str], progress_cb=None) -> dict:
             progress_cb(i, len(slugs), f"Skins: {slug.replace('_', ' ')}")
 
         path = _skin_path(slug)
+        cdn_filename = os.path.basename(path)
 
         try:
-            r = _SESSION.get(f"{cdn_base}/hero_data/{slug}_skins.json", timeout=15)
+            r = _SESSION.get(f"{cdn_base}/hero_data/{cdn_filename}", timeout=15)
             if r.status_code == 404:
                 skipped += 1
                 continue
