@@ -797,9 +797,8 @@ def sync_abilities_from_cdn(slugs: list[str], progress_cb=None) -> dict:
 
     Returns {"fetched": int, "skipped": int, "errors": list[str]}.
     """
-    cdn_base = os.environ.get("PROFTRACKER_CDN_BASE", "").rstrip("/")
-    if not cdn_base:
-        raise RuntimeError("PROFTRACKER_CDN_BASE is not set")
+    from wiki_sync.avatar_sync import CDN_BASE
+    cdn_base = CDN_BASE
 
     os.makedirs(_DATA_DIR, exist_ok=True)
     os.makedirs(_ICONS_DIR, exist_ok=True)

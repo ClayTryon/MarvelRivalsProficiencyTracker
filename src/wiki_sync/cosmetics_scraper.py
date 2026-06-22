@@ -238,9 +238,8 @@ def sync_skins_from_cdn(slugs: list[str], progress_cb=None) -> dict:
     Download skin JSON files + images from PROFTRACKER_CDN_BASE.
     Mirrors scrape_skins() signature; returns the same result dict.
     """
-    cdn_base = os.environ.get("PROFTRACKER_CDN_BASE", "").rstrip("/")
-    if not cdn_base:
-        raise RuntimeError("PROFTRACKER_CDN_BASE is not set")
+    from wiki_sync.avatar_sync import CDN_BASE
+    cdn_base = CDN_BASE
 
     os.makedirs(_DATA_DIR, exist_ok=True)
     os.makedirs(_SKIN_ICONS_DIR, exist_ok=True)
@@ -254,9 +253,6 @@ def sync_skins_from_cdn(slugs: list[str], progress_cb=None) -> dict:
             progress_cb(i, len(slugs), f"Skins: {slug.replace('_', ' ')}")
 
         path = _skin_path(slug)
-        if os.path.exists(path):
-            skipped += 1
-            continue
 
         try:
             r = _SESSION.get(f"{cdn_base}/hero_data/{slug}_skins.json", timeout=15)
@@ -324,10 +320,6 @@ def scrape_skins(icon_sets: list[dict], progress_cb=None) -> dict:
 
         if progress_cb:
             progress_cb(i, len(primary), f"Skins: {hero_name}")
-
-        if os.path.exists(path):
-            skipped += 1
-            continue
 
         try:
             costumes = fetch_hero_costumes(hero_name)
