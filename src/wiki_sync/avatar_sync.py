@@ -37,7 +37,7 @@ _REQUEST_DELAY = float(os.environ.get("PROFTRACKER_REQUEST_DELAY", "0.5"))
 
 CDN_BASE = os.environ.get(
     "PROFTRACKER_CDN_BASE",
-    "https://proftracker-wiki-data-claytryon.s3.amazonaws.com"
+    "https://proftracker-wiki-data-clayhtryon.s3.amazonaws.com"
 ).rstrip("/")
 
 
