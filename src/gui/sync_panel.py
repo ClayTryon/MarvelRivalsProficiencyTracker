@@ -25,6 +25,10 @@ class SyncPanel(QWidget):
 
     def __init__(self, parent=None):
         super().__init__(parent)
+        self._worker: SyncWorker | None = None
+        self._build_ui()
+
+    def _build_ui(self):
         layout = QVBoxLayout(self)
         layout.setContentsMargins(28, 28, 28, 28)
         layout.setSpacing(14)
@@ -80,8 +84,6 @@ class SyncPanel(QWidget):
             f"}}"
         )
         layout.addWidget(self._log)
-
-        self._worker: SyncWorker | None = None
 
     def _start_sync(self):
         self._sync_btn.setEnabled(False)

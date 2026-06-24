@@ -21,7 +21,10 @@ class FirstRunDialog(QDialog):
         self.setStyleSheet(f"background: {BG_APP}; color: {TEXT_DIALOG};")
         self.raise_()
         self.activateWindow()
+        self._build_ui()
+        self._start_worker()
 
+    def _build_ui(self):
         lay = QVBoxLayout(self)
         lay.setContentsMargins(28, 24, 28, 24)
         lay.setSpacing(12)
@@ -38,7 +41,6 @@ class FirstRunDialog(QDialog):
         self._status.setWordWrap(True)
         lay.addWidget(self._status)
 
-        # Optional rivalsmeta UID — saved to QSettings for auto-refresh
         uid_row = QHBoxLayout()
         uid_lbl = QLabel("rivalsmeta player UID")
         uid_lbl.setStyleSheet(f"color: {GRAY_66}; font-size: 11px;")
@@ -61,7 +63,7 @@ class FirstRunDialog(QDialog):
 
         self._bar = QProgressBar()
         self._bar.setMinimum(0)
-        self._bar.setMaximum(0)  # indeterminate until we know total
+        self._bar.setMaximum(0)
         self._bar.setFixedHeight(8)
         self._bar.setTextVisible(False)
         self._bar.setStyleSheet(
@@ -96,6 +98,7 @@ class FirstRunDialog(QDialog):
 
         lay.addLayout(btn_row)
 
+    def _start_worker(self):
         self._worker = SyncWorker()
         self._worker.progress.connect(self._on_progress)
         self._worker.finished.connect(self._on_finished)

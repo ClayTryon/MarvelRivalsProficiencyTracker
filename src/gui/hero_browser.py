@@ -140,7 +140,9 @@ class _ShowAllDialog(QDialog):
         self.setWindowTitle(f"All {tier} Heroes")
         self.setMinimumSize(860, 560)
         self._db = db
+        self._build_ui(tier, heroes)
 
+    def _build_ui(self, tier: str, heroes: list[Hero]):
         tier_heroes = [h for h in heroes if _hero_tier(h) == tier]
 
         outer = QVBoxLayout(self)
@@ -195,12 +197,18 @@ class HeroBrowser(QWidget):
         self._db = db
         self._hwnd: int | None = None
         self._settings = QSettings("ProfTracker", "HeroBrowser")
+        self._all_heroes: list[Hero] = []
+        self._heroes: list[Hero] = []
+        self._descending = False
+        self._layout = QVBoxLayout(self)
+        self._layout.setContentsMargins(0, 0, 0, 0)
+        self._layout.setSpacing(0)
+        self._build_toolbar()
+        self._build_stats_bar()
+        self._build_grid()
+        self._load_settings()
 
-        layout = QVBoxLayout(self)
-        layout.setContentsMargins(0, 0, 0, 0)
-        layout.setSpacing(0)
-
-        # ── Toolbar ──────────────────────────────────────────────────────────
+    def _build_toolbar(self):
         toolbar_widget = QWidget()
         toolbar_widget.setStyleSheet(
             f"QWidget {{ background: {BG_DEEP}; border-bottom: 1px solid {BORDER_MID}; }}"
@@ -272,17 +280,17 @@ class HeroBrowser(QWidget):
         self._dir_btn.clicked.connect(self._toggle_direction)
         toolbar.addWidget(self._dir_btn)
 
-        layout.addWidget(toolbar_widget)
+        self._layout.addWidget(toolbar_widget)
 
-        # ── Stats bar ────────────────────────────────────────────────────────
+    def _build_stats_bar(self):
         self._stats_bar = QLabel()
         self._stats_bar.setStyleSheet(
             f"background: {BG_SINK}; color: {TEXT_DIM}; font-size: 10px;"
             f" padding: 3px 14px; border-bottom: 1px solid {BORDER_DEEP};"
         )
-        layout.addWidget(self._stats_bar)
+        self._layout.addWidget(self._stats_bar)
 
-        # ── Hero grid ────────────────────────────────────────────────────────
+    def _build_grid(self):
         scroll = QScrollArea()
         scroll.setWidgetResizable(True)
         scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
@@ -295,14 +303,7 @@ class HeroBrowser(QWidget):
         )
         self._grid.card_clipboard_scan_requested.connect(self._clipboard_scan)
         scroll.setWidget(self._grid)
-        layout.addWidget(scroll)
-
-        self._all_heroes: list[Hero] = []
-        self._heroes: list[Hero] = []
-        self._descending = False
-
-        # Restore saved sort/filter preferences
-        self._load_settings()
+        self._layout.addWidget(scroll)
 
     def _load_settings(self):
         saved_sort = self._settings.value("sort_key", "")

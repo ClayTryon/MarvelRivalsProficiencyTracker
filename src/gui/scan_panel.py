@@ -26,11 +26,17 @@ class ScanPanel(QWidget):
     def __init__(self, db: Database, parent=None):
         super().__init__(parent)
         self._db = db
+        self._init_state()
+        self._build_ui()
+        self._connect_signals()
+
+    def _init_state(self):
         self._hwnd: int | None = None
         self._heroes: list[Hero] = []
         self._scan_cancelled = False
         self._pre_scan_xp: dict[str, int] = {}
 
+    def _build_ui(self):
         layout = QVBoxLayout(self)
         layout.setContentsMargins(28, 24, 28, 24)
         layout.setSpacing(14)
@@ -77,6 +83,7 @@ class ScanPanel(QWidget):
         self._log.setPlaceholderText("Session log will appear here...")
         layout.addWidget(self._log)
 
+    def _connect_signals(self):
         self._select_btn.clicked.connect(self._select_window)
         self._auto_scan_btn.clicked.connect(self._start_auto_scan)
         self._cancel_btn.clicked.connect(self._cancel_auto_scan)

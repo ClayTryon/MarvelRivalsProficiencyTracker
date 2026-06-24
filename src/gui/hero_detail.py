@@ -578,12 +578,16 @@ class HeroDetailPanel(QWidget):
         super().__init__(parent)
         self._db    = db
         self._movie: QMovie | None = None
+        self._layout = QVBoxLayout(self)
+        self._layout.setContentsMargins(20, 20, 20, 20)
+        self._layout.setSpacing(10)
+        self._build_header()
+        self._build_tracker_row()
+        self._build_xp_card()
+        self._build_tab_bar()
+        self._build_tab_stack()
 
-        root = QVBoxLayout(self)
-        root.setContentsMargins(20, 20, 20, 20)
-        root.setSpacing(10)
-
-        # ── Header card: icon + name/role/level ───────────────────────────
+    def _build_header(self):
         header = _card()
         h_lay = QHBoxLayout(header)
         h_lay.setContentsMargins(16, 16, 16, 16)
@@ -621,7 +625,6 @@ class HeroDetailPanel(QWidget):
 
         h_lay.addLayout(info, stretch=1)
 
-        # ── Milestone icons (remaining proficiencies) ──────────────────────
         milestones_box = QHBoxLayout()
         milestones_box.setSpacing(4)
         milestones_box.setAlignment(Qt.AlignmentFlag.AlignVCenter | Qt.AlignmentFlag.AlignRight)
@@ -633,9 +636,9 @@ class HeroDetailPanel(QWidget):
         milestones_box.addWidget(self._champ_milestone)
 
         h_lay.addLayout(milestones_box)
-        root.addWidget(header)
+        self._layout.addWidget(header)
 
-        # ── Tracker stats row ─────────────────────────────────────────────
+    def _build_tracker_row(self):
         self._tracker_row = QWidget()
         self._tracker_row.setStyleSheet(f"QWidget {{ background: {BG_CARD}; border-radius: 6px; }}")
         tracker_lay = QHBoxLayout(self._tracker_row)
@@ -661,9 +664,9 @@ class HeroDetailPanel(QWidget):
 
         tracker_lay.addStretch()
         self._tracker_row.hide()
-        root.addWidget(self._tracker_row)
+        self._layout.addWidget(self._tracker_row)
 
-        # ── XP card ───────────────────────────────────────────────────────
+    def _build_xp_card(self):
         self._xp_card = _card()
         xp_lay = QVBoxLayout(self._xp_card)
         xp_lay.setContentsMargins(16, 12, 16, 12)
@@ -714,9 +717,9 @@ class HeroDetailPanel(QWidget):
         self._champion_bar = _bar(4)
         xp_lay.addWidget(self._champion_bar)
 
-        root.addWidget(self._xp_card)
+        self._layout.addWidget(self._xp_card)
 
-        # ── Tab bar ───────────────────────────────────────────────────────
+    def _build_tab_bar(self):
         tab_bar = QHBoxLayout()
         tab_bar.setSpacing(6)
         tab_bar.setContentsMargins(0, 0, 0, 0)
@@ -746,15 +749,15 @@ class HeroDetailPanel(QWidget):
         tab_bar.addWidget(self._skins_tab_btn)
 
         tab_bar.addStretch()
-        root.addLayout(tab_bar)
+        self._layout.addLayout(tab_bar)
 
-        # ── Tab content ───────────────────────────────────────────────────
+    def _build_tab_stack(self):
         self._stack = QStackedWidget()
 
         self._abilities_panel = AbilitiesPanel()
         self._stack.addWidget(self._abilities_panel)   # index 0
 
-        self._xp_chart = HeroXpChart(db)
+        self._xp_chart = HeroXpChart(self._db)
         self._stack.addWidget(self._xp_chart)          # index 1
 
         self._teamups_widget = _HeroTeamUpsWidget()
@@ -763,7 +766,7 @@ class HeroDetailPanel(QWidget):
         self._skins_widget = _HeroSkinsWidget()
         self._stack.addWidget(self._skins_widget)      # index 3
 
-        root.addWidget(self._stack, stretch=1)
+        self._layout.addWidget(self._stack, stretch=1)
 
     def _switch_tab(self, index: int):
         self._stack.setCurrentIndex(index)

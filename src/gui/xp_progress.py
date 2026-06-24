@@ -122,7 +122,9 @@ class HeroXpChart(QWidget):
         super().__init__(parent)
         self._db = db
         self._hero_name: str | None = None
+        self._build_ui()
 
+    def _build_ui(self):
         layout = QVBoxLayout(self)
         layout.setContentsMargins(0, 8, 0, 0)
         layout.setSpacing(8)

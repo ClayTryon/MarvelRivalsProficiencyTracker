@@ -23,7 +23,10 @@ class ManualEntryDialog(QDialog):
         self.setWindowTitle("Manual Hero Entry")
         self.setMinimumWidth(380)
         self.setModal(True)
+        self._build_ui()
+        self._load_existing(initial_hero)
 
+    def _build_ui(self):
         layout = QVBoxLayout(self)
 
         form = QFormLayout()
@@ -68,10 +71,10 @@ class ManualEntryDialog(QDialog):
         btn_row.addWidget(save_btn)
         layout.addLayout(btn_row)
 
+    def _load_existing(self, initial_hero: str | None):
         self._existing: dict[str, Hero] = {
-            h.name: h for h in HeroRepository(db).get_all()
+            h.name: h for h in HeroRepository(self._db).get_all()
         }
-
         if initial_hero and self._hero_combo.findText(initial_hero) >= 0:
             self._hero_combo.setCurrentText(initial_hero)
         else:
