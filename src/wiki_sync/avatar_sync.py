@@ -35,10 +35,7 @@ _SESSION.headers["User-Agent"] = "ProfTracker/4.0 (educational project)"
 
 _REQUEST_DELAY = float(os.environ.get("PROFTRACKER_REQUEST_DELAY", "0.5"))
 
-CDN_BASE = os.environ.get(
-    "PROFTRACKER_CDN_BASE",
-    "https://proftracker-wiki-data-clayhtryon.s3.amazonaws.com"
-).rstrip("/")
+CDN_BASE = "https://proftracker-wiki-data-clayhtryon.s3.amazonaws.com"
 
 
 def parse_avatars_page() -> list[dict]:

@@ -198,7 +198,7 @@ The alternative to AWS is continuing to run scraping client-side. The "cost" is:
 ### 4.1 Step 1 — Create S3 Bucket
 
 1. Log in to AWS Console → S3 → **Create bucket**
-2. Bucket name: `proftracker-wiki-data-claytryon` (must be globally unique)
+2. Bucket name: `proftracker-wiki-data-clayhtryon` (must be globally unique)
 3. Region: `us-east-1`
 4. **Uncheck** "Block all public access" → acknowledge the warning
 5. Enable **Versioning**
@@ -217,7 +217,7 @@ The alternative to AWS is continuing to run scraping client-side. The "cost" is:
       "Effect": "Allow",
       "Principal": "*",
       "Action": "s3:GetObject",
-      "Resource": "arn:aws:s3:::proftracker-wiki-data-claytryon/*"
+      "Resource": "arn:aws:s3:::proftracker-wiki-data-clayhtryon/*"
     }
   ]
 }
@@ -241,8 +241,8 @@ The alternative to AWS is continuing to run scraping client-side. The "cost" is:
       "Effect": "Allow",
       "Action": ["s3:PutObject", "s3:DeleteObject", "s3:ListBucket"],
       "Resource": [
-        "arn:aws:s3:::proftracker-wiki-data-claytryon",
-        "arn:aws:s3:::proftracker-wiki-data-claytryon/*"
+        "arn:aws:s3:::proftracker-wiki-data-clayhtryon",
+        "arn:aws:s3:::proftracker-wiki-data-clayhtryon/*"
       ]
     }
   ]
@@ -325,7 +325,7 @@ cat > /home/ec2-user/run_sync.sh << 'EOF'
 set -e
 cd /home/ec2-user/MarvelRivalsProficiencyTracker
 export AWS_DEFAULT_REGION=us-east-1
-export S3_BUCKET=proftracker-wiki-data-claytryon
+export S3_BUCKET=proftracker-wiki-data-clayhtryon
 
 python3.11 src/wiki_sync/server_sync.py
 EOF
@@ -375,7 +375,7 @@ Test the script runs manually:
 In the user's environment or a release `.env` file, set:
 
 ```
-PROFTRACKER_CDN_BASE=https://proftracker-wiki-data-claytryon.s3.amazonaws.com
+PROFTRACKER_CDN_BASE=https://proftracker-wiki-data-clayhtryon.s3.amazonaws.com
 ```
 
 On next application launch, ProfTracker will download `heroes.json` and icons from S3 instead of scraping the wiki directly.
@@ -388,7 +388,7 @@ On next application launch, ProfTracker will download `heroes.json` and icons fr
 
 | Test | Method | Expected Result |
 |------|--------|----------------|
-| S3 bucket public read | `curl https://proftracker-wiki-data-claytryon.s3.amazonaws.com/heroes.json` | Returns valid JSON |
+| S3 bucket public read | `curl https://proftracker-wiki-data-clayhtryon.s3.amazonaws.com/heroes.json` | Returns valid JSON |
 | S3 bucket write-blocked | Attempt PUT without credentials from browser | HTTP 403 Forbidden |
 | EC2 scraper manual run | SSH → `./run_sync.sh` | Exits 0; S3 object count increases |
 | EventBridge trigger | Console → **Test rule** (or wait 24 hrs) | CloudWatch log shows SSM command executed |
@@ -401,7 +401,7 @@ On next application launch, ProfTracker will download `heroes.json` and icons fr
 
 Command run from local Windows terminal:
 ```
-curl https://proftracker-wiki-data-claytryon.s3.amazonaws.com/heroes.json
+curl https://proftracker-wiki-data-clayhtryon.s3.amazonaws.com/heroes.json
 ```
 
 *[Screenshot: curl command output — first 10 lines of heroes.json JSON response]*
