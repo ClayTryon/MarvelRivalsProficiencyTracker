@@ -15,21 +15,18 @@ from gui.scan_panel import ScanPanel
 from gui.hero_browser import HeroBrowser
 from gui.hero_info_panel import HeroInfoPanel
 from gui.sync_panel import SyncPanel
-from gui.teamups_panel import TeamUpsPanel
 from gui.training_panel import TrainingPanel
 from gui.update_checker import UpdateChecker
 from storage.database import Database
 from storage.repository import HeroRepository
 from version import __version__
 
-_TAB_SCAN     = 0
-_TAB_HEROES   = 1
-_TAB_WIKI     = 2
-_TAB_TEAMUPS  = 3
-_TAB_TRAINING = 4
-_TAB_SYNC     = 5
+_TAB_HEROES = 0
+_TAB_SCAN   = 1
+_TAB_WIKI   = 2
+_TAB_SYNC   = 3  # hidden from nav bar — reachable only via ⟳ SYNC button
 
-_TAB_LABELS = ["SCAN", "HEROES", "HERO WIKI", "TEAM-UPS", "TRAINING", "SYNC"]
+_TAB_LABELS = ["HEROES", "SCAN", "WIKI"]
 
 
 class _NavBar(QWidget):
@@ -106,7 +103,7 @@ class _NavBar(QWidget):
         ver.setStyleSheet(f"color: {TEXT_VER}; font-size: 11px; padding-left: 10px;")
         row.addWidget(ver)
 
-        self.set_active(1)
+        self.set_active(0)
 
     def set_active(self, index: int):
         for i, btn in enumerate(self._tab_btns):
@@ -150,6 +147,85 @@ class _UpdateBanner(QWidget):
             webbrowser.open(self._url)
 
 
+class _WikiTab(QWidget):
+    """WIKI top-level tab: sub-tabs for Hero Wiki (RAG chat) and Training."""
+
+    _SUB_ACTIVE = (
+        "QPushButton {"
+        " font-family: Impact, 'Arial Narrow', Arial;"
+        " font-size: 11px; letter-spacing: 2px;"
+        f" color: #ffffff; background: transparent; border: none;"
+        f" border-bottom: 2px solid {GOLD}; padding: 0 12px;"
+        " margin-bottom: -1px;"
+        "}"
+    )
+    _SUB_INACTIVE = (
+        "QPushButton {"
+        " font-family: Impact, 'Arial Narrow', Arial;"
+        " font-size: 11px; letter-spacing: 2px;"
+        f" color: {TEXT_DIM}; background: transparent; border: none;"
+        " padding: 0 12px;"
+        "}"
+        f"QPushButton:hover {{ color: {TEXT_NAV_HOVER}; }}"
+    )
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        root = QVBoxLayout(self)
+        root.setContentsMargins(0, 0, 0, 0)
+        root.setSpacing(0)
+
+        sub_bar = QWidget()
+        sub_bar.setStyleSheet(
+            f"background: {BG_DEEP}; border-bottom: 1px solid {BORDER_MID};"
+        )
+        sub_bar.setFixedHeight(36)
+        sub_row = QHBoxLayout(sub_bar)
+        sub_row.setContentsMargins(16, 0, 16, 0)
+        sub_row.setSpacing(0)
+
+        self._wiki_btn = QPushButton("HERO WIKI")
+        self._wiki_btn.setFlat(True)
+        self._wiki_btn.setFixedHeight(36)
+        self._wiki_btn.setCursor(Qt.CursorShape.PointingHandCursor)
+        self._wiki_btn.clicked.connect(lambda: self._switch(0))
+        sub_row.addWidget(self._wiki_btn)
+
+        sep = QLabel("/")
+        sep.setStyleSheet(f"color: {BORDER_NAV}; font-size: 15px; padding: 0 4px;")
+        sub_row.addWidget(sep)
+
+        self._train_btn = QPushButton("TRAINING")
+        self._train_btn.setFlat(True)
+        self._train_btn.setFixedHeight(36)
+        self._train_btn.setCursor(Qt.CursorShape.PointingHandCursor)
+        self._train_btn.clicked.connect(lambda: self._switch(1))
+        sub_row.addWidget(self._train_btn)
+        sub_row.addStretch()
+        root.addWidget(sub_bar)
+
+        self._stack = QStackedWidget()
+        self._hero_info = HeroInfoPanel()
+        self._training = TrainingPanel()
+        self._stack.addWidget(self._hero_info)
+        self._stack.addWidget(self._training)
+        root.addWidget(self._stack, stretch=1)
+
+        self._switch(0)
+
+    def _switch(self, index: int):
+        self._stack.setCurrentIndex(index)
+        self._wiki_btn.setStyleSheet(self._SUB_ACTIVE if index == 0 else self._SUB_INACTIVE)
+        self._train_btn.setStyleSheet(self._SUB_ACTIVE if index == 1 else self._SUB_INACTIVE)
+
+    def set_query(self, text: str):
+        self._switch(0)
+        self._hero_info.set_query(text)
+
+    def load_heroes(self, heroes):
+        self._training.load_heroes(heroes)
+
+
 class MainWindow(QMainWindow):
     def __init__(self, db: Database):
         super().__init__()
@@ -173,19 +249,15 @@ class MainWindow(QMainWindow):
         self._stack = QStackedWidget()
         self._stack.setStyleSheet(f"background: {BG_APP};")
 
-        self._scan_panel     = ScanPanel(db)
-        self._hero_browser   = HeroBrowser(db)
-        self._hero_info      = HeroInfoPanel()
-        self._teamups_panel  = TeamUpsPanel()
-        self._training_panel = TrainingPanel()
-        self._sync_panel     = SyncPanel()
+        self._hero_browser = HeroBrowser(db)
+        self._scan_panel   = ScanPanel(db)
+        self._wiki_tab     = _WikiTab()
+        self._sync_panel   = SyncPanel()
 
-        self._stack.addWidget(self._scan_panel)      # 0 — SCAN
-        self._stack.addWidget(self._hero_browser)    # 1 — HEROES
-        self._stack.addWidget(self._hero_info)       # 2 — HERO WIKI
-        self._stack.addWidget(self._teamups_panel)   # 3 — TEAM-UPS
-        self._stack.addWidget(self._training_panel)  # 4 — TRAINING
-        self._stack.addWidget(self._sync_panel)      # 5 — SYNC
+        self._stack.addWidget(self._hero_browser)  # 0 — HEROES
+        self._stack.addWidget(self._scan_panel)    # 1 — SCAN
+        self._stack.addWidget(self._wiki_tab)      # 2 — WIKI
+        self._stack.addWidget(self._sync_panel)    # 3 — SYNC (hidden from nav)
         root.addWidget(self._stack)
 
         self.setCentralWidget(central)
@@ -198,7 +270,7 @@ class MainWindow(QMainWindow):
         heroes = HeroRepository(db).get_all()
         if heroes:
             self._hero_browser.load_heroes(heroes)
-            self._training_panel.load_heroes(heroes)
+            self._wiki_tab.load_heroes(heroes)
             self._navigate(_TAB_HEROES)
         else:
             self._navigate(_TAB_SCAN)
@@ -214,12 +286,12 @@ class MainWindow(QMainWindow):
     def _on_scan_complete(self, _heroes: list = None):
         heroes = HeroRepository(self._db).get_all()
         self._hero_browser.load_heroes(heroes)
-        self._training_panel.load_heroes(heroes)
+        self._wiki_tab.load_heroes(heroes)
         self._navigate(_TAB_HEROES)
 
     def _on_wiki_hero_requested(self, hero_name: str):
         self._navigate(_TAB_WIKI)
-        self._hero_info.set_query(f"Tell me about {hero_name}")
+        self._wiki_tab.set_query(f"Tell me about {hero_name}")
 
     def _on_sync_complete(self):
         import data.heroes as _heroes_mod
@@ -227,8 +299,7 @@ class MainWindow(QMainWindow):
         _heroes_mod._reload()
         seed_default_heroes(self._db)
 
-        self._teamups_panel.load()
-
         heroes = HeroRepository(self._db).get_all()
         if heroes:
             self._hero_browser.load_heroes(heroes)
+            self._wiki_tab.load_heroes(heroes)
