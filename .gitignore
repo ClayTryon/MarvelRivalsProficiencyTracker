@@ -21,3 +21,6 @@ specs/
 artfxt9npjoe1.jpeg
 ExampleUI.png
 "web roster.webp"
+screenshots/
+*.pdf
+cloud_build_report.md
