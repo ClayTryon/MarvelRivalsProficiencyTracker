@@ -349,6 +349,3 @@ ProfTracker demonstrates the integration of multiple AI and systems engineering 
 
 The system processes 51 heroes in a single automated scan, indexes the full game wiki for conversational queries, and stores all proficiency data locally with no ongoing cloud dependency for the end user beyond the initial setup sync.
 
----
-
-*Word count: ~4,400 | Estimated pages at standard academic formatting (1" margins, 12pt font, 1.5 spacing): 10–11 pages*
