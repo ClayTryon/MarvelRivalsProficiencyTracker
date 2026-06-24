@@ -36,7 +36,6 @@ jobs:
 
       - name: Bundle runtime data
         run: |
-          Copy-Item heroes.json "dist\ProfTracker\heroes.json"
           Copy-Item README.md "dist\ProfTracker\README.md"
 
       - name: Zip release
