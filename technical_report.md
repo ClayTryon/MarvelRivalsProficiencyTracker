@@ -20,16 +20,16 @@
 
 Marvel Rivals is a team-based hero shooter released in December 2024 that reached 20 million players within its first ten days of launch. The game features a proficiency system in which players earn experience points (XP) for each hero they play, advancing through five ranks: Agent, Knight, Captain, Centurion, and Lord. Players who grind a hero to level 20 (Lord) and then continue to level 50 earn the Champion designation, which unlocks animated avatar frames visible to all players.
 
-The game itself provides minimal cross-session tracking of proficiency progress. A player who wants to know which heroes are closest to their next rank milestone, how much XP they have earned across an entire roster of 51 heroes, or which heroes they should prioritize for training must navigate the in-game menus and manually note each hero's stats. There is no export function, no summary dashboard, and no way to compare progress across heroes without clicking through each one individually. Players interested in team synergy mechanics ("team-up abilities" that unlock special powers when specific hero combinations are on the same team) also require menuing within the game, or navigating to the Fandom community wiki. 
+The game itself provides minimal cross-session tracking of proficiency progress. A player who wants to know which heroes are closest to their next rank milestone, how much XP they have earned across an entire roster of 51 heroes, or which heroes they should prioritize for training must navigate the in-game menus and manually note each hero's stats. There is no export function, no summary dashboard, and no way to compare progress across heroes without clicking through each one individually. Players interested in team synergy mechanics ("team-up abilities" that unlock special powers when specific hero combinations are on the same team) also require menuing within the game, or navigating to the Fandom community wiki.
 
 ### 1.2 Business Justification
 
-The target audience for ProfTracker is the competitive or dedicated player population—players who are actively managing a multi-hero roster and seeking to optimize their time spent grinding. Based on public reporting, Marvel Rivals had approximately 35 million registered accounts as of early 2026, with an active player base estimated in the millions. Even a 1% capture rate of players seeking proficiency tooling represents tens of thousands of potential users for a niche desktop utility. Many players within this game WANT to get lord on all characters. They view Lord or Champion as a status, showing their skill, dedication, and prowess with a particular character. Its a point of pride. 
+The target audience for ProfTracker is the competitive or dedicated player population—players who are actively managing a multi-hero roster and seeking to optimize their time spent grinding. Based on public reporting, Marvel Rivals had approximately 35 million registered accounts as of early 2026, with an active player base estimated in the millions. Even a 1% capture rate of players seeking proficiency tooling represents tens of thousands of potential users for a niche desktop utility. Many players want to achieve Lord or Champion rank on every hero, viewing it as a mark of skill and dedication. It is a point of pride within the community.
 
 The direct costs of building and distributing ProfTracker are minimal:
 - **Development**: Solo developer project using entirely free, open-source frameworks
-- **Distribution**: GitHub Releases with PyInstaller binary; no hosting cost
-- **Runtime**: All processing is local; no cloud compute costs for users
+- **Distribution**: GitHub Releases with PyInstaller binary; no hosting cost for the developer
+- **Runtime**: All proficiency data is processed and stored locally; no per-user cloud compute cost
 
 The indirect value proposition is measurable. A typical player scanning all 51 heroes manually takes approximately 15 minutes of in-game navigation. ProfTracker's Auto Scan reduces this to a fully automated ~4 minutes of unattended operation. For a player performing weekly scans over a year, this is approximately 8 hours of navigation time recovered.
 
@@ -37,7 +37,12 @@ For content creators and community organizers, the data export capability (CSV, 
 
 ### 1.3 Scope Boundaries
 
-ProfTracker is intentionally scoped to a local-first, offline-capable design. It does not require accounts, does not transmit gameplay data to any server, and does not interfere with the game client beyond read-only screen capture.
+ProfTracker is intentionally scoped to a local-first design with the following constraints:
+
+- **Windows 10/11 only.** The Auto Scan feature depends on the Interception kernel-mode input driver and the Windows `win32gui` API for window management. These are Windows-specific and cannot be ported to macOS or Linux without a full rewrite of the capture layer.
+- **English language only.** The OCR pipeline's character allowlists, the UI, and the wiki data sourcing are all English-only.
+- **Internet required for initial setup.** On first launch, ProfTracker downloads hero roster data, icons, and ability information from the project's AWS S3 CDN. Subsequent use is fully offline-capable.
+- **No account or telemetry.** The app does not require accounts, does not transmit gameplay data to any developer-controlled server, and does not interfere with the game client beyond read-only screen capture.
 
 ---
 
@@ -50,6 +55,7 @@ ProfTracker is a Windows desktop application built with PyQt6. The decision to u
 **Screen capture and OCR.** The OCR pipeline requires pixel-level access to the game window, including the ability to synthesize keyboard and mouse input via a kernel-level driver (Interception). This is not possible in a web browser context. A native application can use the Windows `win32gui` API to locate the game window, attach to its thread input queue, and capture its contents via `Alt+PrtScn` to the clipboard.
 
 **Minimal backend cost.** A web application serving 51-hero proficiency data to multiple users would require a backend API, authentication, and database hosting. ProfTracker's offline-first design means each user's data stays on their own machine in a local SQLite database at `%APPDATA%\ProficiencyTracker\`. There are no recurring costs for the developer and no privacy concerns for the user.
+
 ### 2.2 PyQt6 Framework
 
 PyQt6 was chosen over alternative Python GUI frameworks (Tkinter, wxPython, Dear PyGui) for three reasons:
@@ -58,11 +64,11 @@ PyQt6 was chosen over alternative Python GUI frameworks (Tkinter, wxPython, Dear
 
 2. **QStackedWidget navigation.** The six-tab interface (SCAN, HEROES, HERO WIKI, TEAM-UPS, TRAINING, SYNC) is implemented as a `QStackedWidget` with a custom navigation bar. This avoids the overhead of a full routing framework while keeping each tab as an independent, lazily-initialized widget.
 
-3. **Animation support.** Champion-rank heroes (level 50+) display animated `.webp` or `.gif` icons. PyQt6's `QMovie` handles animated image formats natively, which would require third-party libraries in most other Python GUI frameworks.
+3. **Animation support.** Champion-rank heroes (level 50+) display animated `.gif` icons. PyQt6's `QMovie` handles animated image formats natively, which would require third-party libraries in most other Python GUI frameworks.
 
 ### 2.3 SQLite Database Design
 
-The persistence layer uses SQLite with WAL (Write-Ahead Logging) mode and foreign key enforcement. The schema has three tables:
+The persistence layer uses SQLite with WAL (Write-Ahead Logging) mode and foreign key enforcement. The schema has three core tables:
 
 - `capture_run`: Tracks each scan session with status (running/completed/cancelled/failed), timestamps, and hero count.
 - `hero`: Current state for each hero — level, XP, XP required, max-level flag, challenge progress.
@@ -82,20 +88,23 @@ The OCR capture pipeline uses a two-phase design to minimize the time the game w
 
 This design ensures the game session is disrupted for the minimum possible time. If the user needs to take over mid-scan, pressing Backspace triggers a cancel event that terminates Phase 1 cleanly.
 
-### 2.5 Wiki Data Architecture
+### 2.5 Wiki Data Architecture and CDN Distribution
 
-Hero roster data, icons, ability descriptions, and team-up synergies are sourced from the Marvel Rivals Fandom wiki. Rather than shipping static data with the application (which would become stale after each game patch), ProfTracker fetches live data via the MediaWiki `action=parse` and `action=query` APIs. These stable API endpoints return structured data without requiring JavaScript execution or bypassing Cloudflare bot detection.
+Hero roster data, icons, ability descriptions, and team-up synergies are sourced from the Marvel Rivals Fandom wiki. Rather than shipping static data with the application binary (which would become stale after each game patch), ProfTracker uses a two-tier data delivery system.
 
-The wiki sync workflow (triggered by `SyncWorker`) proceeds in seven stages:
-1. Parse the Avatars page to extract all hero slugs and icon filenames
-2. Download Hero/Lord/Champion icon files (skipping existing files)
+**Server-side scraping (EC2 daily job).** A Python process running on an AWS EC2 t3.micro instance (`server_sync.py`) performs the full wiki scrape once daily via EventBridge schedule. It proceeds through seven stages:
+
+1. Parse the Avatars wiki page to extract all hero slugs and icon filenames
+2. Download Hero/Lord/Champion icon files
 3. Write the updated hero roster to `heroes.json`
 4. Fetch ability wikitext for each hero and parse structured ability data
 5. Scrape team-up synergy data
 6. Fetch hero release dates
-7. Rebuild the RAG vector index from all hero wiki pages
+7. Upload all artifacts to the S3 bucket (`proftracker-wiki-data-clayhtryon`)
 
-The result is written to `heroes.json`, `hero_data/*.json`, `Icons/`, and `rag_index/`—all of which survive application updates because they live outside the install directory.
+**Client-side CDN sync.** `CDN_BASE` is hardcoded in `avatar_sync.py` to the S3 bucket URL. On first launch and on manual sync, `SyncWorker` routes through `_run_cdn_sync()`, downloading `heroes.json`, icon files, and ability JSON directly from S3. This reduces client sync time from 2–5 minutes (sequential wiki API calls) to under 30 seconds (parallel S3 downloads), and eliminates any risk of triggering Fandom's rate limiting.
+
+The direct wiki scraping path (`_run_wiki_sync()`) is retained in the codebase as a fallback for development and in the event the CDN is unavailable. All downloaded artifacts are written to `%APPDATA%\ProficiencyTracker\` and survive application updates.
 
 ---
 
@@ -187,13 +196,13 @@ The retrieval and generation pipeline follows a standard RAG pattern:
 
 The `QueryWorker` thread implements exponential backoff with jitter for Groq API rate limit responses (HTTP 429). The retry sequence uses delays of 1s, 2s, and 4s with random jitter, up to 3 attempts. If all retries are exhausted, the error is surfaced as an in-chat message rather than a crash.
 
-Wiki scraping during auto-sync uses a configurable inter-request delay (default 0.5s, overridable via `PROFTRACKER_REQUEST_DELAY` environment variable). HTTP 429 responses from the Fandom CDN are logged explicitly and skipped rather than retried, preventing the sync from stalling indefinitely on rate-limited icon downloads.
+The EC2 server-side scraper uses a configurable inter-request delay (default 0.5s, overridable via `PROFTRACKER_REQUEST_DELAY` environment variable) to respect Fandom's rate limits. Because scraping now runs once daily on the server rather than on each client machine, the rate-limiting risk to end users is entirely eliminated.
 
 ### 4.4 Human-in-the-Loop Design
 
 ProfTracker incorporates two deliberate human-in-the-loop checkpoints:
 
-**First Run Setup.** On first launch when no hero data exists, a modal dialog (`FirstRunDialog`) automatically initiates wiki sync while displaying a "Skip (use built-in roster)" button. The user can interrupt the download at any time and proceed with the built-in hardcoded roster. This prevents the application from being unusable if the wiki is unavailable or the user is on a slow connection.
+**First Run Setup.** On first launch when no hero data exists, a modal dialog (`FirstRunDialog`) automatically initiates CDN sync while displaying a "Skip (use built-in roster)" button. If the CDN is unreachable, the user is shown a clear error message with a **Retry** button and the option to continue with the built-in hardcoded roster. This prevents the application from being unusable if AWS is temporarily unavailable.
 
 **Scan Cancel.** During the Auto Scan pipeline, pressing Backspace at any time triggers a cancel event that halts Phase 1 cleanly after the current hero's screenshot. The partial results are committed to the database with a `cancelled` status on the capture run. The user retains all data captured before the cancellation.
 
@@ -203,15 +212,15 @@ ProfTracker incorporates two deliberate human-in-the-loop checkpoints:
 
 ### 5.1 Data Privacy
 
-All user data in ProfTracker is stored locally. The SQLite database at `%APPDATA%\ProficiencyTracker\` contains hero proficiency levels and XP snapshots. None of this data is transmitted to any server operated by the developer.
+All user gameplay data in ProfTracker is stored locally. The SQLite database at `%APPDATA%\ProficiencyTracker\` contains hero proficiency levels and XP snapshots. None of this data is transmitted to any server operated by the developer.
 
-The Groq API key is shipped with the application. The developer does not log or collect the content of any queries users send to the model, but all queries do pass through the shared key.
+The Groq API key is embedded in the application (obfuscated via XOR in `api_keys.py`). The developer does not log or collect the content of any queries users send to the model, but all queries do pass through the shared key and are subject to Groq's data handling policies.
 
 ### 5.2 OCR Accuracy and Validation
 
 OCR misreads are a known risk in any screen-capture pipeline. ProfTracker mitigates this through:
 
-- **Multi-engine design**: EasyOCR is the primary engine, with the look-alike correction layer providing deterministic post-processing.
+- **EasyOCR with post-processing**: The look-alike correction layer (`_ocr_digits_str`) provides deterministic post-processing for common OCR errors on game UI fonts.
 - **XP table cross-validation**: Every OCR'd level is validated against the level range implied by the `xp_required` value. Out-of-range levels trigger an automated correction attempt before the data is written to the database.
 - **Manual override**: The Manual Entry dialog allows the user to correct any hero's level and XP if the OCR produced an incorrect result.
 - **Clipboard scan**: Users who prefer not to use the automated driver can manually navigate to a hero's Proficiency tab and press `Alt+PrtScn`, then trigger a single-hero scan from clipboard—giving full control over what the OCR processes.
@@ -270,27 +279,35 @@ The in-app disclaimer informs users that the RAG feature is powered by a shared 
 
 ### 6.3 Cloud Data Distribution (AWS Architecture)
 
-Scraping the Fandom wiki directly from each user's machine creates a rate-limiting risk (risk R-008 in the project risk register): as the user base grows, concurrent sync operations from many machines could trigger Fandom's rate limiting, causing syncs to fail or produce incomplete icon sets. ProfTracker addresses this with a cloud-hosted data distribution layer that is fully implemented.
+Scraping the Fandom wiki directly from each user's machine creates a rate-limiting risk: as the user base grows, concurrent sync operations from many machines could trigger Fandom's rate limiting, causing syncs to fail or produce incomplete icon sets. ProfTracker addresses this with a fully implemented cloud-hosted data distribution layer.
 
 **Architecture (three AWS services):**
 
-1. **EC2 (t2.micro):** A scheduled Python process (`server_sync.py`) runs the full wiki scrape once daily, writing the output (heroes.json, hero_data/*.json, Icons/) to an S3 bucket via boto3. This eliminates the Fandom scraping load from end users entirely.
+1. **EC2 (t3.micro):** A scheduled Python process (`server_sync.py`) runs the full wiki scrape once daily, writing the output (`heroes.json`, `hero_data/*.json`, `Icons/`) to an S3 bucket via boto3. This eliminates the Fandom scraping load from end users entirely.
 
 2. **S3 (Standard storage):** The output files are stored in a public-read S3 bucket (`proftracker-wiki-data-clayhtryon.s3.amazonaws.com`). At roughly 300 MB for all icons and <1 MB for JSON data, monthly storage cost is approximately $0.07. The S3 bucket serves as the canonical source of truth for the hero roster.
 
-3. **Amazon EventBridge (Scheduler):** A scheduled rule triggers the EC2 scraper daily at a consistent time (e.g., 06:00 UTC). EventBridge is effectively free at this invocation rate.
+3. **Amazon EventBridge (Scheduler):** A scheduled rule triggers the EC2 scraper daily at 06:00 UTC. EventBridge is effectively free at this invocation rate.
 
-**Client integration:** `SyncWorker` checks for the `PROFTRACKER_CDN_BASE` environment variable at startup. When set, it fetches `heroes.json` and icon files directly from S3 rather than scraping the wiki. The full wiki scrape path remains available as a fallback. This reduces sync time for end users from 2–5 minutes to under 30 seconds and ensures all users work from the same consistent dataset regardless of when they sync.
+**Client integration:** `CDN_BASE` is hardcoded in `avatar_sync.py` to the S3 bucket URL, so all clients always sync from CDN without requiring any environment configuration. This reduces sync time for end users from 2–5 minutes (sequential wiki API calls) to under 30 seconds (parallel S3 downloads) and ensures all users work from the same consistent daily dataset.
 
-### 6.4 Additional Future Work
+### 6.4 Known Limitations
 
-**Multi-resolution OCR calibration.** The current pixel regions are calibrated for 1920×1080 windowed mode. Support for 2560×1440 and 3840×2160 resolutions would expand the addressable user base without requiring manual region recalibration, as the fractional coordinate approach already scales correctly for any 16:9 aspect ratio.
+The following limitations are present in the current release and are documented for transparency:
+
+- **Windows-only.** The Interception kernel driver and `win32gui` APIs used by the Auto Scan feature are Windows-specific. The application will install and run on other platforms, but the Auto Scan tab is non-functional outside of Windows 10/11.
+- **English-only.** The OCR character allowlists, UI strings, and wiki data pipeline are all English. Non-English game clients or localized wiki pages are not supported.
+- **1920×1080 resolution optimized.** The fractional pixel coordinate approach scales correctly for any 16:9 aspect ratio, but the OCR regions have been validated only at 1080p windowed mode. Ultra-wide or non-standard resolutions may require recalibration.
+- **CDN dependency at first run.** A fresh install requires an internet connection to download hero data from S3. The built-in roster fallback provides a degraded experience (no icons or ability data) if the CDN is unavailable at setup time.
+- **No multi-device sync.** Proficiency data is stored in a local SQLite database and does not sync between machines.
+
+### 6.5 Future Work
+
+**Multi-resolution OCR calibration.** Automated detection of the game window's resolution would allow the fractional pixel regions to be validated and adjusted per display, expanding the addressable user base without manual recalibration.
 
 **Automated regression test fixtures.** The `.temp/` directory accumulates OCR debug screenshots automatically during every scan. A future CI step could hash these images and flag when OCR output for a known screenshot changes after a code update, providing an automated regression test for the OCR pipeline without requiring a live game session.
 
-**Hero skin library.** Each hero detail page will include a dedicated Skins tab displaying the full cosmetic roster for that hero — skin name, rarity, source, cost, and preview image. The cosmetics data is scraped from the predictable Fandom wiki URL pattern (`/wiki/{HeroName}/Cosmetics`) as an additional stage in the wiki sync pipeline, with results written to `hero_data/{slug}_cosmetics.json`. This extends the existing per-hero detail view without requiring a new top-level tab.
-
-**Chroma skin association.** Each skin in Marvel Rivals can have one or more Chroma variants — recolors with unrelated names (e.g., the skin "Prism Parade" for Invisible Woman has chromas named "Radiant Ray" and "Vivid Vibe"). Because chroma names follow no consistent naming convention relative to their parent skin, they cannot be matched by name. The planned approach is to fetch the individual wiki page for each skin and parse the chromas listed there. This is deferred due to the HTTP cost: with 10–15 skins per hero across 51 heroes, chroma resolution requires 500–750 additional requests per sync.
+**Hero skin library.** Each hero detail page could include a dedicated Skins tab displaying the full cosmetic roster — skin name, rarity, source, cost, and preview image. The cosmetics data is scraped from the Fandom wiki (`/wiki/{HeroName}/Cosmetics`) as an additional stage in the server-side sync pipeline, with results written to `hero_data/{slug}_cosmetics.json`. The scraper (`cosmetics_scraper.py`) is implemented and tested; the UI tab is the remaining deliverable.
 
 ---
 
@@ -300,11 +317,11 @@ ProfTracker demonstrates the integration of multiple AI and systems engineering 
 
 - A two-phase OCR scan pipeline using EasyOCR with XP-table cross-validation that achieves reliable accuracy on stylized game UI text
 - A LlamaIndex RAG system with a two-document ingest strategy that isolates game stats from lore text to improve retrieval precision
-- A MediaWiki API-based wiki sync pipeline that provides live hero roster data without requiring a headless browser or bypassing bot protections
+- A MediaWiki API-based wiki sync pipeline, offloaded to a daily AWS EC2 job, that provides consistent hero roster data to all clients via S3
 - A PyQt6 desktop architecture using QThread workers with a uniform signal contract across all async operations
 
-The system processes 51 heroes in a single automated scan, indexes the full game wiki for conversational queries, and stores all data locally with no cloud dependencies for the end user.
+The system processes 51 heroes in a single automated scan, indexes the full game wiki for conversational queries, and stores all proficiency data locally with no ongoing cloud dependency for the end user beyond the initial setup sync.
 
 ---
 
-*Word count: ~4,200 | Estimated pages at standard academic formatting (1" margins, 12pt font, 1.5 spacing): 10–11 pages*
+*Word count: ~4,400 | Estimated pages at standard academic formatting (1" margins, 12pt font, 1.5 spacing): 10–11 pages*

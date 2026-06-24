@@ -1,22 +1,22 @@
 from PyQt6.QtWidgets import (
-    QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QProgressBar, QLineEdit,
+    QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QProgressBar,
 )
-from PyQt6.QtCore import Qt, QSettings
+from PyQt6.QtCore import Qt
 from wiki_sync.worker import SyncWorker
 from gui.colors import (
-    BG_APP, BG_INPUT, BORDER, BORDER_MID, BORDER_INPUT,
-    TEXT, TEXT_DIM, TEXT_LIGHT_GRAY, TEXT_DIALOG,
-    GOLD, GRAY_66,
+    BG_APP, BORDER, BORDER_MID,
+    TEXT_DIM, TEXT_LIGHT_GRAY, TEXT_DIALOG,
+    GOLD,
 )
 
 
 class FirstRunDialog(QDialog):
-    """Shown on first launch when no heroes.json exists. Auto-runs wiki sync."""
+    """Shown on first launch when no heroes.json exists. Auto-runs CDN sync."""
 
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setWindowTitle("ProfTracker — First Run Setup")
-        self.setFixedSize(480, 270)
+        self.setFixedSize(480, 210)
         self.setWindowFlags(Qt.WindowType.Window | Qt.WindowType.CustomizeWindowHint | Qt.WindowType.WindowTitleHint)
         self.setStyleSheet(f"background: {BG_APP}; color: {TEXT_DIALOG};")
         self.raise_()
@@ -36,30 +36,10 @@ class FirstRunDialog(QDialog):
         )
         lay.addWidget(title)
 
-        self._status = QLabel("Connecting to Marvel Rivals wiki...")
+        self._status = QLabel("Downloading hero data from server...")
         self._status.setStyleSheet(f"color: {TEXT_LIGHT_GRAY}; font-size: 12px;")
         self._status.setWordWrap(True)
         lay.addWidget(self._status)
-
-        uid_row = QHBoxLayout()
-        uid_lbl = QLabel("rivalsmeta player UID")
-        uid_lbl.setStyleSheet(f"color: {GRAY_66}; font-size: 11px;")
-        uid_row.addWidget(uid_lbl)
-        self._ign_input = QLineEdit()
-        self._ign_input.setPlaceholderText("optional — numeric ID from rivalsmeta.com")
-        self._ign_input.setStyleSheet(
-            f"QLineEdit {{ background: {BG_INPUT}; color: {TEXT}; border: 1px solid {BORDER_INPUT};"
-            f" border-radius: 3px; padding: 3px 8px; font-size: 11px; }}"
-            f" QLineEdit:focus {{ border-color: {GOLD}; }}"
-        )
-        saved_uid = QSettings("ProfTracker", "HeroBrowser").value("tracker_uid", "")
-        self._ign_input.setText(saved_uid)
-        uid_row.addWidget(self._ign_input, stretch=1)
-        lay.addLayout(uid_row)
-
-        sub_lbl = QLabel("Your stats will auto-sync every launch via the STATS tab.")
-        sub_lbl.setStyleSheet(f"color: {TEXT_DIM}; font-size: 10px;")
-        lay.addWidget(sub_lbl)
 
         self._bar = QProgressBar()
         self._bar.setMinimum(0)
@@ -111,13 +91,7 @@ class FirstRunDialog(QDialog):
             self._bar.setValue(current)
         self._status.setText(msg)
 
-    def _save_ign(self):
-        uid = self._ign_input.text().strip()
-        if uid:
-            QSettings("ProfTracker", "HeroBrowser").setValue("tracker_uid", uid)
-
     def _on_finished(self, _result: dict):
-        self._save_ign()
         self.accept()
 
     def _on_error(self, msg: str):
@@ -137,14 +111,9 @@ class FirstRunDialog(QDialog):
         self._status.setText("Retrying...")
         self._bar.setMaximum(0)
         self._bar.setValue(0)
-        self._worker = SyncWorker()
-        self._worker.progress.connect(self._on_progress)
-        self._worker.finished.connect(self._on_finished)
-        self._worker.error.connect(self._on_error)
-        self._worker.start()
+        self._start_worker()
 
     def _skip(self):
-        self._save_ign()
         self._worker.stop()
         self._worker.wait(3000)
         self.reject()
