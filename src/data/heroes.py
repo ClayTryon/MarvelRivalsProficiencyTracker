@@ -128,22 +128,6 @@ def _load() -> tuple[list, dict, dict]:
     return list(_DEFAULT_ROSTER), dict(_DEFAULT_ROLES), {}
 
 
-def get_scan_roster() -> list[str]:
-    """Return HERO_ROSTER filtered to heroes with synced ability data."""
-    if getattr(sys, 'frozen', False):
-        data_dir = os.path.join(sys._MEIPASS, 'hero_data')
-    else:
-        data_dir = os.path.normpath(
-            os.path.join(os.path.dirname(__file__), '..', '..', 'hero_data')
-        )
-    return [
-        name for name in HERO_ROSTER
-        if os.path.exists(os.path.join(
-            data_dir, name.replace(' ', '_').replace('&', '%26') + '.json'
-        ))
-    ]
-
-
 def is_synced() -> bool:
     """Return True if heroes.json exists and contains a valid roster."""
     try:

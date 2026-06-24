@@ -20,7 +20,7 @@ from storage.repository import HeroRepository, CaptureRunRepository, SnapshotRep
 from models.hero import Hero
 from models.capture_run import CaptureStatus
 from exceptions import CaptureError, ParseError, ValidationError
-from data.heroes import HERO_ROSTER, HERO_ROLES, is_synced, get_scan_roster
+from data.heroes import HERO_ROSTER, HERO_ROLES, is_synced
 
 _GRID_COLS = 7
 _GRID_ROWS = 2
@@ -122,7 +122,7 @@ def run_scan(hwnd: int, db: Database, on_log, on_hero, check_cancelled) -> int:
         raise CaptureError("Target window is no longer alive")
 
     clear_temp()
-    scan_roster = get_scan_roster()
+    scan_roster = list(HERO_ROSTER)
     run_repo = CaptureRunRepository(db)
     hero_repo = HeroRepository(db)
     snapshot_repo = SnapshotRepository(db)
