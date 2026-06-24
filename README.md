@@ -99,7 +99,6 @@ ProfTracker does not connect to the internet (except for update checks and Hero 
 - **Interception driver required for Auto Scan.** Clipboard Scan works without it for single-hero updates.
 - **RAG requires a GROQ_API_KEY.** Without it the Hero Wiki tab loads but returns an error on every query. The rest of the app is unaffected.
 - **Hero roster is locked to heroes.json.** If a new hero is released before a wiki sync, the scanner will not recognize them. Run a sync after each game patch.
-- **Tracker stats require a rivalsmeta.com UID.** Proficiency mission estimation is unavailable without it.
 - **OCR accuracy degrades on non-standard fonts or UI mods.** ProfTracker is calibrated against the default Marvel Rivals UI theme.
 
 ---
@@ -132,7 +131,7 @@ ProfTracker does not connect to the internet (except for update checks and Hero 
 
 **Data flow — RAG query:** User question → LlamaIndex VectorStoreIndex (BAAI/bge-small-en-v1.5 embeddings) → top-k chunks → Groq llama-3.3-70b → answer.
 
-**Data flow — wiki sync:** Fandom MediaWiki API → hero roster + icon URLs + ability wikitext → heroes.json + icons/ + abilities.json on disk → SQLite seeded.
+**Data flow — wiki sync:** AWS S3 CDN (updated daily by EC2 scraper) → heroes.json + icons + ability JSON → local disk → SQLite seeded. Falls back to direct Fandom MediaWiki API scraping if CDN is unavailable.
 
 ---
 
@@ -154,12 +153,10 @@ uv run pytest tests/unit/ -v
 uv run pytest tests/unit/test_ocr_parser.py -v
 ```
 
-**Environment variables** (create a `.env` file in the project root):
+**Environment variables** (optional — create a `.env` file in the project root to override defaults):
 
 ```
-GROQ_API_KEY=your_groq_api_key_here
-# Optional: fetch hero data from S3 instead of scraping the wiki
-# PROFTRACKER_CDN_BASE=https://your-bucket.s3.amazonaws.com
+GROQ_API_KEY=your_groq_api_key_here  # embedded by default; override here if needed
 ```
 
 **Build a standalone executable:**
@@ -177,12 +174,10 @@ src/
   capture/             — OCR pipeline (EasyOCR, Interception driver)
   gui/                 — PyQt6 panels; QThread workers in rag/ and wiki_sync/
   rag/                 — LlamaIndex RAG: ingest, query engine, QueryWorker
-  wiki_sync/           — Fandom scraper: avatars, abilities, SyncWorker
+  wiki_sync/           — CDN + wiki sync: avatars, abilities, SyncWorker
   storage/             — SQLite database.py + repository.py
   data/                — heroes.py roster, xp_table.py, proficiency_missions.py
-  tracker/             — rivalsmeta.com API client + TrackerWorker
   models/              — Hero dataclass, CaptureRun dataclass
 tests/
   unit/                — pytest unit tests (mocked OCR, storage, scraper)
-SubmissionArtifacts/   — Sprint 4 deliverables (SPEC, architecture, risk register)
 ```
