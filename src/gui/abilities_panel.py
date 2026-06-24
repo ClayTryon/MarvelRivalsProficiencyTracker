@@ -6,29 +6,31 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPixmap
 from wiki_sync.ability_scraper import ability_icon_path
+from gui.colors import (
+    GOLD, BLUE_ACCENT, DARK,
+    BG_INPUT, BG_HOVER_INPUT, BORDER_INPUT,
+    TEXT_NEAR_WHITE, TEXT_LIGHT_GRAY, TEXT_GRAY, TEXT_HOVER_GRAY,
+    GRAY_55, GRAY_66,
+)
 
 
 _SECTION_COLORS = {
-    "Normal Attack":      "#888",
-    "Abilities":          "#f4d641",
-    "Team-Up Abilities":  "#a0c8ff",
-    "General":            "#888",
+    "Normal Attack":      TEXT_GRAY,
+    "Abilities":          GOLD,
+    "Team-Up Abilities":  BLUE_ACCENT,
+    "General":            TEXT_GRAY,
 }
 
 _BTN_ACTIVE = (
-    "QPushButton {"
-    " background: #f4d641; color: #1a1a1a; border: none;"
+    f"QPushButton {{ background: {GOLD}; color: {DARK}; border: none;"
     " border-radius: 3px; font-size: 11px; font-weight: bold;"
-    " letter-spacing: 1px; padding: 4px 14px;"
-    "}"
+    f" letter-spacing: 1px; padding: 4px 14px; }}"
 )
 _BTN_INACTIVE = (
-    "QPushButton {"
-    " background: #12121e; color: #666; border: 1px solid #2a2a4a;"
+    f"QPushButton {{ background: {BG_INPUT}; color: {GRAY_66}; border: 1px solid {BORDER_INPUT};"
     " border-radius: 3px; font-size: 11px; font-weight: bold;"
-    " letter-spacing: 1px; padding: 4px 14px;"
-    "}"
-    "QPushButton:hover { background: #1e1e30; color: #bbb; }"
+    f" letter-spacing: 1px; padding: 4px 14px; }}"
+    f"QPushButton:hover {{ background: {BG_HOVER_INPUT}; color: {TEXT_HOVER_GRAY}; }}"
 )
 
 
@@ -36,7 +38,7 @@ class _AbilityCard(QFrame):
     def __init__(self, ability: dict, parent=None):
         super().__init__(parent)
         self.setStyleSheet(
-            "QFrame { background: #12121e; border: 1px solid #1e1e30;"
+            f"QFrame {{ background: {BG_INPUT}; border: 1px solid {BG_HOVER_INPUT};"
             " border-radius: 4px; }"
         )
         layout = QVBoxLayout(self)
@@ -66,11 +68,11 @@ class _AbilityCard(QFrame):
 
         header = QLabel(
             f"{ability['name']}"
-            + (f"  <span style='color:#555;font-size:10px;'>[{ability['key']}]</span>"
+            + (f"  <span style='color:{GRAY_55};font-size:10px;'>[{ability['key']}]</span>"
                if ability['key'] else "")
         )
         header.setTextFormat(Qt.TextFormat.RichText)
-        header.setStyleSheet("font-size: 13px; font-weight: bold; color: #e8e8e8;")
+        header.setStyleSheet(f"font-size: 13px; font-weight: bold; color: {TEXT_NEAR_WHITE};")
         header.setWordWrap(True)
         header_row.addWidget(header, stretch=1)
         layout.addLayout(header_row)
@@ -78,14 +80,14 @@ class _AbilityCard(QFrame):
         if ability.get("description"):
             desc = QLabel(ability["description"])
             desc.setWordWrap(True)
-            desc.setStyleSheet("font-size: 11px; color: #aaa;")
+            desc.setStyleSheet(f"font-size: 11px; color: {TEXT_LIGHT_GRAY};")
             layout.addWidget(desc)
 
         for stat_name, stat_val in ability.get("stats", {}).items():
             stat_lbl = QLabel(f"<b>{stat_name}:</b> {stat_val}")
             stat_lbl.setTextFormat(Qt.TextFormat.RichText)
             stat_lbl.setWordWrap(True)
-            stat_lbl.setStyleSheet("font-size: 10px; color: #888;")
+            stat_lbl.setStyleSheet(f"font-size: 10px; color: {TEXT_GRAY};")
             layout.addWidget(stat_lbl)
 
 
@@ -176,7 +178,7 @@ class AbilitiesPanel(QWidget):
 
         if not self._abilities:
             empty = QLabel("No ability data — run Wiki Sync to download.")
-            empty.setStyleSheet("color: #555; font-size: 11px;")
+            empty.setStyleSheet(f"color: {GRAY_55}; font-size: 11px;")
             self._list_layout.insertWidget(0, empty)
             return
 
@@ -192,7 +194,7 @@ class AbilitiesPanel(QWidget):
             section = ability.get("section", "General")
             if section != current_section:
                 current_section = section
-                color = _SECTION_COLORS.get(section, "#888")
+                color = _SECTION_COLORS.get(section, TEXT_GRAY)
                 sec_lbl = QLabel(section.upper())
                 sec_lbl.setStyleSheet(
                     f"font-size: 10px; font-weight: bold; color: {color};"

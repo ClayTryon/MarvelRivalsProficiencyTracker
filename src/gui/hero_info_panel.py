@@ -8,13 +8,18 @@ from PyQt6.QtWidgets import (
     QLineEdit, QPushButton, QTextBrowser, QSizePolicy,
 )
 from rag.worker import QueryWorker
+from gui.colors import (
+    BG_APP, BG_PANEL, BORDER_MID, BORDER_NAV,
+    TEXT_BODY, TEXT_DIM,
+    GOLD, GOLD_BG, ERR, ERR_BG,
+)
 
-_GOLD = "#f4d641"
-_BG   = "#0c0c14"
-_PANEL = "#141420"
-_TEXT  = "#c8c8e0"
-_DIM   = "#484860"
-_ERR   = "#c84040"
+_GOLD  = GOLD
+_BG    = BG_APP
+_PANEL = BG_PANEL
+_TEXT  = TEXT_BODY
+_DIM   = TEXT_DIM
+_ERR   = ERR
 
 _MAX_HISTORY = 40  # max Q&A items to persist across sessions
 
@@ -64,7 +69,7 @@ class HeroInfoPanel(QWidget):
 
         self._clear_btn = QPushButton("Clear Index")
         self._clear_btn.setFixedHeight(26)
-        self._clear_btn.setStyleSheet(self._btn_style(_ERR, "#1a0000"))
+        self._clear_btn.setStyleSheet(self._btn_style(_ERR, ERR_BG))
         self._clear_btn.clicked.connect(self._clear_index)
         status_row.addWidget(self._clear_btn)
 
@@ -76,7 +81,7 @@ class HeroInfoPanel(QWidget):
         self._chat.setOpenLinks(False)
         self._chat.setStyleSheet(
             f"background: {_PANEL}; color: {_TEXT}; font-size: 13px;"
-            " border: 1px solid #1a1a2c; border-radius: 4px; padding: 10px;"
+            f" border: 1px solid {BORDER_MID}; border-radius: 4px; padding: 10px;"
         )
         self._chat.setSizePolicy(
             QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding
@@ -95,7 +100,7 @@ class HeroInfoPanel(QWidget):
 
         self._ask_btn = QPushButton("Ask")
         self._ask_btn.setFixedHeight(32)
-        self._ask_btn.setStyleSheet(self._btn_style(_GOLD, "#1a1a00"))
+        self._ask_btn.setStyleSheet(self._btn_style(_GOLD, GOLD_BG))
         self._ask_btn.clicked.connect(self._send_query)
         query_row.addWidget(self._ask_btn)
 
@@ -120,7 +125,7 @@ class HeroInfoPanel(QWidget):
         return (
             f"QLineEdit {{"
             f" background: {_PANEL}; color: {_TEXT};"
-            f" border: 1px solid #2a2a40; border-radius: 4px;"
+            f" border: 1px solid {BORDER_NAV}; border-radius: 4px;"
             f" padding: 6px 10px; font-size: 12px;"
             f"}}"
             f" QLineEdit:focus {{ border-color: {_GOLD}; }}"
@@ -133,7 +138,7 @@ class HeroInfoPanel(QWidget):
             f" background: {bg}; color: {fg}; border: 1px solid {fg};"
             f" border-radius: 4px; padding: 0 14px; font-size: 12px; font-weight: bold;"
             f"}}"
-            f" QPushButton:hover {{ background: {fg}; color: #000000; }}"
+            f" QPushButton:hover {{ background: {fg}; color: #000; }}"
             f" QPushButton:disabled {{ opacity: 0.35; }}"
         )
 
@@ -186,7 +191,7 @@ class HeroInfoPanel(QWidget):
             f'<b style="color:{_GOLD};">{role}</b><br/>'
             f'<span style="color:{color};">{safe}</span>'
             f'</p>'
-            f'<hr style="border:none;border-top:1px solid #1a1a2c;margin:4px 0;"/>'
+            f'<hr style="border:none;border-top:1px solid {BORDER_MID};margin:4px 0;"/>'
         )
         self._chat.append(html)
         self._chat.verticalScrollBar().setValue(
@@ -210,7 +215,7 @@ class HeroInfoPanel(QWidget):
             f'<span style="color:{_TEXT};">{safe}</span>'
             f'{src_html}'
             f'</p>'
-            f'<hr style="border:none;border-top:1px solid #1a1a2c;margin:4px 0;"/>'
+            f'<hr style="border:none;border-top:1px solid {BORDER_MID};margin:4px 0;"/>'
         )
         self._chat.append(html)
         self._chat.verticalScrollBar().setValue(

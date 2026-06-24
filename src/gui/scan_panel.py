@@ -11,6 +11,7 @@ from capture.window_picker import pick_window
 from models.hero import Hero
 from storage.database import Database
 from storage.repository import HeroRepository
+from gui.colors import GOLD, TEXT_DIM, WARN, WARN_BG, WARN_BORDER, ERR_LIGHT
 
 
 class ScanPanel(QWidget):
@@ -37,12 +38,12 @@ class ScanPanel(QWidget):
         title = QLabel("PROFICIENCY SCANNER")
         title.setStyleSheet(
             "font-family: Impact, 'Arial Narrow', Arial;"
-            " font-size: 20px; letter-spacing: 4px; color: #f4d641;"
+            f" font-size: 20px; letter-spacing: 4px; color: {GOLD};"
         )
         layout.addWidget(title)
 
         self._status_label = QLabel("No window selected.")
-        self._status_label.setStyleSheet("color: #484860; font-size: 12px;")
+        self._status_label.setStyleSheet(f"color: {TEXT_DIM}; font-size: 12px;")
         layout.addWidget(self._status_label)
 
         checklist = QLabel(
@@ -52,7 +53,7 @@ class ScanPanel(QWidget):
         )
         checklist.setWordWrap(True)
         checklist.setStyleSheet(
-            "color: #b0903a; background: #1a1400; border: 1px solid #3a2e00;"
+            f"color: {WARN}; background: {WARN_BG}; border: 1px solid {WARN_BORDER};"
             " border-radius: 4px; padding: 6px 10px; font-size: 11px;"
         )
         layout.addWidget(checklist)
@@ -63,7 +64,7 @@ class ScanPanel(QWidget):
         self._auto_scan_btn.setEnabled(False)
         self._auto_scan_btn.setStyleSheet("font-weight: bold; padding: 6px 14px;")
         self._cancel_btn = QPushButton("Cancel Scan")
-        self._cancel_btn.setStyleSheet("color: #f88; padding: 6px 14px;")
+        self._cancel_btn.setStyleSheet(f"color: {ERR_LIGHT}; padding: 6px 14px;")
         self._cancel_btn.setVisible(False)
         btn_row.addWidget(self._select_btn)
         btn_row.addWidget(self._auto_scan_btn)

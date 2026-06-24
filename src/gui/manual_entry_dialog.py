@@ -11,6 +11,7 @@ from models.capture_run import CaptureStatus
 from models.hero import Hero
 from storage.database import Database
 from storage.repository import CaptureRunRepository, HeroRepository, SnapshotRepository
+from gui.colors import TEXT_LIGHT_GRAY
 
 _MAX_LEVEL = max(XP_PER_LEVEL.keys())  # 70
 
@@ -34,7 +35,7 @@ class ManualEntryDialog(QDialog):
         form.addRow("Hero:", self._hero_combo)
 
         self._role_lbl = QLabel()
-        self._role_lbl.setStyleSheet("color: #aaaaaa;")
+        self._role_lbl.setStyleSheet(f"color: {TEXT_LIGHT_GRAY};")
         form.addRow("Role:", self._role_lbl)
 
         self._level_spin = QSpinBox()
@@ -47,7 +48,7 @@ class ManualEntryDialog(QDialog):
         form.addRow("", self._max_check)
 
         self._xp_req_lbl = QLabel()
-        self._xp_req_lbl.setStyleSheet("color: #aaaaaa;")
+        self._xp_req_lbl.setStyleSheet(f"color: {TEXT_LIGHT_GRAY};")
         form.addRow("XP Required:", self._xp_req_lbl)
 
         self._xp_spin = QSpinBox()

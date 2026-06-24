@@ -3,6 +3,11 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt, QSettings
 from wiki_sync.worker import SyncWorker
+from gui.colors import (
+    BG_APP, BG_INPUT, BORDER, BORDER_MID, BORDER_INPUT,
+    TEXT, TEXT_DIM, TEXT_LIGHT_GRAY, TEXT_DIALOG,
+    GOLD, GRAY_66,
+)
 
 
 class FirstRunDialog(QDialog):
@@ -14,7 +19,7 @@ class FirstRunDialog(QDialog):
         self.setFixedSize(480, 270)
         # Window flag gives it a taskbar button so it's findable
         self.setWindowFlags(Qt.WindowType.Window | Qt.WindowType.CustomizeWindowHint | Qt.WindowType.WindowTitleHint)
-        self.setStyleSheet("background: #0c0c14; color: #e0e0e0;")
+        self.setStyleSheet(f"background: {BG_APP}; color: {TEXT_DIALOG};")
         self.raise_()
         self.activateWindow()
 
@@ -25,26 +30,26 @@ class FirstRunDialog(QDialog):
         title = QLabel("SETTING UP PROFTRACKER")
         title.setStyleSheet(
             "font-family: Impact, 'Arial Narrow', Arial;"
-            " font-size: 16px; letter-spacing: 3px; color: #f4d641;"
+            f" font-size: 16px; letter-spacing: 3px; color: {GOLD};"
         )
         lay.addWidget(title)
 
         self._status = QLabel("Connecting to Marvel Rivals wiki...")
-        self._status.setStyleSheet("color: #aaa; font-size: 12px;")
+        self._status.setStyleSheet(f"color: {TEXT_LIGHT_GRAY}; font-size: 12px;")
         self._status.setWordWrap(True)
         lay.addWidget(self._status)
 
         # Optional rivalsmeta UID — saved to QSettings for auto-refresh
         uid_row = QHBoxLayout()
         uid_lbl = QLabel("rivalsmeta player UID")
-        uid_lbl.setStyleSheet("color: #666; font-size: 11px;")
+        uid_lbl.setStyleSheet(f"color: {GRAY_66}; font-size: 11px;")
         uid_row.addWidget(uid_lbl)
         self._ign_input = QLineEdit()
         self._ign_input.setPlaceholderText("optional — numeric ID from rivalsmeta.com")
         self._ign_input.setStyleSheet(
-            "QLineEdit { background: #12121e; color: #dcdce8; border: 1px solid #2a2a4a;"
-            " border-radius: 3px; padding: 3px 8px; font-size: 11px; }"
-            " QLineEdit:focus { border-color: #f4d641; }"
+            f"QLineEdit {{ background: {BG_INPUT}; color: {TEXT}; border: 1px solid {BORDER_INPUT};"
+            f" border-radius: 3px; padding: 3px 8px; font-size: 11px; }}"
+            f" QLineEdit:focus {{ border-color: {GOLD}; }}"
         )
         saved_uid = QSettings("ProfTracker", "HeroBrowser").value("tracker_uid", "")
         self._ign_input.setText(saved_uid)
@@ -52,7 +57,7 @@ class FirstRunDialog(QDialog):
         lay.addLayout(uid_row)
 
         sub_lbl = QLabel("Your stats will auto-sync every launch via the STATS tab.")
-        sub_lbl.setStyleSheet("color: #484860; font-size: 10px;")
+        sub_lbl.setStyleSheet(f"color: {TEXT_DIM}; font-size: 10px;")
         lay.addWidget(sub_lbl)
 
         self._bar = QProgressBar()
@@ -61,17 +66,17 @@ class FirstRunDialog(QDialog):
         self._bar.setFixedHeight(8)
         self._bar.setTextVisible(False)
         self._bar.setStyleSheet(
-            "QProgressBar { background: #1a1a2c; border: none; border-radius: 4px; }"
-            "QProgressBar::chunk { background: #f4d641; border-radius: 4px; }"
+            f"QProgressBar {{ background: {BORDER_MID}; border: none; border-radius: 4px; }}"
+            f"QProgressBar::chunk {{ background: {GOLD}; border-radius: 4px; }}"
         )
         lay.addWidget(self._bar)
 
         self._skip_btn = QPushButton("Skip (use built-in roster)")
         self._skip_btn.setStyleSheet(
-            "QPushButton { background: transparent; color: #484860;"
-            " border: 1px solid #26263c; border-radius: 3px;"
-            " font-size: 11px; padding: 4px 12px; }"
-            "QPushButton:hover { color: #aaa; border-color: #aaa; }"
+            f"QPushButton {{ background: transparent; color: {TEXT_DIM};"
+            f" border: 1px solid {BORDER}; border-radius: 3px;"
+            f" font-size: 11px; padding: 4px 12px; }}"
+            f"QPushButton:hover {{ color: {TEXT_LIGHT_GRAY}; border-color: {TEXT_LIGHT_GRAY}; }}"
         )
         self._skip_btn.clicked.connect(self._skip)
         lay.addWidget(self._skip_btn, alignment=Qt.AlignmentFlag.AlignRight)

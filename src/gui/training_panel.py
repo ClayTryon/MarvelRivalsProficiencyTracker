@@ -9,6 +9,12 @@ from models.hero import Hero
 from data.xp_table import TOTAL_XP_FOR_LORD, total_xp_earned
 from gui.hero_detail import _icon_path
 from gui.hero_card import _get_pixmap
+from gui.colors import (
+    BG_APP, BG_DEEP, BORDER_MID,
+    TEXT_DIM, TEXT_SUB, TEXT_FAINT, TEXT_MUTED, TEXT_UI,
+    GOLD, GOLD_HOVER, GOLD_PRESS,
+    ROLE_VANGUARD, ROLE_DUELIST, ROLE_STRATEGIST, ROLE_MULTI_ROLE,
+)
 
 _LORD_LEVEL   = 20
 _ICON_SIZE    = 160
@@ -16,10 +22,10 @@ _ICON_SIZE    = 160
 _ROLE_OPTIONS = ["All Roles", "Vanguard", "Duelist", "Strategist", "Multi-Role"]
 
 _ROLE_COLORS = {
-    "Vanguard":   "#4a90d9",
-    "Duelist":    "#d94a4a",
-    "Strategist": "#4ad98a",
-    "Multi-Role": "#d9a44a",
+    "Vanguard":   ROLE_VANGUARD,
+    "Duelist":    ROLE_DUELIST,
+    "Strategist": ROLE_STRATEGIST,
+    "Multi-Role": ROLE_MULTI_ROLE,
 }
 
 _FAST_TICKS        = 25
@@ -53,7 +59,7 @@ class TrainingPanel(QWidget):
         title.setAlignment(Qt.AlignmentFlag.AlignCenter)
         title.setStyleSheet(
             "font-family: Impact, 'Arial Narrow', Arial;"
-            " font-size: 20px; letter-spacing: 4px; color: #f4d641;"
+            f" font-size: 20px; letter-spacing: 4px; color: {GOLD};"
         )
         root.addWidget(title)
 
@@ -61,7 +67,7 @@ class TrainingPanel(QWidget):
 
         subtitle = QLabel("Pick a random hero that hasn't earned Lord (LV20) yet")
         subtitle.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        subtitle.setStyleSheet("color: #484860; font-size: 12px;")
+        subtitle.setStyleSheet(f"color: {TEXT_DIM}; font-size: 12px;")
         root.addWidget(subtitle)
 
         root.addSpacing(24)
@@ -74,7 +80,7 @@ class TrainingPanel(QWidget):
         role_lbl = QLabel("ROLE")
         role_lbl.setStyleSheet(
             "font-family: Impact, 'Arial Narrow', Arial;"
-            " font-size: 11px; letter-spacing: 2px; color: #606078;"
+            f" font-size: 11px; letter-spacing: 2px; color: {TEXT_SUB};"
         )
         filter_row.addWidget(role_lbl)
 
@@ -93,7 +99,7 @@ class TrainingPanel(QWidget):
         self._icon_lbl.setFixedSize(_ICON_SIZE, _ICON_SIZE)
         self._icon_lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self._icon_lbl.setStyleSheet(
-            "background: #080810; border: 1px solid #1a1a2c; border-radius: 6px;"
+            f"background: {BG_DEEP}; border: 1px solid {BORDER_MID}; border-radius: 6px;"
         )
 
         icon_row = QHBoxLayout()
@@ -106,7 +112,7 @@ class TrainingPanel(QWidget):
         # Hero name (shown after spin settles)
         self._name_lbl = QLabel("—")
         self._name_lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self._name_lbl.setStyleSheet(self._name_style("#363650"))
+        self._name_lbl.setStyleSheet(self._name_style(TEXT_FAINT))
         root.addWidget(self._name_lbl)
 
         root.addSpacing(4)
@@ -115,13 +121,13 @@ class TrainingPanel(QWidget):
         self._role_result_lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self._role_result_lbl.setStyleSheet(
             "font-family: Impact, 'Arial Narrow', Arial;"
-            " font-size: 12px; letter-spacing: 2px; color: #363650;"
+            f" font-size: 12px; letter-spacing: 2px; color: {TEXT_FAINT};"
         )
         root.addWidget(self._role_result_lbl)
 
         self._xp_lbl = QLabel("")
         self._xp_lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self._xp_lbl.setStyleSheet("font-size: 12px; color: #363650;")
+        self._xp_lbl.setStyleSheet(f"font-size: 12px; color: {TEXT_FAINT};")
         root.addWidget(self._xp_lbl)
 
         root.addSpacing(20)
@@ -133,12 +139,12 @@ class TrainingPanel(QWidget):
             "QPushButton {"
             " font-family: Impact, 'Arial Narrow', Arial;"
             " font-size: 18px; letter-spacing: 4px;"
-            " background: #f4d641; color: #0c0c14;"
+            f" background: {GOLD}; color: {BG_APP};"
             " border: none; border-radius: 4px;"
             "}"
-            "QPushButton:hover   { background: #ffe066; }"
-            "QPushButton:pressed { background: #c8b030; }"
-            "QPushButton:disabled { background: #1a1a2c; color: #363650; }"
+            f"QPushButton:hover   {{ background: {GOLD_HOVER}; }}"
+            f"QPushButton:pressed {{ background: {GOLD_PRESS}; }}"
+            f"QPushButton:disabled {{ background: {BORDER_MID}; color: {TEXT_FAINT}; }}"
         )
         self._spin_btn.clicked.connect(self._start_spin)
         self._spin_btn.setEnabled(False)
@@ -152,7 +158,7 @@ class TrainingPanel(QWidget):
 
         self._pool_lbl = QLabel("")
         self._pool_lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self._pool_lbl.setStyleSheet("color: #363650; font-size: 11px;")
+        self._pool_lbl.setStyleSheet(f"color: {TEXT_FAINT}; font-size: 11px;")
         root.addWidget(self._pool_lbl)
 
         root.addStretch()
@@ -189,12 +195,12 @@ class TrainingPanel(QWidget):
 
         self._spin_btn.setEnabled(False)
         self._name_lbl.setText("")
-        self._name_lbl.setStyleSheet(self._name_style("#363650"))
+        self._name_lbl.setStyleSheet(self._name_style(TEXT_FAINT))
         self._role_result_lbl.setText("")
         self._xp_lbl.setText("")
         self._icon_lbl.clear()
         self._icon_lbl.setStyleSheet(
-            "background: #080810; border: 1px solid #1a1a2c; border-radius: 6px;"
+            f"background: {BG_DEEP}; border: 1px solid {BORDER_MID}; border-radius: 6px;"
         )
         self._spin_timer.start(_FAST_INTERVAL_MS)
 
@@ -222,14 +228,14 @@ class TrainingPanel(QWidget):
     def _show_result(self, hero: Hero):
         self._set_icon(hero.name)
         self._icon_lbl.setStyleSheet(
-            "background: #080810;"
-            " border: 2px solid #f4d641; border-radius: 6px;"
+            f"background: {BG_DEEP};"
+            f" border: 2px solid {GOLD}; border-radius: 6px;"
         )
 
         self._name_lbl.setText(hero.name)
-        self._name_lbl.setStyleSheet(self._name_style("#f4d641"))
+        self._name_lbl.setStyleSheet(self._name_style(GOLD))
 
-        role_color = _ROLE_COLORS.get(hero.role, "#a8a8c0")
+        role_color = _ROLE_COLORS.get(hero.role, TEXT_UI)
         self._role_result_lbl.setText(hero.role.upper())
         self._role_result_lbl.setStyleSheet(
             f"font-family: Impact, 'Arial Narrow', Arial;"
@@ -241,7 +247,7 @@ class TrainingPanel(QWidget):
         self._xp_lbl.setText(
             f"LV {hero.level}  ·  {xp:,} / {TOTAL_XP_FOR_LORD:,} XP to Lord  ({pct}%)"
         )
-        self._xp_lbl.setStyleSheet("font-size: 12px; color: #7878a0;")
+        self._xp_lbl.setStyleSheet(f"font-size: 12px; color: {TEXT_MUTED};")
 
         self._spin_btn.setEnabled(True)
 

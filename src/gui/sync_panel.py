@@ -4,19 +4,23 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt, pyqtSignal
 from wiki_sync.worker import SyncWorker
+from gui.colors import (
+    BG_DEEP, BORDER_MID,
+    TEXT_GRAY, TEXT_LIGHT_GRAY, TEXT_LOG,
+    GOLD, GOLD_HOVER, DARK,
+    BTN_DISABLED_BG, GRAY_55,
+)
 
 
 class SyncPanel(QWidget):
     sync_complete = pyqtSignal()
 
     _BTN = (
-        "QPushButton {"
-        " background: #f4d641; color: #1a1a1a; border: none;"
+        f"QPushButton {{ background: {GOLD}; color: {DARK}; border: none;"
         " border-radius: 4px; font-size: 13px; font-weight: bold;"
-        " letter-spacing: 1px; padding: 8px 28px;"
-        "}"
-        "QPushButton:hover { background: #ffe066; }"
-        "QPushButton:disabled { background: #2a2a3a; color: #555; }"
+        f" letter-spacing: 1px; padding: 8px 28px; }}"
+        f"QPushButton:hover {{ background: {GOLD_HOVER}; }}"
+        f"QPushButton:disabled {{ background: {BTN_DISABLED_BG}; color: {GRAY_55}; }}"
     )
 
     def __init__(self, parent=None):
@@ -28,7 +32,7 @@ class SyncPanel(QWidget):
         title = QLabel("WIKI SYNC")
         title.setStyleSheet(
             "font-family: Impact, 'Arial Narrow', Arial;"
-            " font-size: 20px; letter-spacing: 4px; color: #f4d641;"
+            f" font-size: 20px; letter-spacing: 4px; color: {GOLD};"
         )
         layout.addWidget(title)
 
@@ -37,7 +41,7 @@ class SyncPanel(QWidget):
             "from the Marvel Rivals Fandom wiki.\n"
             "Icons already present in the Icons folder are skipped."
         )
-        desc.setStyleSheet("color: #888; font-size: 12px;")
+        desc.setStyleSheet(f"color: {TEXT_GRAY}; font-size: 12px;")
         layout.addWidget(desc)
 
         btn_row = QHBoxLayout()
@@ -55,25 +59,25 @@ class SyncPanel(QWidget):
         self._progress_bar.setFixedHeight(8)
         self._progress_bar.setTextVisible(False)
         self._progress_bar.setStyleSheet(
-            "QProgressBar { background: #1a1a2c; border: none; border-radius: 4px; }"
-            "QProgressBar::chunk { background: #f4d641; border-radius: 4px; }"
+            f"QProgressBar {{ background: {BORDER_MID}; border: none; border-radius: 4px; }}"
+            f"QProgressBar::chunk {{ background: {GOLD}; border-radius: 4px; }}"
         )
         self._progress_bar.hide()
         layout.addWidget(self._progress_bar)
 
         self._status = QLabel("")
-        self._status.setStyleSheet("color: #aaa; font-size: 12px;")
+        self._status.setStyleSheet(f"color: {TEXT_LIGHT_GRAY}; font-size: 12px;")
         layout.addWidget(self._status)
 
         self._log = QPlainTextEdit()
         self._log.setReadOnly(True)
         self._log.setStyleSheet(
-            "QPlainTextEdit {"
-            " background: #080810; color: #ccc;"
+            f"QPlainTextEdit {{"
+            f" background: {BG_DEEP}; color: {TEXT_LOG};"
             " font-family: Consolas, 'Courier New', monospace;"
-            " font-size: 11px; border: 1px solid #1a1a2c;"
+            f" font-size: 11px; border: 1px solid {BORDER_MID};"
             " border-radius: 4px;"
-            "}"
+            f"}}"
         )
         layout.addWidget(self._log)
 

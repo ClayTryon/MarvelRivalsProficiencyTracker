@@ -3,6 +3,10 @@ from PyQt6.QtCore import Qt, pyqtSignal, QRect
 from PyQt6.QtGui import QMovie, QPixmap, QCursor, QPainter, QColor, QFont
 from models.hero import Hero
 from gui.hero_detail import _icon_path
+from gui.colors import (
+    GOLD, GOLD_MAX, DARK, BG_ICON, PROGRESS_BG,
+    TEXT_NEAR_WHITE, TEXT_GRAY, TEXT_DIALOG,
+)
 
 _PIXMAP_CACHE: dict[str, QPixmap] = {}
 
@@ -30,12 +34,12 @@ def _apply_upcoming_overlay(pixmap: QPixmap, date_str: str) -> QPixmap:
     font_up = QFont("Impact", 12)
     font_up.setLetterSpacing(QFont.SpacingType.AbsoluteSpacing, 1)
     p.setFont(font_up)
-    p.setPen(QColor("#f4d641"))
+    p.setPen(QColor(GOLD))
     p.drawText(QRect(2, mid - 22, w - 4, 22), Qt.AlignmentFlag.AlignCenter, "UPCOMING")
     font_dt = QFont("Arial", 8)
     font_dt.setBold(True)
     p.setFont(font_dt)
-    p.setPen(QColor("#e0e0e0"))
+    p.setPen(QColor(TEXT_DIALOG))
     p.drawText(QRect(2, mid + 2, w - 4, 20), Qt.AlignmentFlag.AlignCenter, date_str)
     p.end()
     return result
@@ -68,19 +72,19 @@ class HeroCard(QFrame):
         self._icon_lbl = QLabel()
         self._icon_lbl.setFixedSize(self.ICON, self.ICON)
         self._icon_lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self._icon_lbl.setStyleSheet("background: #141414; border-radius: 4px;")
+        self._icon_lbl.setStyleSheet(f"background: {BG_ICON}; border-radius: 4px;")
         lay.addWidget(self._icon_lbl, alignment=Qt.AlignmentFlag.AlignHCenter)
 
         name_lbl = QLabel(hero.name)
         name_lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
         name_lbl.setWordWrap(True)
-        name_lbl.setStyleSheet("font-size: 11px; font-weight: bold; color: #e8e8e8;")
+        name_lbl.setStyleSheet(f"font-size: 11px; font-weight: bold; color: {TEXT_NEAR_WHITE};")
         lay.addWidget(name_lbl)
 
         if hero.is_max_level:
-            level_text, level_color = "MAX", "#FFD700"
+            level_text, level_color = "MAX", GOLD_MAX
         else:
-            level_text, level_color = f"LV {hero.level}", "#f4d641"
+            level_text, level_color = f"LV {hero.level}", GOLD
         level_lbl = QLabel(level_text)
         level_lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
         level_lbl.setStyleSheet(f"font-size: 11px; color: {level_color}; font-weight: bold;")
@@ -93,23 +97,23 @@ class HeroCard(QFrame):
             bar.setFixedHeight(4)
             bar.setTextVisible(False)
             bar.setStyleSheet(
-                "QProgressBar { background: #2a2a2a; border: none; border-radius: 2px; }"
-                "QProgressBar::chunk { background: #f4d641; border-radius: 2px; }"
+                f"QProgressBar {{ background: {PROGRESS_BG}; border: none; border-radius: 2px; }}"
+                f"QProgressBar::chunk {{ background: {GOLD}; border-radius: 2px; }}"
             )
             lay.addWidget(bar)
 
             xp_lbl = QLabel(f"{hero.xp:,} / {hero.xp_required:,}")
             xp_lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
-            xp_lbl.setStyleSheet("font-size: 9px; color: #888888;")
+            xp_lbl.setStyleSheet(f"font-size: 9px; color: {TEXT_GRAY};")
             lay.addWidget(xp_lbl)
 
         self._load_icon(hero.name, hero.level, release_date)
 
     def _set_border(self, hovered: bool):
-        border = "#f4d641" if hovered else "#2a2a2a"
+        border = GOLD if hovered else PROGRESS_BG
         self.setStyleSheet(f"""
             HeroCard {{
-                background: #1a1a1a;
+                background: {DARK};
                 border: 2px solid {border};
                 border-radius: 6px;
             }}

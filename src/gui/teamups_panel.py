@@ -8,6 +8,12 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt, pyqtSignal
 from PyQt6.QtGui import QPixmap
+from gui.colors import (
+    BG_CARD, BG_CARD_ALT, BORDER_CARD,
+    GOLD, BLUE_ACCENT,
+    TEAMUP_INACTIVE, TEAMUP_ABILITY, TEAMUP_DESC, TEAMUP_STATS, TEAMUP_STATS_KEY,
+    GRAY_55,
+)
 
 if getattr(sys, 'frozen', False):
     _DATA_DIR = os.path.join(sys._MEIPASS, 'hero_data')
@@ -112,9 +118,9 @@ class _PortraitBtn(QWidget):
 
     clicked = pyqtSignal()
 
-    _ANCHOR_COLOR   = "#f4d641"
-    _SELECTED_COLOR = "#a0c8ff"
-    _DEFAULT_BG     = "#0d1628"
+    _ANCHOR_COLOR   = GOLD
+    _SELECTED_COLOR = BLUE_ACCENT
+    _DEFAULT_BG     = BG_CARD
 
     def __init__(self, hero_name: str, is_anchor: bool = False, parent=None):
         super().__init__(parent)
@@ -153,7 +159,7 @@ class _PortraitBtn(QWidget):
         name_lbl.setAlignment(Qt.AlignmentFlag.AlignHCenter)
         name_lbl.setWordWrap(True)
         name_lbl.setFixedWidth(_PORTRAIT + 16)
-        name_lbl.setStyleSheet("font-size: 8px; color: #556;")
+        name_lbl.setStyleSheet(f"font-size: 8px; color: {TEAMUP_STATS};")
 
         col.addWidget(self._icon_lbl)
         col.addWidget(self._pip)
@@ -170,7 +176,7 @@ class _PortraitBtn(QWidget):
         elif not self._is_anchor and self._active:
             color = self._SELECTED_COLOR
         else:
-            color = "#1e2a42"
+            color = TEAMUP_INACTIVE
         self._icon_lbl.setStyleSheet(
             f"background: {self._DEFAULT_BG}; border: 2px solid {color}; border-radius: 4px;"
         )
@@ -188,7 +194,7 @@ class _TeamUpCard(QFrame):
     def __init__(self, teamup: dict, parent=None):
         super().__init__(parent)
         self.setStyleSheet(
-            "QFrame { background: #0d1628; border: 1px solid #1a2a44;"
+            f"QFrame {{ background: {BG_CARD}; border: 1px solid {BORDER_CARD};"
             " border-radius: 6px; }"
         )
 
@@ -207,7 +213,7 @@ class _TeamUpCard(QFrame):
         name_lbl = QLabel(teamup["name"].upper())
         name_lbl.setStyleSheet(
             "font-family: Impact, 'Arial Narrow', Arial;"
-            " font-size: 16px; letter-spacing: 2px; color: #a0c8ff;"
+            f" font-size: 16px; letter-spacing: 2px; color: {BLUE_ACCENT};"
         )
         name_lbl.setAlignment(Qt.AlignmentFlag.AlignVCenter | Qt.AlignmentFlag.AlignLeft)
         top_layout.addWidget(name_lbl, stretch=1)
@@ -235,24 +241,24 @@ class _TeamUpCard(QFrame):
 
         # ── Bottom section: description bar ──────────────────────────────
         bottom = QWidget()
-        bottom.setStyleSheet("background: #080f1e; border-radius: 0 0 6px 6px;")
+        bottom.setStyleSheet(f"background: {BG_CARD_ALT}; border-radius: 0 0 6px 6px;")
         bot_layout = QVBoxLayout(bottom)
         bot_layout.setContentsMargins(16, 8, 16, 10)
         bot_layout.setSpacing(3)
 
         self._ability_name_lbl = QLabel()
-        self._ability_name_lbl.setStyleSheet("font-size: 10px; color: #4a5a78; letter-spacing: 1px;")
+        self._ability_name_lbl.setStyleSheet(f"font-size: 10px; color: {TEAMUP_ABILITY}; letter-spacing: 1px;")
         bot_layout.addWidget(self._ability_name_lbl)
 
         self._desc_lbl = QLabel()
         self._desc_lbl.setWordWrap(True)
-        self._desc_lbl.setStyleSheet("font-size: 11px; color: #8a9ab8;")
+        self._desc_lbl.setStyleSheet(f"font-size: 11px; color: {TEAMUP_DESC};")
         bot_layout.addWidget(self._desc_lbl)
 
         self._stats_lbl = QLabel()
         self._stats_lbl.setTextFormat(Qt.TextFormat.RichText)
         self._stats_lbl.setWordWrap(True)
-        self._stats_lbl.setStyleSheet("font-size: 10px; color: #556;")
+        self._stats_lbl.setStyleSheet(f"font-size: 10px; color: {TEAMUP_STATS};")
         bot_layout.addWidget(self._stats_lbl)
 
         root.addWidget(bottom)
@@ -267,7 +273,7 @@ class _TeamUpCard(QFrame):
         self._desc_lbl.setText(entry.get("description", ""))
         stats = entry.get("stats", {})
         self._stats_lbl.setText(
-            "   ".join(f"<b style='color:#667'>{k}:</b> {v}" for k, v in stats.items())
+            "   ".join(f"<b style='color:{TEAMUP_STATS_KEY}'>{k}:</b> {v}" for k, v in stats.items())
         )
         self._stats_lbl.setVisible(bool(stats))
 
@@ -298,7 +304,7 @@ class TeamUpsPanel(QWidget):
         title = QLabel("TEAM-UP ABILITIES")
         title.setStyleSheet(
             "font-family: Impact, 'Arial Narrow', Arial;"
-            " font-size: 20px; letter-spacing: 4px; color: #a0c8ff;"
+            f" font-size: 20px; letter-spacing: 4px; color: {BLUE_ACCENT};"
         )
         outer.addWidget(title)
 
@@ -329,7 +335,7 @@ class TeamUpsPanel(QWidget):
         teamups = _collect_teamups()
         if not teamups:
             empty = QLabel("No team-up data — run Wiki Sync to download.")
-            empty.setStyleSheet("color: #555; font-size: 12px;")
+            empty.setStyleSheet(f"color: {GRAY_55}; font-size: 12px;")
             self._list_layout.insertWidget(0, empty)
             return
 

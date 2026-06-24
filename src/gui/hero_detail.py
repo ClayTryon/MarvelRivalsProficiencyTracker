@@ -11,6 +11,15 @@ from models.hero import Hero
 from data.xp_table import total_xp_earned, TOTAL_XP_FOR_CHAMPION, TOTAL_XP_FOR_LORD
 from gui.abilities_panel import AbilitiesPanel, _AbilityCard
 from gui.xp_progress import HeroXpChart
+from gui.colors import (
+    BG_CARD, BG_CARD_ALT, BG_INPUT, BG_HOVER_INPUT,
+    BORDER, BORDER_CARD, BORDER_INPUT,
+    TEXT, TEXT_DIM,
+    GOLD, DARK, BLUE_ACCENT,
+    RARITY_LEGENDARY, RARITY_EPIC, RARITY_RARE, RARITY_COMMON, RARITY_UNKNOWN,
+    TEXT_GRAY, TEXT_HOVER_GRAY,
+    GRAY_66,
+)
 from wiki_sync.ability_scraper import load_abilities
 from wiki_sync.cosmetics_scraper import load_skins, skin_icon_path, skin_costume_path
 
@@ -27,21 +36,16 @@ else:
 
 _ICON_PIXMAP_CACHE: dict[str, "QPixmap"] = {}
 
-_CARD_BG = "#0d1628"
-_DIM     = "#484860"
-_GOLD    = "#f4d641"
-_TEXT    = "#dcdce8"
-
 _TAB_ACTIVE = (
-    "QPushButton { background: #f4d641; color: #1a1a1a; border: none;"
+    f"QPushButton {{ background: {GOLD}; color: {DARK}; border: none;"
     " border-radius: 3px; font-size: 11px; font-weight: bold;"
-    " letter-spacing: 1px; padding: 4px 14px; }"
+    f" letter-spacing: 1px; padding: 4px 14px; }}"
 )
 _TAB_INACTIVE = (
-    "QPushButton { background: #12121e; color: #666; border: 1px solid #2a2a4a;"
+    f"QPushButton {{ background: {BG_INPUT}; color: {GRAY_66}; border: 1px solid {BORDER_INPUT};"
     " border-radius: 3px; font-size: 11px; font-weight: bold;"
-    " letter-spacing: 1px; padding: 4px 14px; }"
-    " QPushButton:hover { background: #1e1e30; color: #bbb; }"
+    f" letter-spacing: 1px; padding: 4px 14px; }}"
+    f" QPushButton:hover {{ background: {BG_HOVER_INPUT}; color: {TEXT_HOVER_GRAY}; }}"
 )
 
 
@@ -116,7 +120,7 @@ def _find_ability_for_teamup(abilities: list[dict], partner_names: list[str]) ->
 
 def _card(parent=None) -> QWidget:
     w = QWidget(parent)
-    w.setStyleSheet(f"QWidget {{ background: {_CARD_BG}; border-radius: 6px; }}")
+    w.setStyleSheet(f"QWidget {{ background: {BG_CARD}; border-radius: 6px; }}")
     return w
 
 
@@ -133,7 +137,7 @@ class _TeamUpEntry(QFrame):
     def __init__(self, teamup: dict, hero_name: str, ability: dict | None, parent=None):
         super().__init__(parent)
         self.setStyleSheet(
-            "QFrame { background: #0d1628; border: 1px solid #1a2a44; border-radius: 4px; }"
+            f"QFrame {{ background: {BG_CARD}; border: 1px solid {BORDER_CARD}; border-radius: 4px; }}"
         )
         lay = QVBoxLayout(self)
         lay.setContentsMargins(12, 10, 12, 10)
@@ -143,7 +147,7 @@ class _TeamUpEntry(QFrame):
         name_lbl = QLabel(teamup.get("name", "").upper())
         name_lbl.setStyleSheet(
             "font-family: Impact, 'Arial Narrow', Arial;"
-            " font-size: 11px; color: #a0c8ff; letter-spacing: 1px;"
+            f" font-size: 11px; color: {BLUE_ACCENT}; letter-spacing: 1px;"
             " background: transparent; border: none;"
         )
         lay.addWidget(name_lbl)
@@ -151,7 +155,7 @@ class _TeamUpEntry(QFrame):
         all_heroes = [teamup.get("anchor", "")] + list(teamup.get("partners", []))
         partners = [h for h in all_heroes if h and h != hero_name]
         role = "Anchor" if teamup.get("anchor") == hero_name else "Partner"
-        role_color = _GOLD if role == "Anchor" else _DIM
+        role_color = GOLD if role == "Anchor" else TEXT_DIM
 
         meta_row = QHBoxLayout()
         meta_row.setSpacing(6)
@@ -163,7 +167,7 @@ class _TeamUpEntry(QFrame):
         if partners:
             with_lbl = QLabel("with  " + "  ·  ".join(partners))
             with_lbl.setStyleSheet(
-                f"font-size: 10px; color: {_DIM}; background: transparent; border: none;"
+                f"font-size: 10px; color: {TEXT_DIM}; background: transparent; border: none;"
             )
             meta_row.addWidget(with_lbl)
         meta_row.addStretch()
@@ -204,7 +208,7 @@ class _HeroTeamUpsWidget(QWidget):
 
         if not teamups:
             lbl = QLabel("No team-up data.\nRun Wiki Sync to download.")
-            lbl.setStyleSheet(f"color: {_DIM}; font-size: 12px; background: transparent;")
+            lbl.setStyleSheet(f"color: {TEXT_DIM}; font-size: 12px; background: transparent;")
             lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
             self._inner.addWidget(lbl)
         else:
@@ -219,11 +223,11 @@ class _HeroTeamUpsWidget(QWidget):
 
 
 _RARITY_COLORS = {
-    "Legendary": "#f4d641",
-    "Epic":      "#b060f0",
-    "Rare":      "#4090e0",
-    "Common":    "#888888",
-    "Unknown":   "#444444",
+    "Legendary": RARITY_LEGENDARY,
+    "Epic":      RARITY_EPIC,
+    "Rare":      RARITY_RARE,
+    "Common":    RARITY_COMMON,
+    "Unknown":   RARITY_UNKNOWN,
 }
 _RARITY_ORDER  = ["Legendary", "Epic", "Rare", "Common", "Unknown"]
 _SKIN_IMG_SIZE    = 64
@@ -248,7 +252,7 @@ class _CostumeDialog(QDialog):
         super().__init__(parent)
         self.setWindowTitle(skin.get("name", "").title())
         self.setStyleSheet(
-            "QDialog { background: #0d1628; }"
+            f"QDialog {{ background: {BG_CARD}; }}"
             "QLabel  { background: transparent; border: none; }"
         )
         self.setModal(True)
@@ -271,7 +275,7 @@ class _CostumeDialog(QDialog):
             img_lbl.setFixedSize(px.width(), px.height())
         else:
             img_lbl.setText("Image not yet downloaded.\nRun Wiki Sync to fetch skin images.")
-            img_lbl.setStyleSheet(f"color: {_DIM}; font-size: 12px;")
+            img_lbl.setStyleSheet(f"color: {TEXT_DIM}; font-size: 12px;")
             img_lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
             img_lbl.setFixedSize(300, 200)
         lay.addWidget(img_lbl, alignment=Qt.AlignmentFlag.AlignHCenter)
@@ -280,7 +284,7 @@ class _CostumeDialog(QDialog):
         name_lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
         name_lbl.setStyleSheet(
             "font-family: Impact, 'Arial Narrow', Arial;"
-            f" font-size: 15px; letter-spacing: 2px; color: {_TEXT};"
+            f" font-size: 15px; letter-spacing: 2px; color: {TEXT};"
         )
         lay.addWidget(name_lbl)
 
@@ -297,7 +301,7 @@ class _CostumeDialog(QDialog):
         if meta_parts:
             meta_lbl = QLabel("  ·  ".join(meta_parts))
             meta_lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
-            meta_lbl.setStyleSheet(f"font-size: 10px; color: {_DIM};")
+            meta_lbl.setStyleSheet(f"font-size: 10px; color: {TEXT_DIM};")
             lay.addWidget(meta_lbl)
 
         self.adjustSize()
@@ -307,7 +311,7 @@ def _img_label(item_id: int, size: int) -> _ClickableImgLabel:
     lbl = _ClickableImgLabel()
     lbl.setFixedSize(size, size)
     lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
-    lbl.setStyleSheet("background: #080f1e; border-radius: 4px; border: none;")
+    lbl.setStyleSheet(f"background: {BG_CARD_ALT}; border-radius: 4px; border: none;")
     path = skin_icon_path(item_id)
     if os.path.exists(path):
         px = QPixmap(path).scaled(
@@ -323,7 +327,7 @@ class _SkinCard(QFrame):
     def __init__(self, skin: dict, recolors: list[dict], parent=None):
         super().__init__(parent)
         self.setStyleSheet(
-            "QFrame { background: #12121e; border: 1px solid #1e1e30; border-radius: 4px; }"
+            f"QFrame {{ background: {BG_INPUT}; border: 1px solid {BG_HOVER_INPUT}; border-radius: 4px; }}"
         )
         row = QHBoxLayout(self)
         row.setContentsMargins(10, 8, 10, 8)
@@ -344,7 +348,7 @@ class _SkinCard(QFrame):
 
         name_lbl = QLabel(skin.get("name", "").title())
         name_lbl.setStyleSheet(
-            f"font-size: 13px; font-weight: bold; color: {_TEXT};"
+            f"font-size: 13px; font-weight: bold; color: {TEXT};"
             " background: transparent; border: none;"
         )
         name_lbl.setWordWrap(True)
@@ -365,7 +369,7 @@ class _SkinCard(QFrame):
         if meta_parts:
             meta_lbl = QLabel("  ·  ".join(meta_parts))
             meta_lbl.setStyleSheet(
-                f"font-size: 10px; color: {_DIM}; background: transparent; border: none;"
+                f"font-size: 10px; color: {TEXT_DIM}; background: transparent; border: none;"
             )
             text_col.addWidget(meta_lbl)
 
@@ -375,7 +379,7 @@ class _SkinCard(QFrame):
         if recolors:
             sep = QFrame()
             sep.setFrameShape(QFrame.Shape.VLine)
-            sep.setStyleSheet("color: #1e1e30; background: #1e1e30; max-width: 1px;")
+            sep.setStyleSheet(f"color: {BG_HOVER_INPUT}; background: {BG_HOVER_INPUT}; max-width: 1px;")
             row.addWidget(sep)
 
             recolor_row = QHBoxLayout()
@@ -393,7 +397,7 @@ class _SkinCard(QFrame):
 
                 rc_name = QLabel(rc.get("name", "").title())
                 rc_name.setStyleSheet(
-                    f"font-size: 9px; color: {_DIM}; background: transparent; border: none;"
+                    f"font-size: 9px; color: {TEXT_DIM}; background: transparent; border: none;"
                 )
                 rc_name.setAlignment(Qt.AlignmentFlag.AlignHCenter)
                 rc_name.setWordWrap(True)
@@ -436,7 +440,7 @@ class _HeroSkinsWidget(QWidget):
 
         if not skins:
             lbl = QLabel("No skin data.\nRun Wiki Sync to download.")
-            lbl.setStyleSheet(f"color: {_DIM}; font-size: 12px; background: transparent;")
+            lbl.setStyleSheet(f"color: {TEXT_DIM}; font-size: 12px; background: transparent;")
             lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
             self._inner.addWidget(lbl)
         else:
@@ -476,7 +480,7 @@ class _IconZoomDialog(QDialog):
         self.setWindowTitle("")
         self.setModal(True)
         self.setStyleSheet(
-            "QDialog { background: #0d1628; border: 1px solid #2a2a4a; }"
+            f"QDialog {{ background: {BG_CARD}; border: 1px solid {BORDER_INPUT}; }}"
             "QLabel  { background: transparent; border: none; }"
         )
         self._movie: QMovie | None = None
@@ -528,14 +532,14 @@ class _MilestoneCard(QWidget):
         self._img = _ClickableImgLabel()
         self._img.setFixedSize(self._SIZE, self._SIZE)
         self._img.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self._img.setStyleSheet("background: #080f1e; border-radius: 4px; border: none;")
+        self._img.setStyleSheet(f"background: {BG_CARD_ALT}; border-radius: 4px; border: none;")
         self._img.clicked.connect(self._open_zoom)
         lay.addWidget(self._img, alignment=Qt.AlignmentFlag.AlignHCenter)
 
         lbl = QLabel(label)
         lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
         lbl.setStyleSheet(
-            f"font-size: 8px; color: {_DIM}; letter-spacing: 1px;"
+            f"font-size: 8px; color: {TEXT_DIM}; letter-spacing: 1px;"
             " background: transparent; border: none;"
         )
         lay.addWidget(lbl, alignment=Qt.AlignmentFlag.AlignHCenter)
@@ -588,7 +592,7 @@ class HeroDetailPanel(QWidget):
         self._icon_label = QLabel()
         self._icon_label.setFixedSize(self._ICON_SIZE, self._ICON_SIZE)
         self._icon_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self._icon_label.setStyleSheet("background: #080f1e; border-radius: 4px;")
+        self._icon_label.setStyleSheet(f"background: {BG_CARD_ALT}; border-radius: 4px;")
         self._icon_label.hide()
         h_lay.addWidget(self._icon_label)
 
@@ -599,19 +603,19 @@ class HeroDetailPanel(QWidget):
         self._name_label = QLabel()
         self._name_label.setStyleSheet(
             "font-family: Impact, 'Arial Narrow', Arial;"
-            f" font-size: 20px; letter-spacing: 2px; color: {_TEXT};"
+            f" font-size: 20px; letter-spacing: 2px; color: {TEXT};"
             " background: transparent;"
         )
         info.addWidget(self._name_label)
 
         self._role_label = QLabel()
-        self._role_label.setStyleSheet(f"font-size: 12px; color: {_DIM}; background: transparent;")
+        self._role_label.setStyleSheet(f"font-size: 12px; color: {TEXT_DIM}; background: transparent;")
         info.addWidget(self._role_label)
 
         self._level_label = QLabel()
         self._level_label.setStyleSheet(
             "font-family: Impact, 'Arial Narrow', Arial;"
-            f" font-size: 16px; letter-spacing: 1px; color: {_GOLD}; background: transparent;"
+            f" font-size: 16px; letter-spacing: 1px; color: {GOLD}; background: transparent;"
         )
         info.addWidget(self._level_label)
 
@@ -633,7 +637,7 @@ class HeroDetailPanel(QWidget):
 
         # ── Tracker stats row ─────────────────────────────────────────────
         self._tracker_row = QWidget()
-        self._tracker_row.setStyleSheet(f"QWidget {{ background: {_CARD_BG}; border-radius: 6px; }}")
+        self._tracker_row.setStyleSheet(f"QWidget {{ background: {BG_CARD}; border-radius: 6px; }}")
         tracker_lay = QHBoxLayout(self._tracker_row)
         tracker_lay.setContentsMargins(16, 8, 16, 8)
         tracker_lay.setSpacing(0)
@@ -642,12 +646,12 @@ class HeroDetailPanel(QWidget):
         for label_text in ("WIN %", "KDA", "MATCHES", "TIME"):
             if self._stat_chips:
                 sep = QLabel("·")
-                sep.setStyleSheet(f"color: #26263c; font-size: 14px; padding: 0 10px; background: transparent;")
+                sep.setStyleSheet(f"color: {BORDER}; font-size: 14px; padding: 0 10px; background: transparent;")
                 tracker_lay.addWidget(sep)
             lbl = QLabel(label_text)
-            lbl.setStyleSheet(f"font-size: 9px; color: {_DIM}; letter-spacing: 1px; background: transparent;")
+            lbl.setStyleSheet(f"font-size: 9px; color: {TEXT_DIM}; letter-spacing: 1px; background: transparent;")
             val = QLabel("—")
-            val.setStyleSheet(f"font-size: 13px; color: {_TEXT}; font-weight: bold; padding-left: 5px; background: transparent;")
+            val.setStyleSheet(f"font-size: 13px; color: {TEXT}; font-weight: bold; padding-left: 5px; background: transparent;")
             chip = QHBoxLayout()
             chip.setSpacing(0)
             chip.addWidget(lbl)
@@ -667,11 +671,11 @@ class HeroDetailPanel(QWidget):
 
         lvl_row = QHBoxLayout()
         lvl_lbl = QLabel("CURRENT LEVEL")
-        lvl_lbl.setStyleSheet(f"font-size: 10px; color: {_DIM}; letter-spacing: 1px; background: transparent;")
+        lvl_lbl.setStyleSheet(f"font-size: 10px; color: {TEXT_DIM}; letter-spacing: 1px; background: transparent;")
         lvl_row.addWidget(lvl_lbl)
         lvl_row.addStretch()
         self._xp_detail_label = QLabel()
-        self._xp_detail_label.setStyleSheet(f"font-size: 11px; color: {_DIM}; background: transparent;")
+        self._xp_detail_label.setStyleSheet(f"font-size: 11px; color: {TEXT_DIM}; background: transparent;")
         lvl_row.addWidget(self._xp_detail_label)
         xp_lay.addLayout(lvl_row)
 
@@ -679,31 +683,31 @@ class HeroDetailPanel(QWidget):
         xp_lay.addWidget(self._progress_bar)
 
         self._velocity_label = QLabel()
-        self._velocity_label.setStyleSheet(f"font-size: 10px; color: {_DIM}; background: transparent;")
+        self._velocity_label.setStyleSheet(f"font-size: 10px; color: {TEXT_DIM}; background: transparent;")
         self._velocity_label.hide()
         xp_lay.addWidget(self._velocity_label)
 
         self._max_label = QLabel("MAX LEVEL")
         self._max_label.setStyleSheet(
             "font-family: Impact, 'Arial Narrow', Arial;"
-            f" font-size: 13px; letter-spacing: 3px; color: {_GOLD}; background: transparent;"
+            f" font-size: 13px; letter-spacing: 3px; color: {GOLD}; background: transparent;"
         )
         self._max_label.hide()
         xp_lay.addWidget(self._max_label)
 
         champ_sep = QFrame()
         champ_sep.setFrameShape(QFrame.Shape.HLine)
-        champ_sep.setStyleSheet("color: #1a2a44; background: #1a2a44; max-height: 1px;")
+        champ_sep.setStyleSheet(f"color: {BORDER_CARD}; background: {BORDER_CARD}; max-height: 1px;")
         xp_lay.addWidget(champ_sep)
         self._champ_sep = champ_sep
 
         champ_row = QHBoxLayout()
         champ_lbl = QLabel("CHAMPION PROGRESS")
-        champ_lbl.setStyleSheet(f"font-size: 10px; color: {_DIM}; letter-spacing: 1px; background: transparent;")
+        champ_lbl.setStyleSheet(f"font-size: 10px; color: {TEXT_DIM}; letter-spacing: 1px; background: transparent;")
         champ_row.addWidget(champ_lbl)
         champ_row.addStretch()
         self._total_xp_label = QLabel()
-        self._total_xp_label.setStyleSheet(f"font-size: 11px; color: {_DIM}; background: transparent;")
+        self._total_xp_label.setStyleSheet(f"font-size: 11px; color: {TEXT_DIM}; background: transparent;")
         champ_row.addWidget(self._total_xp_label)
         xp_lay.addLayout(champ_row)
 

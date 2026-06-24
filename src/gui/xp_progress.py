@@ -13,6 +13,7 @@ from PIL import Image, ImageDraw
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QComboBox, QLabel
 
 from storage.repository import SnapshotRepository
+from gui.colors import BG_APP, BG_SINK, BORDER_MID, TEXT, TEXT_SUB, TEXT_DIM, BLUE_ACCENT
 
 if getattr(sys, 'frozen', False):
     _ICONS_DIR = os.path.join(sys._MEIPASS, 'Icons')
@@ -33,12 +34,12 @@ _TIME_OPTIONS = {
 _DEFAULT_RANGE = "30 days"
 _ICON_SIZE = 96
 
-_C_BG       = '#0c0c14'
-_C_AX_BG    = '#0a0a12'
-_C_TEXT     = '#dcdce8'
-_C_SUBTEXT  = '#606078'
-_C_SPINE    = '#1a1a2c'
-_C_GRID     = '#1a1a2c'
+_C_BG      = BG_APP
+_C_AX_BG   = BG_SINK
+_C_TEXT    = TEXT
+_C_SUBTEXT = TEXT_SUB
+_C_SPINE   = BORDER_MID
+_C_GRID    = BORDER_MID
 
 # Background ring colors per tier (RGBA)
 _BG_HERO    = (50,  55,  75,  220)
@@ -128,7 +129,7 @@ class HeroXpChart(QWidget):
 
         ctrl_row = QHBoxLayout()
         range_lbl = QLabel("RANGE")
-        range_lbl.setStyleSheet("color: #484860; font-size: 10px; letter-spacing: 1px;")
+        range_lbl.setStyleSheet(f"color: {TEXT_DIM}; font-size: 10px; letter-spacing: 1px;")
         ctrl_row.addWidget(range_lbl)
         self._range_combo = QComboBox()
         self._range_combo.addItems(_TIME_OPTIONS.keys())
@@ -178,8 +179,8 @@ class HeroXpChart(QWidget):
         xp_values = [p[1] for p in points]
         last_level = points[-1][2]
 
-        ax.plot(dates, xp_values, color='#a0c8ff', linewidth=2, zorder=2)
-        ax.fill_between(dates, xp_values, alpha=0.12, color='#a0c8ff')
+        ax.plot(dates, xp_values, color=BLUE_ACCENT, linewidth=2, zorder=2)
+        ax.fill_between(dates, xp_values, alpha=0.12, color=BLUE_ACCENT)
 
         icon_arr = _load_icon(self._hero_name, last_level)
         if icon_arr is not None:
@@ -191,7 +192,7 @@ class HeroXpChart(QWidget):
             )
             ax.add_artist(ab)
         else:
-            ax.plot(dates[-1:], xp_values[-1:], 'o', color='#a0c8ff', markersize=8, zorder=3)
+            ax.plot(dates[-1:], xp_values[-1:], 'o', color=BLUE_ACCENT, markersize=8, zorder=3)
 
         unique_dates = sorted({p[0].date() for p in points})
         ax.xaxis.set_major_locator(

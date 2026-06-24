@@ -5,6 +5,10 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt, pyqtSignal, QSettings
 
+from gui.colors import (
+    BG_DEEP, BG_SINK, BORDER, BORDER_MID, BORDER_DEEP, BORDER_NAV,
+    TEXT_DIM, TEXT_BRONZE,
+)
 from gui.excel_import import generate_template, import_from_excel
 from data.heroes import HERO_RELEASE_DATES
 from gui.hero_card import HeroCard
@@ -126,10 +130,10 @@ class _HeroGrid(QWidget):
 
 class _ShowAllDialog(QDialog):
     _HEADER_STYLE = (
-        "color: #c8a84b; font-size: 13px; font-weight: bold;"
-        " padding: 6px 0 4px; border-bottom: 1px solid #2a2a40;"
+        f"color: {TEXT_BRONZE}; font-size: 13px; font-weight: bold;"
+        f" padding: 6px 0 4px; border-bottom: 1px solid {BORDER_NAV};"
     )
-    _EMPTY_STYLE = "color: #484860; font-size: 11px; padding: 4px 12px;"
+    _EMPTY_STYLE = f"color: {TEXT_DIM}; font-size: 11px; padding: 4px 12px;"
 
     def __init__(self, tier: str, heroes: list[Hero], db=None, parent=None):
         super().__init__(parent)
@@ -145,7 +149,7 @@ class _ShowAllDialog(QDialog):
         if not tier_heroes:
             lbl = QLabel(f"No {tier} heroes found.")
             lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
-            lbl.setStyleSheet("color: #484860; font-size: 13px; padding: 40px;")
+            lbl.setStyleSheet(f"color: {TEXT_DIM}; font-size: 13px; padding: 40px;")
             outer.addWidget(lbl)
             return
 
@@ -199,7 +203,7 @@ class HeroBrowser(QWidget):
         # ── Toolbar ──────────────────────────────────────────────────────────
         toolbar_widget = QWidget()
         toolbar_widget.setStyleSheet(
-            "QWidget { background: #080810; border-bottom: 1px solid #1a1a2c; }"
+            f"QWidget {{ background: {BG_DEEP}; border-bottom: 1px solid {BORDER_MID}; }}"
         )
         toolbar = QHBoxLayout(toolbar_widget)
         toolbar.setContentsMargins(14, 8, 14, 8)
@@ -229,7 +233,7 @@ class HeroBrowser(QWidget):
         toolbar.addStretch()
 
         tier_lbl = QLabel("TIER")
-        tier_lbl.setStyleSheet("color: #484860; font-size: 10px; letter-spacing: 1px;")
+        tier_lbl.setStyleSheet(f"color: {TEXT_DIM}; font-size: 10px; letter-spacing: 1px;")
         toolbar.addWidget(tier_lbl)
         self._tier_combo = QComboBox()
         self._tier_combo.addItems(_TIER_LABELS)
@@ -241,11 +245,11 @@ class HeroBrowser(QWidget):
         toolbar.addWidget(show_all_btn)
 
         _sep = QLabel("|")
-        _sep.setStyleSheet("color: #26263c; padding: 0 2px;")
+        _sep.setStyleSheet(f"color: {BORDER}; padding: 0 2px;")
         toolbar.addWidget(_sep)
 
         role_lbl = QLabel("ROLE")
-        role_lbl.setStyleSheet("color: #484860; font-size: 10px; letter-spacing: 1px;")
+        role_lbl.setStyleSheet(f"color: {TEXT_DIM}; font-size: 10px; letter-spacing: 1px;")
         toolbar.addWidget(role_lbl)
         self._role_combo = QComboBox()
         self._role_combo.addItems(_ROLE_FILTERS.keys())
@@ -254,7 +258,7 @@ class HeroBrowser(QWidget):
         toolbar.addWidget(self._role_combo)
 
         sort_lbl = QLabel("SORT")
-        sort_lbl.setStyleSheet("color: #484860; font-size: 10px; letter-spacing: 1px;")
+        sort_lbl.setStyleSheet(f"color: {TEXT_DIM}; font-size: 10px; letter-spacing: 1px;")
         toolbar.addWidget(sort_lbl)
         self._sort_combo = QComboBox()
         self._sort_combo.addItems(_SORT_OPTIONS.keys())
@@ -273,8 +277,8 @@ class HeroBrowser(QWidget):
         # ── Stats bar ────────────────────────────────────────────────────────
         self._stats_bar = QLabel()
         self._stats_bar.setStyleSheet(
-            "background: #0a0a12; color: #484860; font-size: 10px;"
-            " padding: 3px 14px; border-bottom: 1px solid #141424;"
+            f"background: {BG_SINK}; color: {TEXT_DIM}; font-size: 10px;"
+            f" padding: 3px 14px; border-bottom: 1px solid {BORDER_DEEP};"
         )
         layout.addWidget(self._stats_bar)
 

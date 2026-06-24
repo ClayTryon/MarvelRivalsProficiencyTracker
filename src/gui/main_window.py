@@ -6,6 +6,11 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt, pyqtSignal
 
+from gui.colors import (
+    BG_APP, BG_DEEP, BORDER, BORDER_MID, BORDER_NAV,
+    TEXT_DIM, TEXT_NAV_HOVER, TEXT_VER,
+    GOLD, GOLD_HOVER, DARK, UPDATE_BG,
+)
 from gui.scan_panel import ScanPanel
 from gui.hero_browser import HeroBrowser
 from gui.hero_info_panel import HeroInfoPanel
@@ -34,8 +39,8 @@ class _NavBar(QWidget):
         "QPushButton {"
         " font-family: Impact, 'Arial Narrow', Arial;"
         " font-size: 13px; letter-spacing: 2px;"
-        " color: #ffffff; background: transparent; border: none;"
-        " border-bottom: 2px solid #f4d641; padding: 0 14px;"
+        f" color: #ffffff; background: transparent; border: none;"
+        f" border-bottom: 2px solid {GOLD}; padding: 0 14px;"
         " margin-bottom: -1px;"
         "}"
     )
@@ -43,17 +48,17 @@ class _NavBar(QWidget):
         "QPushButton {"
         " font-family: Impact, 'Arial Narrow', Arial;"
         " font-size: 13px; letter-spacing: 2px;"
-        " color: #484860; background: transparent; border: none;"
+        f" color: {TEXT_DIM}; background: transparent; border: none;"
         " padding: 0 14px;"
         "}"
-        "QPushButton:hover { color: #9090b8; }"
+        f"QPushButton:hover {{ color: {TEXT_NAV_HOVER}; }}"
     )
 
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setFixedHeight(44)
         self.setStyleSheet(
-            "background: #080810; border-bottom: 1px solid #1a1a2c;"
+            f"background: {BG_DEEP}; border-bottom: 1px solid {BORDER_MID};"
         )
 
         row = QHBoxLayout(self)
@@ -64,7 +69,7 @@ class _NavBar(QWidget):
         logo.setStyleSheet(
             "font-family: Impact, 'Arial Narrow', Arial;"
             " font-size: 14px; letter-spacing: 4px;"
-            " color: #f4d641; padding-right: 28px;"
+            f" color: {GOLD}; padding-right: 28px;"
         )
         row.addWidget(logo)
 
@@ -72,7 +77,7 @@ class _NavBar(QWidget):
         for i, label in enumerate(_TAB_LABELS):
             if i > 0:
                 sep = QLabel("/")
-                sep.setStyleSheet("color: #2a2a40; font-size: 15px; padding: 0 2px;")
+                sep.setStyleSheet(f"color: {BORDER_NAV}; font-size: 15px; padding: 0 2px;")
                 row.addWidget(sep)
 
             btn = QPushButton(label)
@@ -89,16 +94,16 @@ class _NavBar(QWidget):
         sync_btn.setFixedHeight(28)
         sync_btn.setCursor(Qt.CursorShape.PointingHandCursor)
         sync_btn.setStyleSheet(
-            "QPushButton { background: transparent; color: #484860;"
-            " border: 1px solid #26263c; border-radius: 3px;"
-            " font-size: 11px; letter-spacing: 1px; padding: 0 10px; }"
-            " QPushButton:hover { color: #f4d641; border-color: #f4d641; }"
+            f"QPushButton {{ background: transparent; color: {TEXT_DIM};"
+            f" border: 1px solid {BORDER}; border-radius: 3px;"
+            f" font-size: 11px; letter-spacing: 1px; padding: 0 10px; }}"
+            f" QPushButton:hover {{ color: {GOLD}; border-color: {GOLD}; }}"
         )
         sync_btn.clicked.connect(lambda: self.tab_clicked.emit(_TAB_SYNC))
         row.addWidget(sync_btn)
 
         ver = QLabel(f"v{__version__}")
-        ver.setStyleSheet("color: #303048; font-size: 11px; padding-left: 10px;")
+        ver.setStyleSheet(f"color: {TEXT_VER}; font-size: 11px; padding-left: 10px;")
         row.addWidget(ver)
 
         self.set_active(1)
@@ -112,23 +117,23 @@ class _UpdateBanner(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self._url = ""
-        self.setStyleSheet("background: #3a3000; border-bottom: 1px solid #f4d641;")
+        self.setStyleSheet(f"background: {UPDATE_BG}; border-bottom: 1px solid {GOLD};")
         self.setFixedHeight(32)
 
         row = QHBoxLayout(self)
         row.setContentsMargins(12, 0, 12, 0)
 
         self._label = QLabel()
-        self._label.setStyleSheet("color: #f4d641; font-size: 12px;")
+        self._label.setStyleSheet(f"color: {GOLD}; font-size: 12px;")
         row.addWidget(self._label)
         row.addStretch()
 
         download_btn = QPushButton("Download")
         download_btn.setFixedHeight(22)
         download_btn.setStyleSheet(
-            "QPushButton { background: #f4d641; color: #1a1a1a; border: none;"
+            f"QPushButton {{ background: {GOLD}; color: {DARK}; border: none;"
             " border-radius: 3px; font-size: 11px; font-weight: bold; padding: 0 10px; }"
-            " QPushButton:hover { background: #ffe066; }"
+            f" QPushButton:hover {{ background: {GOLD_HOVER}; }}"
         )
         download_btn.clicked.connect(self._open_release)
         row.addWidget(download_btn)
@@ -166,7 +171,7 @@ class MainWindow(QMainWindow):
         root.addWidget(self._nav)
 
         self._stack = QStackedWidget()
-        self._stack.setStyleSheet("background: #0c0c14;")
+        self._stack.setStyleSheet(f"background: {BG_APP};")
 
         self._scan_panel     = ScanPanel(db)
         self._hero_browser   = HeroBrowser(db)
