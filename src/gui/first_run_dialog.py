@@ -17,7 +17,6 @@ class FirstRunDialog(QDialog):
         super().__init__(parent)
         self.setWindowTitle("ProfTracker — First Run Setup")
         self.setFixedSize(480, 270)
-        # Window flag gives it a taskbar button so it's findable
         self.setWindowFlags(Qt.WindowType.Window | Qt.WindowType.CustomizeWindowHint | Qt.WindowType.WindowTitleHint)
         self.setStyleSheet(f"background: {BG_APP}; color: {TEXT_DIALOG};")
         self.raise_()
@@ -71,6 +70,20 @@ class FirstRunDialog(QDialog):
         )
         lay.addWidget(self._bar)
 
+        btn_row = QHBoxLayout()
+        btn_row.addStretch()
+
+        self._retry_btn = QPushButton("Retry")
+        self._retry_btn.setStyleSheet(
+            f"QPushButton {{ background: {GOLD}; color: #000;"
+            f" border: none; border-radius: 3px;"
+            f" font-size: 11px; font-weight: bold; padding: 4px 16px; }}"
+            f"QPushButton:hover {{ background: #ffd966; }}"
+        )
+        self._retry_btn.clicked.connect(self._retry)
+        self._retry_btn.hide()
+        btn_row.addWidget(self._retry_btn)
+
         self._skip_btn = QPushButton("Skip (use built-in roster)")
         self._skip_btn.setStyleSheet(
             f"QPushButton {{ background: transparent; color: {TEXT_DIM};"
@@ -79,7 +92,9 @@ class FirstRunDialog(QDialog):
             f"QPushButton:hover {{ color: {TEXT_LIGHT_GRAY}; border-color: {TEXT_LIGHT_GRAY}; }}"
         )
         self._skip_btn.clicked.connect(self._skip)
-        lay.addWidget(self._skip_btn, alignment=Qt.AlignmentFlag.AlignRight)
+        btn_row.addWidget(self._skip_btn)
+
+        lay.addLayout(btn_row)
 
         self._worker = SyncWorker()
         self._worker.progress.connect(self._on_progress)
@@ -103,10 +118,27 @@ class FirstRunDialog(QDialog):
         self.accept()
 
     def _on_error(self, msg: str):
-        self._status.setText(f"Sync failed: {msg}\nUsing built-in roster.")
+        self._status.setText(
+            "Could not reach the data server. This is usually a temporary AWS outage "
+            "or a network issue.\n\nPlease try again later, or continue with the "
+            "built-in roster (hero icons and abilities won't be available until you sync)."
+        )
         self._bar.setMaximum(1)
-        self._bar.setValue(1)
-        self._skip_btn.setText("Continue")
+        self._bar.setValue(0)
+        self._retry_btn.show()
+        self._skip_btn.setText("Continue without syncing")
+
+    def _retry(self):
+        self._retry_btn.hide()
+        self._skip_btn.setText("Skip (use built-in roster)")
+        self._status.setText("Retrying...")
+        self._bar.setMaximum(0)
+        self._bar.setValue(0)
+        self._worker = SyncWorker()
+        self._worker.progress.connect(self._on_progress)
+        self._worker.finished.connect(self._on_finished)
+        self._worker.error.connect(self._on_error)
+        self._worker.start()
 
     def _skip(self):
         self._save_ign()

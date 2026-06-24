@@ -13,6 +13,9 @@ debug/
 CLAUDE.md
 chat_history.json
 rag_index/
+Icons/
+hero_data/
+heroes.json
 generate_user_guide.py
 specs/
 artfxt9npjoe1.jpeg
