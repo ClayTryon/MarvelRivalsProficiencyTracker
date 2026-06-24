@@ -14,12 +14,6 @@ from gui.colors import (
     GOLD, GOLD_BG, ERR, ERR_BG,
 )
 
-_GOLD  = GOLD
-_BG    = BG_APP
-_PANEL = BG_PANEL
-_TEXT  = TEXT_BODY
-_DIM   = TEXT_DIM
-_ERR   = ERR
 
 _MAX_HISTORY = 40  # max Q&A items to persist across sessions
 
@@ -34,7 +28,7 @@ else:
 class HeroInfoPanel(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setStyleSheet(f"background: {_BG};")
+        self.setStyleSheet(f"background: {BG_APP};")
 
         self._query_worker: QueryWorker | None = None
         self._history: list[dict] = []  # {"role", "body", "sources"?}
@@ -47,7 +41,7 @@ class HeroInfoPanel(QWidget):
         title = QLabel("HERO WIKI  —  RAG Knowledge Base")
         title.setStyleSheet(
             f"font-family: Impact, 'Arial Narrow', Arial;"
-            f" font-size: 15px; letter-spacing: 3px; color: {_GOLD};"
+            f" font-size: 15px; letter-spacing: 3px; color: {GOLD};"
         )
         root.addWidget(title)
 
@@ -55,7 +49,7 @@ class HeroInfoPanel(QWidget):
             "Powered by Groq AI (free tier) — API key is shared. "
             "Please don't abuse it or it will be disabled for everyone."
         )
-        disclaimer.setStyleSheet(f"color: {_DIM}; font-size: 10px; font-style: italic;")
+        disclaimer.setStyleSheet(f"color: {TEXT_DIM}; font-size: 10px; font-style: italic;")
         disclaimer.setWordWrap(True)
         root.addWidget(disclaimer)
 
@@ -63,13 +57,13 @@ class HeroInfoPanel(QWidget):
         status_row = QHBoxLayout()
 
         self._status_label = QLabel("No pages indexed — run Wiki Sync to build index.")
-        self._status_label.setStyleSheet(f"color: {_DIM}; font-size: 11px;")
+        self._status_label.setStyleSheet(f"color: {TEXT_DIM}; font-size: 11px;")
         status_row.addWidget(self._status_label)
         status_row.addStretch()
 
         self._clear_btn = QPushButton("Clear Index")
         self._clear_btn.setFixedHeight(26)
-        self._clear_btn.setStyleSheet(self._btn_style(_ERR, ERR_BG))
+        self._clear_btn.setStyleSheet(self._btn_style(ERR, ERR_BG))
         self._clear_btn.clicked.connect(self._clear_index)
         status_row.addWidget(self._clear_btn)
 
@@ -80,7 +74,7 @@ class HeroInfoPanel(QWidget):
         self._chat.setOpenExternalLinks(False)
         self._chat.setOpenLinks(False)
         self._chat.setStyleSheet(
-            f"background: {_PANEL}; color: {_TEXT}; font-size: 13px;"
+            f"background: {BG_PANEL}; color: {TEXT_BODY}; font-size: 13px;"
             f" border: 1px solid {BORDER_MID}; border-radius: 4px; padding: 10px;"
         )
         self._chat.setSizePolicy(
@@ -100,7 +94,7 @@ class HeroInfoPanel(QWidget):
 
         self._ask_btn = QPushButton("Ask")
         self._ask_btn.setFixedHeight(32)
-        self._ask_btn.setStyleSheet(self._btn_style(_GOLD, GOLD_BG))
+        self._ask_btn.setStyleSheet(self._btn_style(GOLD, GOLD_BG))
         self._ask_btn.clicked.connect(self._send_query)
         query_row.addWidget(self._ask_btn)
 
@@ -124,11 +118,11 @@ class HeroInfoPanel(QWidget):
     def _input_style() -> str:
         return (
             f"QLineEdit {{"
-            f" background: {_PANEL}; color: {_TEXT};"
+            f" background: {BG_PANEL}; color: {TEXT_BODY};"
             f" border: 1px solid {BORDER_NAV}; border-radius: 4px;"
             f" padding: 6px 10px; font-size: 12px;"
             f"}}"
-            f" QLineEdit:focus {{ border-color: {_GOLD}; }}"
+            f" QLineEdit:focus {{ border-color: {GOLD}; }}"
         )
 
     @staticmethod
@@ -183,12 +177,12 @@ class HeroInfoPanel(QWidget):
         for w in (self._ask_btn, self._query_input):
             w.setEnabled(not busy)
 
-    def _append(self, role: str, body: str, color: str = _TEXT):
+    def _append(self, role: str, body: str, color: str = TEXT_BODY):
         safe = body.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
         safe = safe.replace("\n", "<br/>")
         html = (
             f'<p style="margin:6px 0;">'
-            f'<b style="color:{_GOLD};">{role}</b><br/>'
+            f'<b style="color:{GOLD};">{role}</b><br/>'
             f'<span style="color:{color};">{safe}</span>'
             f'</p>'
             f'<hr style="border:none;border-top:1px solid {BORDER_MID};margin:4px 0;"/>'
@@ -206,13 +200,13 @@ class HeroInfoPanel(QWidget):
         src_html = ""
         if sources:
             links = " &nbsp;|&nbsp; ".join(
-                f'<a href="{s}" style="color:{_GOLD};">{s}</a>' for s in sources
+                f'<a href="{s}" style="color:{GOLD};">{s}</a>' for s in sources
             )
-            src_html = f'<br/><small style="color:{_DIM};">Sources: {links}</small>'
+            src_html = f'<br/><small style="color:{TEXT_DIM};">Sources: {links}</small>'
         html = (
             f'<p style="margin:6px 0;">'
-            f'<b style="color:{_GOLD};">WIKI BOT</b><br/>'
-            f'<span style="color:{_TEXT};">{safe}</span>'
+            f'<b style="color:{GOLD};">WIKI BOT</b><br/>'
+            f'<span style="color:{TEXT_BODY};">{safe}</span>'
             f'{src_html}'
             f'</p>'
             f'<hr style="border:none;border-top:1px solid {BORDER_MID};margin:4px 0;"/>'
@@ -233,7 +227,7 @@ class HeroInfoPanel(QWidget):
         if not query:
             return
         if len(query) > 500:
-            self._append("ERROR", "Query too long (500 character limit).", color=_ERR)
+            self._append("ERROR", "Query too long (500 character limit).", color=ERR)
             return
         self._query_input.clear()
         self._set_busy(True)
@@ -269,5 +263,5 @@ class HeroInfoPanel(QWidget):
 
     def _on_error(self, msg: str):
         self._set_busy(False)
-        self._append("ERROR", msg, color=_ERR)
+        self._append("ERROR", msg, color=ERR)
         self._query_input.setFocus()

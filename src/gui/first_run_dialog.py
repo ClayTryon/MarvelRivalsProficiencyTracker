@@ -6,7 +6,7 @@ from wiki_sync.worker import SyncWorker
 from gui.colors import (
     BG_APP, BORDER, BORDER_MID,
     TEXT_DIM, TEXT_LIGHT_GRAY, TEXT_DIALOG,
-    GOLD,
+    GOLD, GOLD_HOVER,
 )
 
 
@@ -60,7 +60,7 @@ class FirstRunDialog(QDialog):
             f"QPushButton {{ background: {GOLD}; color: #000;"
             f" border: none; border-radius: 3px;"
             f" font-size: 11px; font-weight: bold; padding: 4px 16px; }}"
-            f"QPushButton:hover {{ background: #ffd966; }}"
+            f"QPushButton:hover {{ background: {GOLD_HOVER}; }}"
         )
         self._retry_btn.clicked.connect(self._retry)
         self._retry_btn.hide()

@@ -44,9 +44,13 @@ class _AbilityCard(QFrame):
         layout = QVBoxLayout(self)
         layout.setContentsMargins(10, 8, 10, 8)
         layout.setSpacing(4)
+        layout.addLayout(self._build_header_row(ability))
+        self._add_description(layout, ability)
+        self._add_stats(layout, ability)
 
-        header_row = QHBoxLayout()
-        header_row.setSpacing(8)
+    def _build_header_row(self, ability: dict) -> QHBoxLayout:
+        row = QHBoxLayout()
+        row.setSpacing(8)
 
         icon_filename = ability.get("icon", "")
         if icon_filename:
@@ -64,25 +68,27 @@ class _AbilityCard(QFrame):
                 )
                 icon_lbl.setPixmap(px)
                 icon_lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
-            header_row.addWidget(icon_lbl)
+            row.addWidget(icon_lbl)
 
-        header = QLabel(
+        name_lbl = QLabel(
             f"{ability['name']}"
             + (f"  <span style='color:{GRAY_55};font-size:10px;'>[{ability['key']}]</span>"
                if ability['key'] else "")
         )
-        header.setTextFormat(Qt.TextFormat.RichText)
-        header.setStyleSheet(f"font-size: 13px; font-weight: bold; color: {TEXT_NEAR_WHITE};")
-        header.setWordWrap(True)
-        header_row.addWidget(header, stretch=1)
-        layout.addLayout(header_row)
+        name_lbl.setTextFormat(Qt.TextFormat.RichText)
+        name_lbl.setStyleSheet(f"font-size: 13px; font-weight: bold; color: {TEXT_NEAR_WHITE};")
+        name_lbl.setWordWrap(True)
+        row.addWidget(name_lbl, stretch=1)
+        return row
 
+    def _add_description(self, layout: QVBoxLayout, ability: dict):
         if ability.get("description"):
             desc = QLabel(ability["description"])
             desc.setWordWrap(True)
             desc.setStyleSheet(f"font-size: 11px; color: {TEXT_LIGHT_GRAY};")
             layout.addWidget(desc)
 
+    def _add_stats(self, layout: QVBoxLayout, ability: dict):
         for stat_name, stat_val in ability.get("stats", {}).items():
             stat_lbl = QLabel(f"<b>{stat_name}:</b> {stat_val}")
             stat_lbl.setTextFormat(Qt.TextFormat.RichText)
