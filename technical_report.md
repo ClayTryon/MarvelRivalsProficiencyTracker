@@ -257,6 +257,23 @@ The Groq API key is shipped with ProfTracker and shared across all users. This i
 
 The in-app disclaimer informs users that the RAG feature is powered by a shared Groq API key and that query volume may be subject to rate limiting.
 
+### 5.6 Risk Register
+
+The following table summarizes the project's tracked risks, their current likelihood and impact, implemented mitigations, and any remaining open actions.
+
+| ID | Risk | Likelihood | Impact | Status |
+|----|------|------------|--------|--------|
+| R-001 | Fandom wiki MediaWiki API changes break the avatar/ability scraper | Medium | High | **Open** — scraper targets stable `action=parse` / `action=query` endpoints rather than rendered HTML; scraper unit tests with fixture HTML not yet written |
+| R-002 | Groq free-tier rate limits block RAG queries | Medium | Medium | **Mitigated** — `QueryWorker` implements exponential backoff with jitter (1s, 2s, 4s, up to 3 retries); errors surface as in-chat messages |
+| R-003 | PyInstaller bundle omits RAG dependencies, breaking HERO WIKI in the frozen exe | Low | High | **Open** — `proftracker.spec` includes explicit `datas` entries; HuggingFace model downloads to user cache on first query; frozen-build smoke test in CI not yet implemented |
+| R-004 | OCR accuracy regresses after a Marvel Rivals patch changes the proficiency screen layout | High | Medium | **Open** — current mitigation is fixed fractional pixel regions + manual entry fallback; automated OCR regression fixture against saved screenshots not yet built |
+| R-005 | Hero roster becomes stale after a patch adds new heroes before the CDN sync runs | Medium | Low | **Open** — CDN refreshes daily; a "new heroes available" in-app banner when CDN roster count exceeds local count is not yet implemented |
+| R-006 | HuggingFace model download fails in restricted network environments | Low | High | **Open** — setup notes document cache location; a `PROFTRACKER_DISABLE_RAG` flag to hide the HERO WIKI tab and skip model loading is not yet implemented |
+| R-007 | EasyOCR or torch version update breaks the capture pipeline | Low | Medium | **Open** — `pyproject.toml` specifies minimum versions; exact version pinning via `constraints.txt` in the PyInstaller CI step is not yet implemented |
+| R-008 | Client-side wiki sync hits Fandom rate limits at scale | Medium | Medium | **Mitigated** — CDN architecture (Section 2.5) moves all wiki scraping to a single daily EC2 job; end users never contact Fandom directly |
+
+**Closed risks:** R-C01 (database wiped by app update — resolved in v1.0.6 by moving DB to `%APPDATA%`), R-C02 (Interception driver crash — resolved by lazy-loading), R-C03 (hardcoded roster — resolved by `heroes.json` CDN sync), R-C04 (missing GROQ key crash — resolved by graceful in-chat error handling).
+
 ---
 
 ## 6. Lessons Learned and Future Work
@@ -303,11 +320,21 @@ The following limitations are present in the current release and are documented 
 
 ### 6.5 Future Work
 
-**Multi-resolution OCR calibration.** Automated detection of the game window's resolution would allow the fractional pixel regions to be validated and adjusted per display, expanding the addressable user base without manual recalibration.
+The following items are planned next steps, several of which directly address open risks from the risk register (Section 5.6):
 
-**Automated regression test fixtures.** The `.temp/` directory accumulates OCR debug screenshots automatically during every scan. A future CI step could hash these images and flag when OCR output for a known screenshot changes after a code update, providing an automated regression test for the OCR pipeline without requiring a live game session.
+**OCR regression test fixture (R-004).** The `.temp/` directory accumulates OCR debug screenshots automatically during every scan. A CI step could hash these images and flag when OCR output for a known screenshot changes after a code update, providing an automated regression signal for proficiency screen layout changes without requiring a live game session.
 
-**Hero skin library.** Each hero detail page could include a dedicated Skins tab displaying the full cosmetic roster — skin name, rarity, source, cost, and preview image. The cosmetics data is scraped from the Fandom wiki (`/wiki/{HeroName}/Cosmetics`) as an additional stage in the server-side sync pipeline, with results written to `hero_data/{slug}_cosmetics.json`. The scraper (`cosmetics_scraper.py`) is implemented and tested; the UI tab is the remaining deliverable.
+**Scraper unit tests with fixture HTML (R-001).** The wiki scraper targets stable MediaWiki API endpoints, but API response structure can still change. Capturing fixture responses and running the parser against them in CI would catch regressions before users see sync failures.
+
+**Frozen-build smoke test in CI (R-003).** The release workflow builds with PyInstaller but does not verify that the RAG features work in the frozen executable. A post-build smoke test that launches the exe and runs a test query would confirm the HuggingFace and LlamaIndex dependencies are correctly bundled.
+
+**`PROFTRACKER_DISABLE_RAG` flag (R-006).** Users in restricted network environments (corporate proxies, air-gapped machines) cannot download the HuggingFace embedding model. An environment flag to hide the HERO WIKI tab and skip model loading entirely would allow the rest of the app to function normally in these environments.
+
+**New-hero available banner (R-005).** When the CDN's hero roster count exceeds the local count, an in-app banner could prompt the user to re-sync, surfacing new heroes without requiring manual awareness of game patches.
+
+**Multi-resolution OCR calibration.** Automated detection of the game window's resolution would allow the fractional pixel regions to be validated and adjusted per display, expanding the addressable user base beyond the current 1080p optimization.
+
+**Hero skin library.** Each hero detail page could include a dedicated Skins tab displaying the full cosmetic roster — skin name, rarity, source, cost, and preview image. The cosmetics scraper (`cosmetics_scraper.py`) is implemented; the UI tab is the remaining deliverable.
 
 ---
 
