@@ -14,6 +14,7 @@ CLAUDE.md
 chat_history.json
 rag_index/
 Icons/
+!Icons/app_icon.ico
 hero_data/
 heroes.json
 generate_user_guide.py
