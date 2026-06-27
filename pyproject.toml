@@ -1,6 +1,6 @@
 [project]
 name = "proftracker"
-version = "1.2.3"
+version = "2.1.0"
 description = "Marvel Rivals hero proficiency tracker with OCR capture and wiki RAG"
 requires-python = ">=3.11"
 dependencies = [
