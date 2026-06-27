@@ -16,6 +16,7 @@ import os
 import re
 import sys
 import time
+from urllib.parse import quote as _url_quote
 
 import requests
 
@@ -299,7 +300,7 @@ def sync_from_cdn(progress_cb=None) -> dict:
         if progress_cb:
             progress_cb(i, total, f"Downloading {filename}...")
         try:
-            r = _SESSION.get(f"{CDN_BASE}/icons/{filename}", timeout=30, stream=True)
+            r = _SESSION.get(f"{CDN_BASE}/icons/{_url_quote(filename, safe='._-~')}", timeout=30, stream=True)
             if r.status_code == 404:
                 skipped += 1
                 continue

@@ -12,6 +12,7 @@ import os
 import re
 import sys
 import time
+from urllib.parse import quote as _url_quote
 
 import requests
 
@@ -827,7 +828,7 @@ def sync_abilities_from_cdn(slugs: list[str], progress_cb=None) -> dict:
             skipped += 1
             continue
         try:
-            r = _SESSION.get(f"{cdn_base}/hero_data/{slug}.json", timeout=15)
+            r = _SESSION.get(f"{cdn_base}/hero_data/{_url_quote(slug, safe='._-~')}.json", timeout=15)
             if r.status_code == 404:
                 skipped += 1
                 continue
